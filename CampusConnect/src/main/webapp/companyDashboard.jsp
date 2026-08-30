@@ -48,10 +48,19 @@
             padding: 45px 0;
         }
 
-        .card {
+        .dash-card {
             border: none;
             border-radius: 16px;
             box-shadow: 0 5px 20px rgba(0,0,0,.06);
+            transition: .2s;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .dash-card:hover {
+            transform: translateY(-4px);
+            color: inherit;
         }
 
         .icon-box {
@@ -64,12 +73,6 @@
             align-items: center;
             justify-content: center;
             font-size: 24px;
-        }
-
-        .post-btn {
-            padding: 12px 22px;
-            border-radius: 10px;
-            font-weight: 600;
         }
 
     </style>
@@ -111,7 +114,7 @@
         </h1>
 
         <p class="mb-0">
-            Find talented students and post opportunities for your organization.
+            Post opportunities and manage your applicants.
         </p>
 
     </div>
@@ -121,118 +124,67 @@
 
 <div class="container py-5">
 
-    <div class="card p-4 mb-4">
-
-        <div class="row align-items-center">
-
-            <div class="col-md-8">
-
-                <h3 class="fw-bold">
-                    Post a New Opportunity
-                </h3>
-
-                <p class="text-muted mb-0">
-                    Create a job or internship opportunity for students.
-                </p>
-
-            </div>
-
-            <div class="col-md-4 text-md-end mt-3 mt-md-0">
-
-                <a href="postJob.jsp"
-                   class="btn btn-primary post-btn">
-
-                    <i class="bi bi-plus-circle me-2"></i>
-                    Post Job / Internship
-
-                </a>
-
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <h3 class="fw-bold mb-4">
-        Company Services
-    </h3>
-
-
     <div class="row g-4">
 
         <div class="col-md-4">
 
-            <div class="card p-4 h-100">
+            <a href="postJob.jsp" class="card dash-card p-4 h-100">
 
                 <div class="icon-box mb-3">
-                    <i class="bi bi-megaphone"></i>
+                    <i class="bi bi-briefcase-fill"></i>
                 </div>
 
                 <h5 class="fw-bold">
-                    Post Opportunities
+                    Post Opportunity
                 </h5>
 
-                <p class="text-muted">
-                    Publish jobs and internships for students.
+                <p class="text-muted mb-0">
+                    Create a new job or internship listing.
                 </p>
 
-                <a href="postJob.jsp"
-                   class="btn btn-outline-primary">
-                    Post Now
-                </a>
-
-            </div>
+            </a>
 
         </div>
 
 
         <div class="col-md-4">
 
-            <div class="card p-4 h-100">
-
-                <div class="icon-box mb-3">
-                    <i class="bi bi-people"></i>
-                </div>
-
-                <h5 class="fw-bold">
-                    Student Applications
-                </h5>
-
-                <p class="text-muted">
-                    View and manage applications from students.
-                </p>
-
-                <span class="badge text-bg-secondary">
-                    Coming Soon
-                </span>
-
-            </div>
-
-        </div>
-
-
-        <div class="col-md-4">
-
-            <div class="card p-4 h-100">
+            <a href="#" class="card dash-card p-4 h-100">
 
                 <div class="icon-box mb-3">
                     <i class="bi bi-list-check"></i>
                 </div>
 
                 <h5 class="fw-bold">
-                    Manage Opportunities
+                    My Postings
                 </h5>
 
-                <p class="text-muted">
-                    Manage your posted jobs and internships.
+                <p class="text-muted mb-0">
+                    View and manage all opportunities you've posted.
                 </p>
 
-                <span class="badge text-bg-secondary">
-                    Coming Soon
-                </span>
+            </a>
 
-            </div>
+        </div>
+
+
+        <div class="col-md-4">
+
+            <a href="#" class="card dash-card p-4 h-100">
+
+                <div class="icon-box mb-3">
+                    <i class="bi bi-people-fill"></i>
+                </div>
+
+                <h5 class="fw-bold">
+                    View Applicants
+                </h5>
+
+                <p class="text-muted mb-0">
+                    Review students who applied to your postings.
+                </p>
+
+            </a>
 
         </div>
 
@@ -242,7 +194,11 @@
 
 
 <footer class="text-center text-muted py-4">
-    <small>© 2026 CampusConnect</small>
+
+    <small>
+        © 2026 CampusConnect
+    </small>
+
 </footer>
 
 
