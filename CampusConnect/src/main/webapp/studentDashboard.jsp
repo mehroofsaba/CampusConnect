@@ -1,5 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="com.campusconnect.model.User" %>
+<%@ page import="java.util.List" %>
+<%@ page import="com.campusconnect.dao.OpportunityDAO" %>
+<%@ page import="com.campusconnect.model.Opportunity" %>
 
 <%
     User user = (User) session.getAttribute("user");
@@ -8,6 +11,9 @@
         response.sendRedirect("login.jsp");
         return;
     }
+
+    OpportunityDAO opportunityDAO = new OpportunityDAO();
+    List<Opportunity> opportunities = opportunityDAO.getAllOpportunities();
 %>
 
 <!DOCTYPE html>
@@ -39,6 +45,8 @@ body {
     color: #f5f1e8;
     font-family: "Segoe UI", Arial, sans-serif;
 }
+
+/* NAVBAR */
 
 .navbar-custom {
     background: #071426;
@@ -76,6 +84,8 @@ body {
     margin-right: 8px;
 }
 
+/* HERO */
+
 .hero {
     padding: 75px 0;
     background:
@@ -107,6 +117,8 @@ body {
     line-height: 1.7;
 }
 
+/* DASHBOARD */
+
 .dashboard {
     padding: 70px 0 90px;
 }
@@ -115,6 +127,8 @@ body {
     font-size: 32px;
     font-weight: 750;
 }
+
+/* OPPORTUNITY CARD */
 
 .feature-card {
     height: 100%;
@@ -156,14 +170,106 @@ body {
 .feature-card p {
     color: #8d98a6;
     line-height: 1.7;
-    min-height: 60px;
 }
 
-.coming {
-    background: rgba(214,173,82,.10);
+/* OPPORTUNITY TYPE */
+
+.opportunity-type {
+    display: inline-block;
     color: #d6ad52;
+    background: rgba(214,173,82,.10);
     border: 1px solid rgba(214,173,82,.20);
+    border-radius: 20px;
+    padding: 6px 13px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .5px;
 }
+
+/* OPPORTUNITY INFO */
+
+.opportunity-location {
+    color: #b8c0cb;
+    font-size: 14px;
+    margin-top: 14px;
+}
+
+.opportunity-location i {
+    color: #d6ad52;
+    margin-right: 5px;
+}
+
+.posted-date {
+    color: #707b89;
+    font-size: 12px;
+    margin-top: 6px;
+}
+
+.opportunity-description {
+    color: #8d98a6;
+    line-height: 1.6;
+    margin-top: 18px;
+    min-height: 70px;
+}
+
+.skills-title {
+    color: #f5f1e8;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.skills {
+    color: #d6ad52;
+    font-size: 14px;
+}
+
+/* APPLY BUTTON */
+
+.apply-btn {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 20px;
+    border-radius: 8px;
+    background: #d6ad52;
+    color: #071426;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 14px;
+    transition: .3s;
+}
+
+.apply-btn:hover {
+    background: #f0ca70;
+    color: #071426;
+    transform: translateY(-2px);
+}
+
+/* EMPTY STATE */
+
+.empty-box {
+    border: 1px dashed rgba(214,173,82,.25);
+    border-radius: 18px;
+    padding: 50px 20px;
+    text-align: center;
+    background: rgba(255,255,255,.02);
+}
+
+.empty-box i {
+    font-size: 40px;
+    color: #d6ad52;
+    margin-bottom: 15px;
+}
+
+.empty-box h4 {
+    font-weight: 700;
+}
+
+.empty-box p {
+    color: #8d98a6;
+}
+
+/* FOOTER */
 
 footer {
     background: #050f1c;
@@ -172,10 +278,16 @@ footer {
     color: #707b89;
 }
 
+/* MOBILE */
+
 @media(max-width:768px) {
 
     .hero h1 {
         font-size: 38px;
+    }
+
+    .dashboard {
+        padding-top: 50px;
     }
 
 }
@@ -186,6 +298,8 @@ footer {
 
 <body>
 
+
+<!-- NAVBAR -->
 
 <nav class="navbar-custom">
 
@@ -220,6 +334,8 @@ CampusConnect
 </nav>
 
 
+<!-- HERO -->
+
 <section class="hero">
 
 <div class="container">
@@ -233,7 +349,9 @@ Student Dashboard
 Welcome,
 
 <span style="color:#d6ad52;">
+
 <%= user.getName() %>.
+
 </span>
 
 </h1>
@@ -250,100 +368,140 @@ and take the next step in your career.
 </section>
 
 
+<!-- OPPORTUNITIES -->
+
 <section class="dashboard">
 
 <div class="container">
 
-<h2 class="section-title mb-4">
-Your opportunities
+<h2 class="section-title mb-2">
+Latest Opportunities
 </h2>
 
+<p style="color:#8d98a6;" class="mb-4">
+Explore jobs and internships posted by companies on CampusConnect.
+</p>
 
-<div class="row g-4 align-items-stretch">
+
+<div class="row g-4">
 
 
-<div class="col-md-4 d-flex">
+<%
+    if (opportunities != null && !opportunities.isEmpty()) {
+
+        for (Opportunity opp : opportunities) {
+%>
+
+
+<div class="col-md-6 col-lg-4 d-flex">
 
 <div class="feature-card w-100">
 
-<div class="icon-box">
-<i class="bi bi-compass"></i>
+
+<!-- TYPE -->
+
+<span class="opportunity-type">
+
+<%= opp.getType() %>
+
+</span>
+
+
+<!-- LOCATION -->
+
+<div class="opportunity-location">
+
+<i class="bi bi-geo-alt-fill"></i>
+
+<%= opp.getLocation() %>
+
 </div>
 
-<h4>
-Discover Opportunities
-</h4>
 
-<p>
+<!-- POSTED DATE -->
 
-Browse jobs and internships posted
-by companies on CampusConnect.
+<div class="posted-date">
+
+Posted:
+<%= opp.getPostedDate() %>
+
+</div>
+
+
+<!-- DESCRIPTION -->
+
+<p class="opportunity-description">
+
+<%= opp.getDescription() %>
 
 </p>
 
-<span class="badge coming">
-Coming Soon
+
+<!-- SKILLS -->
+
+<div>
+
+<span class="skills-title">
+Skills:
+</span>
+
+<span class="skills">
+
+<%= opp.getSkillRequired() %>
+
 </span>
 
 </div>
 
+
+<!-- APPLY -->
+
+<a href="#" class="apply-btn">
+
+Apply Now
+
+<i class="bi bi-arrow-right ms-1"></i>
+
+</a>
+
+
+</div>
+
 </div>
 
 
-<div class="col-md-4 d-flex">
+<%
+        }
 
-<div class="feature-card w-100">
+    } else {
+%>
 
-<div class="icon-box">
-<i class="bi bi-file-earmark-text"></i>
-</div>
+
+<!-- NO OPPORTUNITIES -->
+
+<div class="col-12">
+
+<div class="empty-box">
+
+<i class="bi bi-briefcase"></i>
 
 <h4>
-My Applications
+No opportunities available
 </h4>
 
 <p>
-
-Keep track of applications and
-opportunities you have applied for.
-
+There are no jobs or internships posted yet.
+Please check back later.
 </p>
 
-<span class="badge coming">
-Coming Soon
-</span>
-
 </div>
 
 </div>
 
 
-<div class="col-md-4 d-flex">
-
-<div class="feature-card w-100">
-
-<div class="icon-box">
-<i class="bi bi-person-vcard"></i>
-</div>
-
-<h4>
-My Profile
-</h4>
-
-<p>
-
-Manage your profile and keep your
-information up to date.
-
-</p>
-
-<span class="badge coming">
-Coming Soon
-</span>
-
-</div>
-
-</div>
+<%
+    }
+%>
 
 
 </div>
@@ -352,6 +510,8 @@ Coming Soon
 
 </section>
 
+
+<!-- FOOTER -->
 
 <footer>
 
