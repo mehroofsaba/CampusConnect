@@ -40,6 +40,9 @@ body {
     font-family: "Segoe UI", Arial, sans-serif;
 }
 
+
+/* NAVBAR */
+
 .navbar-custom {
     background: #071426;
     border-bottom: 1px solid rgba(214,173,82,.18);
@@ -51,6 +54,10 @@ body {
     text-decoration: none;
     font-size: 24px;
     font-weight: 750;
+}
+
+.brand:hover {
+    color: #f5f1e8;
 }
 
 .brand i {
@@ -75,6 +82,9 @@ body {
     justify-content: center;
     margin-right: 8px;
 }
+
+
+/* HERO */
 
 .hero {
     padding: 75px 0;
@@ -105,21 +115,101 @@ body {
     line-height: 1.7;
 }
 
+
+/* DASHBOARD */
+
 .dashboard {
     padding: 70px 0 90px;
 }
 
-.post-card {
-    background: linear-gradient(135deg,#10263f,#0b1b2f);
-    border: 1px solid rgba(214,173,82,.25);
-    border-radius: 18px;
-    padding: 32px;
-    margin-bottom: 50px;
+.section-title {
+    font-size: 32px;
+    font-weight: 750;
 }
 
-.post-card p {
-    color: #8d98a6;
+
+/* DASHBOARD CARDS */
+
+.dash-card {
+    height: 100%;
+    min-height: 270px;
+    background: linear-gradient(145deg,
+        rgba(255,255,255,.045),
+        rgba(255,255,255,.015));
+    border: 1px solid rgba(255,255,255,.09);
+    border-radius: 18px;
+    padding: 32px;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    transition: .3s;
 }
+
+.dash-card:hover {
+    transform: translateY(-7px);
+    color: inherit;
+    border-color: rgba(214,173,82,.45);
+    box-shadow: 0 20px 45px rgba(0,0,0,.25);
+}
+
+.icon-box {
+    width: 58px;
+    height: 58px;
+    border-radius: 15px;
+    background: rgba(214,173,82,.10);
+    border: 1px solid rgba(214,173,82,.25);
+    color: #d6ad52;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 25px;
+    margin-bottom: 25px;
+}
+
+.dash-card h4 {
+    font-size: 21px;
+    font-weight: 700;
+}
+
+.dash-card p {
+    color: #8d98a6;
+    line-height: 1.7;
+}
+
+
+/* OLD FEATURE SECTION */
+
+.feature-card {
+    height: 100%;
+    min-height: 300px;
+    background: linear-gradient(145deg,
+        rgba(255,255,255,.045),
+        rgba(255,255,255,.015));
+    border: 1px solid rgba(255,255,255,.09);
+    border-radius: 18px;
+    padding: 32px;
+    transition: .3s;
+}
+
+.feature-card:hover {
+    transform: translateY(-7px);
+    border-color: rgba(214,173,82,.45);
+    box-shadow: 0 20px 45px rgba(0,0,0,.25);
+}
+
+.feature-card h4 {
+    font-size: 21px;
+    font-weight: 700;
+}
+
+.feature-card p {
+    color: #8d98a6;
+    line-height: 1.7;
+    min-height: 60px;
+}
+
+
+/* BUTTON */
 
 .post-btn {
     display: inline-flex;
@@ -140,60 +230,6 @@ body {
     transform: translateY(-2px);
 }
 
-.section-title {
-    font-size: 32px;
-    font-weight: 750;
-}
-
-.feature-card {
-    height: 100%;
-    min-height: 300px;
-    background: linear-gradient(145deg,
-        rgba(255,255,255,.045),
-        rgba(255,255,255,.015));
-    border: 1px solid rgba(255,255,255,.09);
-    border-radius: 18px;
-    padding: 32px;
-    transition: .3s;
-}
-
-.feature-card:hover {
-    transform: translateY(-7px);
-    border-color: rgba(214,173,82,.45);
-    box-shadow: 0 20px 45px rgba(0,0,0,.25);
-}
-
-.icon-box {
-    width: 58px;
-    height: 58px;
-    border-radius: 15px;
-    background: rgba(214,173,82,.10);
-    border: 1px solid rgba(214,173,82,.25);
-    color: #d6ad52;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 25px;
-    margin-bottom: 25px;
-}
-
-.feature-card h4 {
-    font-size: 21px;
-    font-weight: 700;
-}
-
-.feature-card p {
-    color: #8d98a6;
-    line-height: 1.7;
-    min-height: 60px;
-}
-
-.coming {
-    background: rgba(214,173,82,.10);
-    color: #d6ad52;
-    border: 1px solid rgba(214,173,82,.20);
-}
-
 .btn-outline-dark {
     color: #d6ad52;
     border-color: rgba(214,173,82,.45);
@@ -204,6 +240,18 @@ body {
     color: #071426;
     border-color: #d6ad52;
 }
+
+
+/* COMING SOON */
+
+.coming {
+    background: rgba(214,173,82,.10);
+    color: #d6ad52;
+    border: 1px solid rgba(214,173,82,.20);
+}
+
+
+/* FOOTER */
 
 footer {
     background: #050f1c;
@@ -216,227 +264,253 @@ footer {
 
 </head>
 
+
 <body>
 
 
+<!-- NAVBAR -->
+
 <nav class="navbar-custom">
 
-<div class="container">
+    <div class="container">
 
-<div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex justify-content-between align-items-center">
 
-<a href="companyDashboard.jsp" class="brand">
+            <a href="companyDashboard.jsp" class="brand">
 
-<i class="bi bi-mortarboard-fill"></i>
+                <i class="bi bi-mortarboard-fill"></i>
 
-CampusConnect
+                CampusConnect
 
-</a>
+            </a>
 
-<div class="company-name">
 
-<span class="company-icon">
+            <div class="company-name">
 
-<i class="bi bi-building"></i>
+                <span class="company-icon">
 
-</span>
+                    <i class="bi bi-building"></i>
 
-<%= user.getName() %>
+                </span>
 
-</div>
+                <%= user.getName() %>
 
-</div>
+            </div>
 
-</div>
+        </div>
+
+    </div>
 
 </nav>
 
 
+
+<!-- HERO -->
+
 <section class="hero">
 
-<div class="container">
+    <div class="container">
 
-<div class="hero-label">
-Company Dashboard
-</div>
+        <div class="hero-label">
+            Company Dashboard
+        </div>
 
-<h1 class="mt-3">
 
-Welcome,
+        <h1 class="mt-3">
 
-<span style="color:#d6ad52;">
-<%= user.getName() %>.
-</span>
+            Welcome,
 
-</h1>
+            <span style="color:#d6ad52;">
 
-<p class="mt-3 mb-0">
+                <%= user.getName() %>.
 
-Connect with talented students and build
-your next generation of talent.
+            </span>
 
-</p>
+        </h1>
 
-</div>
+
+        <p class="mt-3 mb-0">
+
+            Connect with talented students and build
+            your next generation of talent.
+
+        </p>
+
+    </div>
 
 </section>
 
+
+
+<!-- DASHBOARD -->
 
 <section class="dashboard">
 
-<div class="container">
+    <div class="container">
 
 
-<div class="post-card">
+        <h2 class="section-title mb-4">
 
-<div class="row align-items-center">
+            Company Tools
 
-<div class="col-md-8">
-
-<h3 class="fw-bold">
-Have an opportunity to share?
-</h3>
-
-<p class="mb-0">
-
-Post a job or internship and connect
-with students looking for their next opportunity.
-
-</p>
-
-</div>
-
-<div class="col-md-4 text-md-end mt-4 mt-md-0">
-
-<a href="postJob.jsp"
-   class="post-btn">
-
-<i class="bi bi-plus-lg"></i>
-
-Post Opportunity
-
-</a>
-
-</div>
-
-</div>
-
-</div>
+        </h2>
 
 
-<h2 class="section-title mb-4">
-Company tools
-</h2>
+        <div class="row g-4">
 
 
-<div class="row g-4 align-items-stretch">
+            <!-- POST OPPORTUNITY -->
+
+            <div class="col-md-4">
+
+                <a href="postJob.jsp"
+                   class="dash-card">
+
+                    <div class="icon-box">
+
+                        <i class="bi bi-briefcase-fill"></i>
+
+                    </div>
 
 
-<div class="col-md-4 d-flex">
+                    <h4>
 
-<div class="feature-card w-100">
+                        Post Opportunity
 
-<div class="icon-box">
-<i class="bi bi-megaphone"></i>
-</div>
-
-<h4>
-Post Opportunities
-</h4>
-
-<p>
-
-Publish jobs and internships for
-students to discover.
-
-</p>
-
-<a href="postJob.jsp"
-   class="btn btn-outline-dark">
-
-Post now
-
-</a>
-
-</div>
-
-</div>
+                    </h4>
 
 
-<div class="col-md-4 d-flex">
+                    <p>
 
-<div class="feature-card w-100">
+                        Create and publish a new
+                        job or internship opportunity
+                        for students.
 
-<div class="icon-box">
-<i class="bi bi-people"></i>
-</div>
-
-<h4>
-Student Applications
-</h4>
-
-<p>
-
-View applications and discover
-potential candidates.
-
-</p>
-
-<span class="badge coming">
-Coming Soon
-</span>
-
-</div>
-
-</div>
+                    </p>
 
 
-<div class="col-md-4 d-flex">
+                    <span class="post-btn mt-2">
 
-<div class="feature-card w-100">
+                        <i class="bi bi-plus-lg"></i>
 
-<div class="icon-box">
-<i class="bi bi-list-check"></i>
-</div>
+                        Post now
 
-<h4>
-Manage Opportunities
-</h4>
+                    </span>
 
-<p>
+                </a>
 
-Keep track of the jobs and internships
-you've posted.
-
-</p>
-
-<span class="badge coming">
-Coming Soon
-</span>
-
-</div>
-
-</div>
+            </div>
 
 
-</div>
 
-</div>
+            <!-- MY POSTINGS -->
+
+            <div class="col-md-4">
+
+                <a href="#"
+                   class="dash-card">
+
+                    <div class="icon-box">
+
+                        <i class="bi bi-list-check"></i>
+
+                    </div>
+
+
+                    <h4>
+
+                        My Postings
+
+                    </h4>
+
+
+                    <p>
+
+                        View and manage all the
+                        jobs and internships you
+                        have posted.
+
+                    </p>
+
+
+                    <span class="badge coming mt-2">
+
+                        Coming Soon
+
+                    </span>
+
+                </a>
+
+            </div>
+
+
+
+            <!-- APPLICANTS -->
+
+            <div class="col-md-4">
+
+                <a href="#"
+                   class="dash-card">
+
+                    <div class="icon-box">
+
+                        <i class="bi bi-people-fill"></i>
+
+                    </div>
+
+
+                    <h4>
+
+                        View Applicants
+
+                    </h4>
+
+
+                    <p>
+
+                        Review students who applied
+                        to your job and internship
+                        opportunities.
+
+                    </p>
+
+
+                    <span class="badge coming mt-2">
+
+                        Coming Soon
+
+                    </span>
+
+                </a>
+
+            </div>
+
+
+        </div>
+
+
+    </div>
 
 </section>
 
 
+
+<!-- FOOTER -->
+
 <footer>
 
-<div class="container text-center">
+    <div class="container text-center">
 
-<small>
-© 2026 CampusConnect · Built for companies
-</small>
+        <small>
 
-</div>
+            © 2026 CampusConnect · Built for companies
+
+        </small>
+
+    </div>
 
 </footer>
+
 
 
 </body>
