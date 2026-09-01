@@ -8,6 +8,7 @@ public class Application {
     private int oppId;
     private String status; // PENDING, ACCEPTED, REJECTED
     private Date appliedDate;
+    private String studentName;
 
     public Application() {}
 
@@ -33,4 +34,12 @@ public class Application {
 
     public Date getAppliedDate() { return appliedDate; }
     public void setAppliedDate(Date appliedDate) { this.appliedDate = appliedDate; }
+    
+    public String getStudentName() {
+        return studentName;
+    }
+
+    public void setStudentName(String studentName) {
+        this.studentName = studentName;
+    }
 }

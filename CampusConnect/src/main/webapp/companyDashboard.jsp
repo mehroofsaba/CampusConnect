@@ -954,45 +954,33 @@ footer {
             </div>
 
 
-            <!-- ================================================= -->
-            <!-- APPLICANTS -->
-            <!-- ================================================= -->
+           <div class="col-md-4">
 
-            <div class="col-md-4">
+    <a href="${pageContext.request.contextPath}/companyapplications"
+       class="dash-card">
 
-                <a href="#"
-                   class="dash-card">
+        <div class="icon-box">
+            <i class="bi bi-people-fill"></i>
+        </div>
 
-                    <div class="icon-box">
+        <h4>
+            View Applicants
+        </h4>
 
-                        <i class="bi bi-people-fill"></i>
+        <p>
+            Review students who applied
+            to your job and internship
+            opportunities.
+        </p>
 
-                    </div>
+        <span class="post-btn mt-2">
+            <i class="bi bi-eye-fill"></i>
+            View applicants
+        </span>
 
+    </a>
 
-                    <h4>
-                        View Applicants
-                    </h4>
-
-
-                    <p>
-
-                        Review students who applied
-                        to your job and internship
-                        opportunities.
-
-                    </p>
-
-
-                    <span class="badge coming mt-2">
-
-                        Coming Soon
-
-                    </span>
-
-                </a>
-
-            </div>
+</div>
 
 
         </div>

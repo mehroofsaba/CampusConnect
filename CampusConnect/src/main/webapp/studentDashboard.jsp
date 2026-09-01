@@ -15,8 +15,29 @@
 
     OpportunityDAO opportunityDAO = new OpportunityDAO();
     List<Opportunity> opportunities = opportunityDAO.getAllOpportunities();
+
+    String applyMessage = (String) session.getAttribute("applyMessage");
+    session.removeAttribute("applyMessage");
+%>
+<%
+    if (applyMessage != null) {
 %>
 
+<div class="container mt-4">
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check-circle-fill me-2"></i>
+        <%= applyMessage %>
+
+        <button type="button"
+                class="btn-close"
+                data-bs-dismiss="alert">
+        </button>
+    </div>
+</div>
+
+<%
+    }
+%>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -801,14 +822,19 @@ Skills:
 
 <!-- APPLY BUTTON -->
 
-<a href="#"
-   class="apply-btn">
+<form action="${pageContext.request.contextPath}/apply" method="post">
+ <input type="hidden"
+           name="oppId"
+           value="<%= opp.getOppId() %>">
 
-Apply Now
+    <button type="submit" class="apply-btn border-0">
 
-<i class="bi bi-arrow-right"></i>
+        Apply Now
+        <i class="bi bi-arrow-right ms-1"></i>
 
-</a>
+    </button>
+
+</form>
 
 
 </div>
