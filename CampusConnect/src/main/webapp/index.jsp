@@ -68,7 +68,7 @@
             background: #d6ad52;
             color: #071426;
         }
-
+        
 
         /* ================= HERO ================= */
 
@@ -185,76 +185,129 @@
 
         /* ================= BUTTONS ================= */
 
-        .btn-gold {
-            display: inline-flex;
-            align-items: center;
-            gap: 9px;
+.btn-gold {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
 
-            background: #d6ad52;
-            color: #071426;
+    background: #d6ad52;
+    color: #071426;
 
-            border: none;
+    border: none;
 
-            padding: 14px 25px;
+    padding: 14px 25px;
 
-            border-radius: 9px;
+    border-radius: 9px;
 
-            font-weight: 750;
+    font-weight: 750;
 
-            text-decoration: none;
+    text-decoration: none;
 
-            transition: .25s;
+    transition: all .3s ease;
 
-            box-shadow:
-                0 8px 25px rgba(214, 173, 82, 0.18);
-        }
-
-
-        .btn-gold:hover {
-            background: #e3be68;
-            color: #071426;
-
-            transform: translateY(-3px);
-
-            box-shadow:
-                0 12px 30px rgba(214, 173, 82, 0.25);
-        }
+    /* PERMANENT GOLD GLOW */
+    box-shadow:
+        0 0 6px rgba(214, 173, 82, 0.55),
+        0 0 15px rgba(214, 173, 82, 0.35),
+        0 8px 25px rgba(214, 173, 82, 0.18);
+}
 
 
-        .btn-outline-gold {
-            display: inline-flex;
-            align-items: center;
-            gap: 9px;
+.btn-gold:hover {
+    background: #e3be68;
+    color: #071426;
 
-            background: transparent;
+    transform: translateY(-3px);
 
-            color: #d6ad52;
-
-            border: 1px solid rgba(214, 173, 82, 0.55);
-
-            padding: 13px 24px;
-
-            border-radius: 9px;
-
-            font-weight: 650;
-
-            text-decoration: none;
-
-            transition: .25s;
-
-            margin-left: 10px;
-        }
+    /* STRONGER GLOW ON HOVER */
+    box-shadow:
+        0 0 8px rgba(214, 173, 82, 0.9),
+        0 0 20px rgba(214, 173, 82, 0.65),
+        0 0 35px rgba(214, 173, 82, 0.35);
+}
 
 
-        .btn-outline-gold:hover {
-            background: rgba(214, 173, 82, 0.08);
+.btn-outline-gold {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
 
-            color: #e3be68;
+    background: transparent;
 
-            border-color: #d6ad52;
+    color: #d6ad52;
 
-            transform: translateY(-2px);
-        }
+    border: 1px solid rgba(214, 173, 82, 0.55);
+
+    padding: 13px 24px;
+
+    border-radius: 9px;
+
+    font-weight: 650;
+
+    text-decoration: none;
+
+    transition: all .3s ease;
+
+    margin-left: 10px;
+
+    /* PERMANENT GOLD OUTLINE GLOW */
+    box-shadow:
+        0 0 5px rgba(214, 173, 82, 0.35),
+        0 0 12px rgba(214, 173, 82, 0.18);
+}
+
+
+.btn-outline-gold:hover {
+    background: rgba(214, 173, 82, 0.08);
+
+    color: #e3be68;
+
+    border-color: #d6ad52;
+
+    transform: translateY(-2px);
+
+    /* STRONGER GLOW ON HOVER */
+    box-shadow:
+        0 0 8px rgba(214, 173, 82, 0.75),
+        0 0 18px rgba(214, 173, 82, 0.45),
+        0 0 28px rgba(214, 173, 82, 0.25);
+}
+
+
+.nav-login {
+    color: #d6ad52;
+
+    text-decoration: none;
+
+    font-weight: 650;
+
+    padding: 9px 18px;
+
+    border: 1px solid rgba(214, 173, 82, 0.5);
+
+    border-radius: 8px;
+
+    transition: all .3s ease;
+
+    /* NAVBAR GLOW */
+    box-shadow:
+        0 0 5px rgba(214, 173, 82, 0.35),
+        0 0 12px rgba(214, 173, 82, 0.18);
+}
+
+
+.nav-login:hover {
+    background: #d6ad52;
+
+    color: #071426;
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 0 8px rgba(214, 173, 82, 0.8),
+        0 0 18px rgba(214, 173, 82, 0.5),
+        0 0 28px rgba(214, 173, 82, 0.3);
+}
 
 
         /* ================= STATS ================= */

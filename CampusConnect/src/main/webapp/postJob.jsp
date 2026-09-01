@@ -5,365 +5,823 @@
 
 <head>
 
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
-<title>Post Opportunity | CampusConnect</title>
+    <title>Post Opportunity | CampusConnect</title>
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-      rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
 
-<link rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-<style>
+    <style>
 
-* {
-    box-sizing: border-box;
-}
+        /* ================= GENERAL ================= */
 
-body {
-    margin: 0;
-    background: #071426;
-    color: #f5f1e8;
-    font-family: "Segoe UI", Arial, sans-serif;
-}
+        * {
+            box-sizing: border-box;
+        }
 
-.navbar-custom {
-    background: #071426;
-    border-bottom: 1px solid rgba(214,173,82,.18);
-    padding: 20px 0;
-}
+        body {
+            margin: 0;
+            background: #071426;
+            color: #f5f1e8;
+            font-family: "Segoe UI", Arial, sans-serif;
+        }
 
-.brand {
-    color: #f5f1e8;
-    text-decoration: none;
-    font-size: 24px;
-    font-weight: 750;
-}
 
-.brand i {
-    color: #d6ad52;
-    margin-right: 8px;
-}
+        /* ================= NAVBAR ================= */
 
-.back-link {
-    color: #d6ad52;
-    text-decoration: none;
-    font-weight: 650;
-}
+        .navbar-custom {
+            background: #071426;
+            border-bottom: 1px solid rgba(214,173,82,.18);
+            padding: 20px 0;
+        }
 
-.page {
-    padding: 65px 15px 90px;
-    min-height: calc(100vh - 80px);
-}
+        .brand {
+            color: #f5f1e8;
+            text-decoration: none;
+            font-size: 24px;
+            font-weight: 750;
+            transition: all .3s ease;
+        }
 
-.form-card {
-    max-width: 800px;
-    margin: auto;
-    background: #0a1a2e;
-    border: 1px solid rgba(214,173,82,.20);
-    border-radius: 20px;
-    padding: 45px;
-    box-shadow: 0 25px 70px rgba(0,0,0,.35);
-}
+        .brand i {
+            color: #d6ad52;
+            margin-right: 8px;
+            transition: all .3s ease;
+        }
 
-.heading-icon {
-    width: 65px;
-    height: 65px;
-    background: rgba(214,173,82,.10);
-    border: 1px solid rgba(214,173,82,.25);
-    color: #d6ad52;
-    border-radius: 17px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 28px;
-    margin-bottom: 22px;
-}
+        .brand:hover {
+            color: #ffffff;
+            text-shadow:
+                0 0 8px rgba(214,173,82,.35);
+        }
 
-.form-card h1 {
-    font-size: 36px;
-    font-weight: 800;
-    letter-spacing: -1px;
-}
+        .brand:hover i {
+            text-shadow:
+                0 0 10px rgba(214,173,82,.9);
+        }
 
-.subtitle {
-    color: #7f8a98;
-    line-height: 1.7;
-}
 
-.form-label {
-    font-weight: 650;
-}
+        /* ================= DASHBOARD BUTTON ================= */
 
-.form-control,
-.form-select {
-    padding: 13px;
-    background: #071426;
-    border-color: rgba(255,255,255,.12);
-    color: #f5f1e8;
-    border-radius: 9px;
-}
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
 
-.form-control::placeholder {
-    color: #667384;
-}
+            color: #d6ad52;
+            text-decoration: none;
+            font-weight: 650;
 
-.form-select option {
-    background: #071426;
-}
+            padding: 9px 18px;
 
-.form-control:focus,
-.form-select:focus {
-    background: #071426;
-    color: #f5f1e8;
-    border-color: #d6ad52;
-    box-shadow: 0 0 0 3px rgba(214,173,82,.12);
-}
+            border: 1px solid rgba(214,173,82,.50);
+            border-radius: 9px;
 
-textarea {
-    resize: vertical;
-    min-height: 160px;
-}
+            transition:
+                all .3s ease;
 
-.submit-btn {
-    width: 100%;
-    padding: 13px;
-    border: none;
-    border-radius: 9px;
-    background: #d6ad52;
-    color: #071426;
-    font-weight: 750;
-    transition: .25s;
-}
+            box-shadow:
+                0 0 7px rgba(214,173,82,.25),
+                0 0 15px rgba(214,173,82,.10);
+        }
 
-.submit-btn:hover {
-    background: #e3be68;
-    transform: translateY(-2px);
-    box-shadow: 0 10px 25px rgba(214,173,82,.18);
-}
+        .back-link:hover {
+            background: #d6ad52;
+            color: #071426;
 
-.tip {
-    margin-top: 25px;
-    padding: 15px 18px;
-    background: rgba(214,173,82,.06);
-    border: 1px solid rgba(214,173,82,.12);
-    border-radius: 10px;
-    color: #8d98a6;
-    font-size: 14px;
-}
+            transform: translateY(-2px);
 
-.tip i {
-    color: #d6ad52;
-}
+            box-shadow:
+                0 0 10px rgba(214,173,82,.9),
+                0 0 22px rgba(214,173,82,.55),
+                0 8px 25px rgba(214,173,82,.20);
+        }
 
-.alert {
-    background: rgba(214,173,82,.08);
-    border: 1px solid rgba(214,173,82,.20);
-    color: #d6ad52;
-}
+        .back-link:active {
+            transform: translateY(0);
 
-</style>
+            box-shadow:
+                0 0 7px rgba(214,173,82,.7);
+        }
+
+        .back-link:focus {
+            outline: none;
+
+            box-shadow:
+                0 0 0 3px rgba(214,173,82,.15),
+                0 0 18px rgba(214,173,82,.55);
+        }
+
+
+        /* ================= PAGE ================= */
+
+        .page {
+            padding: 65px 15px 90px;
+            min-height: calc(100vh - 80px);
+
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page::before {
+            content: "";
+            position: absolute;
+
+            width: 400px;
+            height: 400px;
+
+            border-radius: 50%;
+
+            border: 1px solid rgba(214,173,82,.08);
+
+            right: -180px;
+            top: -150px;
+        }
+
+        .page::after {
+            content: "";
+            position: absolute;
+
+            width: 280px;
+            height: 280px;
+
+            border-radius: 50%;
+
+            background: rgba(214,173,82,.035);
+
+            left: -140px;
+            bottom: -130px;
+        }
+
+
+        /* ================= FORM CARD ================= */
+
+        .form-card {
+            max-width: 800px;
+            margin: auto;
+
+            background: #0a1a2e;
+
+            border: 1px solid rgba(214,173,82,.20);
+
+            border-radius: 20px;
+
+            padding: 45px;
+
+            box-shadow:
+                0 25px 70px rgba(0,0,0,.35);
+
+            position: relative;
+            z-index: 2;
+        }
+
+
+        /* ================= HEADING ICON ================= */
+
+        .heading-icon {
+            width: 65px;
+            height: 65px;
+
+            background: rgba(214,173,82,.10);
+
+            border: 1px solid rgba(214,173,82,.25);
+
+            color: #d6ad52;
+
+            border-radius: 17px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 28px;
+
+            margin-bottom: 22px;
+
+            transition:
+                all .3s ease;
+
+            box-shadow:
+                0 0 8px rgba(214,173,82,.15);
+        }
+
+        .heading-icon:hover {
+            transform: translateY(-3px);
+
+            background: rgba(214,173,82,.14);
+
+            box-shadow:
+                0 0 12px rgba(214,173,82,.45),
+                0 0 25px rgba(214,173,82,.20);
+        }
+
+
+        /* ================= HEADING ================= */
+
+        .form-card h1 {
+            font-size: 36px;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+
+        .subtitle {
+            color: #7f8a98;
+            line-height: 1.7;
+        }
+
+
+        /* ================= FORM ================= */
+
+        .form-label {
+            font-weight: 650;
+            margin-bottom: 8px;
+        }
+
+        .form-control,
+        .form-select {
+
+            padding: 13px;
+
+            background: #071426;
+
+            border-color:
+                rgba(255,255,255,.12);
+
+            color: #f5f1e8;
+
+            border-radius: 9px;
+
+            transition:
+                border-color .25s ease,
+                box-shadow .25s ease,
+                transform .25s ease;
+        }
+
+        .form-control::placeholder {
+            color: #667384;
+        }
+
+        .form-select option {
+            background: #071426;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+
+            background: #071426;
+
+            color: #f5f1e8;
+
+            border-color: #d6ad52;
+
+            box-shadow:
+                0 0 0 3px rgba(214,173,82,.12),
+                0 0 12px rgba(214,173,82,.10);
+
+            outline: none;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 160px;
+        }
+
+
+        /* ================= PUBLISH BUTTON ================= */
+
+        .submit-btn {
+
+            width: 100%;
+
+            padding: 13px;
+
+            border: none;
+
+            border-radius: 9px;
+
+            background: #d6ad52;
+
+            color: #071426;
+
+            font-weight: 750;
+
+            cursor: pointer;
+
+            transition:
+                all .3s ease;
+
+            box-shadow:
+                0 0 8px rgba(214,173,82,.45),
+                0 0 18px rgba(214,173,82,.18),
+                0 8px 25px rgba(214,173,82,.12);
+        }
+
+        .submit-btn:hover {
+
+            background: #e3be68;
+
+            color: #071426;
+
+            transform:
+                translateY(-3px)
+                scale(1.01);
+
+            box-shadow:
+                0 0 10px rgba(214,173,82,1),
+                0 0 22px rgba(214,173,82,.70),
+                0 12px 35px rgba(214,173,82,.30);
+        }
+
+        .submit-btn:active {
+
+            transform:
+                translateY(-1px)
+                scale(.98);
+
+            box-shadow:
+                0 0 8px rgba(214,173,82,.70);
+        }
+
+        .submit-btn:focus {
+
+            outline: none;
+
+            box-shadow:
+                0 0 0 3px rgba(214,173,82,.20),
+                0 0 18px rgba(214,173,82,.60);
+        }
+
+
+        /* ================= ALERT ================= */
+
+        .alert {
+
+            background:
+                rgba(214,173,82,.08);
+
+            border:
+                1px solid rgba(214,173,82,.20);
+
+            color: #d6ad52;
+
+            border-radius: 9px;
+        }
+
+
+        /* ================= TIP ================= */
+
+        .tip {
+
+            margin-top: 25px;
+
+            padding: 15px 18px;
+
+            background:
+                rgba(214,173,82,.06);
+
+            border:
+                1px solid rgba(214,173,82,.12);
+
+            border-radius: 10px;
+
+            color: #8d98a6;
+
+            font-size: 14px;
+
+            transition:
+                all .3s ease;
+        }
+
+        .tip:hover {
+
+            border-color:
+                rgba(214,173,82,.28);
+
+            box-shadow:
+                0 0 15px rgba(214,173,82,.08);
+        }
+
+        .tip i {
+            color: #d6ad52;
+        }
+
+
+        /* ================= TABLET ================= */
+
+        @media (max-width: 768px) {
+
+            .navbar-custom {
+                padding: 16px 15px;
+            }
+
+            .brand {
+                font-size: 21px;
+            }
+
+            .back-link {
+                padding: 8px 14px;
+                font-size: 14px;
+            }
+
+            .page {
+                padding:
+                    45px 15px 70px;
+            }
+
+            .form-card {
+                padding: 35px;
+                border-radius: 18px;
+            }
+
+            .form-card h1 {
+                font-size: 32px;
+            }
+
+            .heading-icon {
+                width: 60px;
+                height: 60px;
+                font-size: 25px;
+            }
+
+            .submit-btn {
+                padding: 14px;
+                font-size: 15px;
+            }
+        }
+
+
+        /* ================= SMALL MOBILE ================= */
+
+        @media (max-width: 480px) {
+
+            .navbar-custom {
+                padding: 14px 12px;
+            }
+
+            .brand {
+                font-size: 18px;
+            }
+
+            .brand i {
+                margin-right: 4px;
+            }
+
+            .back-link {
+                padding: 7px 10px;
+                font-size: 13px;
+            }
+
+            .page {
+                padding:
+                    30px 10px 55px;
+            }
+
+            .form-card {
+                padding: 28px 22px;
+                border-radius: 16px;
+            }
+
+            .heading-icon {
+                width: 55px;
+                height: 55px;
+                border-radius: 14px;
+                font-size: 23px;
+            }
+
+            .form-card h1 {
+                font-size: 28px;
+            }
+
+            .subtitle {
+                font-size: 14px;
+            }
+
+            .form-label {
+                font-size: 14px;
+            }
+
+            .form-control,
+            .form-select {
+                padding: 12px;
+                font-size: 14px;
+            }
+
+            textarea {
+                min-height: 140px;
+            }
+
+            .submit-btn {
+                padding: 13px;
+                font-size: 14px;
+            }
+
+            .tip {
+                font-size: 13px;
+                padding: 13px 15px;
+            }
+        }
+
+
+        /* ================= VERY SMALL DEVICES ================= */
+
+        @media (max-width: 360px) {
+
+            .brand {
+                font-size: 16px;
+            }
+
+            .back-link {
+                padding: 6px 8px;
+                font-size: 12px;
+            }
+
+            .form-card {
+                padding: 25px 18px;
+            }
+
+            .form-card h1 {
+                font-size: 25px;
+            }
+
+            .heading-icon {
+                width: 50px;
+                height: 50px;
+                font-size: 21px;
+            }
+        }
+
+    </style>
 
 </head>
+
 
 <body>
 
 
+<!-- ================= NAVBAR ================= -->
+
 <nav class="navbar-custom">
 
-<div class="container">
+    <div class="container">
 
-<div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex justify-content-between align-items-center">
 
-<a href="companyDashboard.jsp" class="brand">
+            <a href="companyDashboard.jsp"
+               class="brand">
 
-<i class="bi bi-mortarboard-fill"></i>
+                <i class="bi bi-mortarboard-fill"></i>
 
-CampusConnect
+                CampusConnect
 
-</a>
+            </a>
 
-<a href="companyDashboard.jsp" class="back-link">
 
-<i class="bi bi-arrow-left me-1"></i>
+            <a href="companyDashboard.jsp"
+               class="back-link">
 
-Dashboard
+                <i class="bi bi-arrow-left"></i>
 
-</a>
+                Dashboard
 
-</div>
+            </a>
 
-</div>
+        </div>
+
+    </div>
 
 </nav>
 
 
+
+<!-- ================= PAGE ================= -->
+
 <section class="page">
 
-<div class="form-card">
+    <div class="form-card">
 
 
-<div class="heading-icon">
+        <!-- ================= ICON ================= -->
 
-<i class="bi bi-briefcase"></i>
+        <div class="heading-icon">
 
-</div>
+            <i class="bi bi-briefcase"></i>
 
+        </div>
 
-<h1>
-Post an opportunity
-</h1>
 
-<p class="subtitle mb-4">
 
-Share a job or internship opportunity
-with students on CampusConnect.
+        <!-- ================= HEADING ================= -->
 
-</p>
+        <h1>
 
+            Post an opportunity
 
-<% if (request.getAttribute("error") != null) { %>
+        </h1>
 
-<div class="alert mb-4">
 
-<i class="bi bi-exclamation-circle me-2"></i>
+        <p class="subtitle mb-4">
 
-<%= request.getAttribute("error") %>
+            Share a job or internship opportunity
+            with students on CampusConnect.
 
-</div>
+        </p>
 
-<% } %>
 
 
-<% if (request.getAttribute("message") != null) { %>
+        <!-- ================= ERROR ================= -->
 
-<div class="alert mb-4">
+        <% if (request.getAttribute("error") != null) { %>
 
-<i class="bi bi-check-circle me-2"></i>
+            <div class="alert mb-4">
 
-<%= request.getAttribute("message") %>
+                <i class="bi bi-exclamation-circle me-2"></i>
 
-</div>
+                <%= request.getAttribute("error") %>
 
-<% } %>
+            </div>
 
+        <% } %>
 
-<form action="postOpportunity" method="post">
 
 
-<div class="mb-4">
+        <!-- ================= SUCCESS ================= -->
 
-<label class="form-label">
-Opportunity title
-</label>
+        <% if (request.getAttribute("message") != null) { %>
 
-<input type="text"
-       name="title"
-       class="form-control"
-       placeholder="e.g. Java Developer Intern"
-       required>
+            <div class="alert mb-4">
 
-</div>
+                <i class="bi bi-check-circle me-2"></i>
 
+                <%= request.getAttribute("message") %>
 
-<div class="mb-4">
+            </div>
 
-<label class="form-label">
-Opportunity type
-</label>
+        <% } %>
 
-<select name="type"
-        class="form-select"
-        required>
 
-<option value="" selected disabled>
-Choose an opportunity type
-</option>
 
-<option value="JOB">
-Full-Time Job
-</option>
+        <!-- ================= FORM ================= -->
 
-<option value="INTERNSHIP">
-Internship
-</option>
+        <form action="postOpportunity"
+              method="post">
 
-</select>
 
-</div>
+            <!-- OPPORTUNITY TITLE -->
 
+            <div class="mb-4">
 
-<div class="mb-4">
+                <label class="form-label">
 
-<label class="form-label">
-Skills required
-</label>
+                    Opportunity title
 
-<input type="text"
-       name="skillRequired"
-       class="form-control"
-       placeholder="e.g. Java, SQL, HTML, CSS">
+                </label>
 
-</div>
+                <input type="text"
+                       name="title"
+                       class="form-control"
+                       placeholder="e.g. Java Developer Intern"
+                       required>
 
+            </div>
 
-<div class="mb-4">
 
-<label class="form-label">
-Location
-</label>
 
-<input type="text"
-       name="location"
-       class="form-control"
-       placeholder="e.g. Kolkata / Remote">
+            <!-- OPPORTUNITY TYPE -->
 
-</div>
+            <div class="mb-4">
 
+                <label class="form-label">
 
-<div class="mb-4">
+                    Opportunity type
 
-<label class="form-label">
-Description
-</label>
+                </label>
 
-<textarea name="description"
-          class="form-control"
-          placeholder="Describe the role, responsibilities and requirements..."
-          required></textarea>
+                <select name="type"
+                        class="form-select"
+                        required>
 
-</div>
+                    <option value=""
+                            selected
+                            disabled>
 
+                        Choose an opportunity type
 
-<button type="submit"
-        class="submit-btn">
+                    </option>
 
-<i class="bi bi-send me-2"></i>
+                    <option value="JOB">
 
-Publish opportunity
+                        Full-Time Job
 
-</button>
+                    </option>
 
+                    <option value="INTERNSHIP">
 
-</form>
+                        Internship
 
+                    </option>
 
-<div class="tip">
+                </select>
 
-<i class="bi bi-lightbulb me-2"></i>
+            </div>
 
-<strong>Tip:</strong>
 
-Add clear skills and requirements so students
-can quickly understand the opportunity.
 
-</div>
+            <!-- SKILLS -->
 
+            <div class="mb-4">
 
-</div>
+                <label class="form-label">
+
+                    Skills required
+
+                </label>
+
+                <input type="text"
+                       name="skillRequired"
+                       class="form-control"
+                       placeholder="e.g. Java, SQL, HTML, CSS">
+
+            </div>
+
+
+
+            <!-- LOCATION -->
+
+            <div class="mb-4">
+
+                <label class="form-label">
+
+                    Location
+
+                </label>
+
+                <input type="text"
+                       name="location"
+                       class="form-control"
+                       placeholder="e.g. Kolkata / Remote">
+
+            </div>
+
+
+
+            <!-- DESCRIPTION -->
+
+            <div class="mb-4">
+
+                <label class="form-label">
+
+                    Description
+
+                </label>
+
+                <textarea name="description"
+                          class="form-control"
+                          placeholder="Describe the role, responsibilities and requirements..."
+                          required></textarea>
+
+            </div>
+
+
+
+            <!-- PUBLISH BUTTON -->
+
+            <button type="submit"
+                    class="submit-btn">
+
+                <i class="bi bi-send me-2"></i>
+
+                Publish opportunity
+
+            </button>
+
+
+        </form>
+
+
+
+        <!-- ================= TIP ================= -->
+
+        <div class="tip">
+
+            <i class="bi bi-lightbulb me-2"></i>
+
+            <strong>Tip:</strong>
+
+            Add clear skills and requirements so students
+            can quickly understand the opportunity.
+
+        </div>
+
+
+    </div>
 
 </section>
 
