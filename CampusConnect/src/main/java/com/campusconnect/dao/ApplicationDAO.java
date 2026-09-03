@@ -81,12 +81,15 @@ public class ApplicationDAO {
               + "       a.student_id, "
               + "       a.opp_id, "
               + "       a.status, "
-              + "       a.applied_date "
+              + "       a.applied_date, "
+              + "       u.name AS student_name "
               + "FROM application a "
               + "JOIN opportunity o "
               + "ON a.opp_id = o.opp_id "
-              +"JOIN company c "
-              +"ON o.company_id=c.company_id "
+              + "JOIN company c "
+              + "ON o.company_id = c.company_id "
+              + "JOIN user u "
+              + "ON a.student_id = u.user_id "
               + "WHERE c.user_id = ? "
               + "ORDER BY a.applied_date DESC";
 
@@ -96,6 +99,8 @@ public class ApplicationDAO {
         ) {
 
             ps.setInt(1, userId);
+            System.out.println("SQL= "+ sql);
+            System.out.println("USER ID="+ userId);
 
             ResultSet rs = ps.executeQuery();
 
@@ -122,15 +127,85 @@ public class ApplicationDAO {
                 application.setAppliedDate(
                     rs.getDate("applied_date")
                 );
-
+                application.setStudentName(
+                		rs.getString("student_name")
+                );
                 applications.add(application);
             }
-
-        } catch (SQLException e) {
+           
+        
+        }catch (SQLException e) {
 
             e.printStackTrace();
         }
 
         return applications;
+    }
+    //get applications of student
+    public List<Application> getApplicationsByStudent(int studentId) {
+
+        List<Application> applications = new ArrayList<>();
+
+        String sql =
+                "SELECT a.app_id, a.student_id, a.opp_id, "
+              + "a.status, a.applied_date, "
+              + "o.type, o.location "
+              + "FROM application a "
+              + "JOIN opportunity o ON a.opp_id = o.opp_id "
+              + "WHERE a.student_id = ? "
+              + "ORDER BY a.applied_date DESC";
+
+        try (
+            Connection conn = DBConnection.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql)
+        ) {
+
+            ps.setInt(1, studentId);
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+
+                Application app = new Application();
+
+                app.setAppId(rs.getInt("app_id"));
+                app.setStudentId(rs.getInt("student_id"));
+                app.setOppId(rs.getInt("opp_id"));
+                app.setStatus(rs.getString("status"));
+                app.setAppliedDate(rs.getDate("applied_date"));
+
+                applications.add(app);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return applications;
+    }
+    public boolean updateApplicationStatus(int appId, String status) {
+
+        String sql =
+                "UPDATE application "
+              + "SET status = ? "
+              + "WHERE app_id = ?";
+
+        try (
+            Connection conn = DBConnection.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql)
+        ) {
+
+            ps.setString(1, status);
+            ps.setInt(2, appId);
+
+            int rows = ps.executeUpdate();
+
+            return rows > 0;
+
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+            return false;
+        }
     }
 }

@@ -4,6 +4,8 @@
 <%@ page import="java.util.List" %>
 <%@ page import="com.campusconnect.dao.OpportunityDAO" %>
 <%@ page import="com.campusconnect.model.Opportunity" %>
+<%@ page import="com.campusconnect.dao.ApplicationDAO" %>
+<%@ page import="com.campusconnect.model.Application" %>
 
 <%
     User user = (User) session.getAttribute("user");
@@ -16,622 +18,625 @@
     OpportunityDAO opportunityDAO = new OpportunityDAO();
     List<Opportunity> opportunities = opportunityDAO.getAllOpportunities();
 
+    ApplicationDAO applicationDAO = new ApplicationDAO();
+    List<Application> applications =
+            applicationDAO.getApplicationsByStudent(user.getUserId());
+
     String applyMessage = (String) session.getAttribute("applyMessage");
     session.removeAttribute("applyMessage");
 %>
-<%
-    if (applyMessage != null) {
-%>
 
-<div class="container mt-4">
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        <i class="bi bi-check-circle-fill me-2"></i>
-        <%= applyMessage %>
-
-        <button type="button"
-                class="btn-close"
-                data-bs-dismiss="alert">
-        </button>
-    </div>
-</div>
-
-<%
-    }
-%>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
 
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Student Dashboard | CampusConnect</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <style>
+          html{
+             scroll-behavior:smooth;
+          }
+          #opportunities;
+          #applications;{
+               scroll-margin-top:80px;
+          }
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #071426;
+            color: #f5f1e8;
+            font-family: "Segoe UI", Arial, sans-serif;
+        }
+
+
+        /* ================= NAVBAR ================= */
+
+        .navbar-custom {
+            background: #071426;
+            border-bottom: 1px solid rgba(255,255,255,.06);
+            padding: 18px 0;
+        }
+
+        .brand {
+            color: #f5f1e8;
+            text-decoration: none;
+            font-size: 23px;
+            font-weight: 800;
+            letter-spacing: -.5px;
+        }
+
+        .brand i {
+            color: #d6ad52;
+            margin-right: 8px;
+        }
+
+        .brand:hover {
+            color: #f5f1e8;
+        }
+
+
+        /* NORMAL NAV LINKS */
+
+        .custom-link {
+            position: relative;
+            color: #b8c0cb !important;
+            font-size: 14px;
+            font-weight: 600;
+            margin-left: 10px;
+            padding: 10px 8px !important;
+
+            background: transparent !important;
+            border: none !important;
+            border-radius: 0 !important;
+            box-shadow: none !important;
 
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
+            transition: color .3s ease;
+        }
+
+        .custom-link i {
+            color: #d6ad52;
+            margin-right: 5px;
+            transition: color .3s ease, text-shadow .3s ease;
+        }
 
-<title>Student Dashboard | CampusConnect</title>
+        .custom-link:hover {
+            color: #f5f1e8 !important;
+            background: transparent !important;
+            box-shadow: none !important;
+            transform: none !important;
+        }
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-      rel="stylesheet">
+        .custom-link:hover i {
+            color: #f0ca70;
+            text-shadow: 0 0 8px rgba(214,173,82,.7);
+        }
 
-<link rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+        /* GOLD UNDERLINE */
+
+        .custom-link::after {
+            content: "";
+            position: absolute;
+            left: 50%;
+            bottom: 4px;
+            width: 0;
+            height: 2px;
+            background: #d6ad52;
 
+            transform: translateX(-50%);
+            border-radius: 5px;
 
-<style>
+            box-shadow: 0 0 7px rgba(214,173,82,.7);
 
-/* ================= GENERAL ================= */
+            transition: width .3s ease;
+        }
 
-* {
-    box-sizing: border-box;
-}
+        .custom-link:hover::after {
+            width: 55%;
+        }
 
-body {
-    margin: 0;
-    background: #071426;
-    color: #f5f1e8;
-    font-family: "Segoe UI", Arial, sans-serif;
-}
 
+        /* ACTIVE LINK */
 
-/* ================= NAVBAR ================= */
+        .custom-link.active {
+            color: #f5f1e8 !important;
+            background: transparent !important;
+            box-shadow: none !important;
+        }
 
-.navbar-custom {
-    background: #071426;
-    border-bottom: 1px solid rgba(214,173,82,.18);
-    padding: 20px 0;
-}
+        .custom-link.active::after {
+            width: 55%;
+        }
 
-.brand {
-    color: #f5f1e8;
-    text-decoration: none;
-    font-size: 24px;
-    font-weight: 750;
-    transition: .3s;
-}
+        .custom-link.active i {
+            color: #f0ca70;
+            text-shadow: 0 0 8px rgba(214,173,82,.7);
+        }
+
+
+        /* LOGOUT */
+
+        .logout-link {
+            color: #d6ad52 !important;
+            font-size: 14px;
+            font-weight: 700;
+
+            margin-left: 14px;
+            padding: 10px 14px !important;
 
-.brand i {
-    color: #d6ad52;
-    margin-right: 8px;
-}
+            border: 1px solid rgba(214,173,82,.25);
+            border-radius: 10px;
+
+            background: transparent;
+
+            transition: .3s ease;
+        }
 
-.brand:hover {
-    color: #ffffff;
-    text-shadow:
-        0 0 8px rgba(214,173,82,.35);
-}
+        .logout-link i {
+            margin-right: 5px;
+        }
 
-.user-area {
-    color: #b8c0cb;
-    font-weight: 600;
-}
+        .logout-link:hover {
+            color: #071426 !important;
+            background: #d6ad52 !important;
 
-.user-icon {
-    width: 40px;
-    height: 40px;
+            border-color: #d6ad52;
+
+            box-shadow:
+                0 0 10px rgba(214,173,82,.35),
+                0 0 25px rgba(214,173,82,.15);
 
-    background: rgba(214,173,82,.10);
+            transform: translateY(-2px);
+        }
 
-    border: 1px solid rgba(214,173,82,.25);
+        .logout-link:hover i {
+            color: #071426;
+            text-shadow: none;
+        }
 
-    color: #d6ad52;
 
-    border-radius: 50%;
+        /* NAVBAR TOGGLER */
 
-    display: inline-flex;
+        .navbar-toggler {
+            border: 1px solid rgba(214,173,82,.35);
+            border-radius: 8px;
+            padding: 7px 10px;
+            color: #d6ad52;
+            background: transparent;
+        }
 
-    align-items: center;
-    justify-content: center;
+        .navbar-toggler i {
+            color: #d6ad52;
+            font-size: 22px;
+        }
 
-    margin-right: 8px;
-}
+        .navbar-toggler:focus {
+            box-shadow: none;
+        }
 
 
-/* ================= HERO ================= */
+        /* ================= HERO ================= */
 
-.hero {
-    padding: 75px 0;
+        .hero {
+            padding: 65px 0 60px;
+            background:
+                radial-gradient(
+                    circle at 85% 15%,
+                    rgba(214,173,82,.12),
+                    transparent 32%
+                ),
+                #0a1a2e;
+            border-bottom: 1px solid rgba(214,173,82,.09);
+        }
 
-    background:
-        radial-gradient(
-            circle at 85% 20%,
-            rgba(214,173,82,.12),
-            transparent 30%
-        ),
-        #0a1a2e;
+        .hero-label {
+            color: #d6ad52;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
 
-    border-bottom:
-        1px solid rgba(214,173,82,.10);
-}
+        .hero h1 {
+            margin: 14px 0 12px;
+            color: #f5f1e8;
+            font-size: clamp(32px, 5vw, 48px);
+            font-weight: 800;
+            letter-spacing: -1.8px;
+        }
 
-.hero-label {
-    color: #d6ad52;
+        .hero h1 span {
+            color: #d6ad52;
+        }
 
-    font-size: 13px;
+        .hero p {
+            max-width: 600px;
+            margin: 0;
+            color: #8d98a6;
+            font-size: 14px;
+            line-height: 1.7;
+        }
 
-    font-weight: 700;
+        /* ================= DASHBOARD ================= */
 
-    letter-spacing: 2px;
+        .dashboard {
+            padding: 70px 0 90px;
+        }
 
-    text-transform: uppercase;
-}
+        .section-title {
+            font-size: 32px;
+            font-weight: 750;
+        }
 
-.hero h1 {
-    font-size: 50px;
 
-    font-weight: 800;
+        /* ================= CARDS ================= */
 
-    letter-spacing: -2px;
-}
+        .feature-card {
+            height: 100%;
+            min-height: 300px;
 
-.hero p {
-    color: #8d98a6;
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(255,255,255,.045),
+                    rgba(255,255,255,.015)
+                );
 
-    font-size: 17px;
+            border: 1px solid rgba(255,255,255,.09);
+            border-radius: 18px;
 
-    max-width: 650px;
+            padding: 32px;
 
-    line-height: 1.7;
-}
+            transition: .3s;
+        }
 
+        .feature-card:hover {
+            transform: translateY(-7px);
 
-/* ================= DASHBOARD ================= */
+            border-color: rgba(214,173,82,.45);
 
-.dashboard {
-    padding: 70px 0 90px;
-}
+            box-shadow:
+                0 20px 45px rgba(0,0,0,.25);
+        }
 
-.section-title {
-    font-size: 32px;
 
-    font-weight: 750;
-}
+        /* ================= ICON ================= */
 
+        .icon-box {
+            width: 58px;
+            height: 58px;
 
-/* ================= OPPORTUNITY CARD ================= */
+            border-radius: 15px;
 
-.feature-card {
-    height: 100%;
+            background: rgba(214,173,82,.10);
+            border: 1px solid rgba(214,173,82,.25);
 
-    min-height: 300px;
+            color: #d6ad52;
 
-    background:
-        linear-gradient(
-            145deg,
-            rgba(255,255,255,.045),
-            rgba(255,255,255,.015)
-        );
+            display: flex;
+            align-items: center;
+            justify-content: center;
 
-    border:
-        1px solid rgba(255,255,255,.09);
+            font-size: 25px;
 
-    border-radius: 18px;
+            margin-bottom: 25px;
+        }
 
-    padding: 32px;
+        .feature-card h4 {
+            font-size: 21px;
+            font-weight: 700;
+        }
 
-    transition: .3s;
-}
+        .feature-card p {
+            color: #8d98a6;
+            line-height: 1.7;
+        }
 
-.feature-card:hover {
 
-    transform: translateY(-7px);
+        /* ================= OPPORTUNITY TYPE ================= */
 
-    border-color:
-        rgba(214,173,82,.45);
+        .opportunity-type {
+            display: inline-block;
 
-    box-shadow:
-        0 20px 45px rgba(0,0,0,.25);
-}
+            color: #d6ad52;
 
+            background: rgba(214,173,82,.10);
 
-/* ================= ICON ================= */
+            border: 1px solid rgba(214,173,82,.20);
 
-.icon-box {
+            border-radius: 20px;
 
-    width: 58px;
-    height: 58px;
+            padding: 6px 13px;
 
-    border-radius: 15px;
+            font-size: 12px;
+            font-weight: 700;
 
-    background:
-        rgba(214,173,82,.10);
+            text-transform: uppercase;
+            letter-spacing: .5px;
+        }
 
-    border:
-        1px solid rgba(214,173,82,.25);
 
-    color: #d6ad52;
+        /* ================= OPPORTUNITY INFO ================= */
 
-    display: flex;
+        .opportunity-location {
+            color: #b8c0cb;
+            font-size: 14px;
+            margin-top: 14px;
+        }
 
-    align-items: center;
+        .opportunity-location i {
+            color: #d6ad52;
+            margin-right: 5px;
+        }
 
-    justify-content: center;
+        .posted-date {
+            color: #707b89;
+            font-size: 12px;
+            margin-top: 6px;
+        }
 
-    font-size: 25px;
+        .opportunity-description {
+            color: #8d98a6;
+            line-height: 1.6;
+            margin-top: 18px;
+            min-height: 70px;
+        }
 
-    margin-bottom: 25px;
-}
+        .skills-title {
+            color: #f5f1e8;
+            font-size: 14px;
+            font-weight: 700;
+        }
 
-.feature-card h4 {
+        .skills {
+            color: #d6ad52;
+            font-size: 14px;
+        }
 
-    font-size: 21px;
 
-    font-weight: 700;
-}
+        /* ================= APPLY BUTTON ================= */
 
-.feature-card p {
+        .apply-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
 
-    color: #8d98a6;
+            margin-top: 20px;
 
-    line-height: 1.7;
-}
+            padding: 11px 21px;
 
+            border-radius: 9px;
 
-/* ================= OPPORTUNITY TYPE ================= */
+            background: #d6ad52;
+            color: #071426;
 
-.opportunity-type {
+            text-decoration: none;
 
-    display: inline-block;
+            font-weight: 750;
+            font-size: 14px;
 
-    color: #d6ad52;
+            border: 1px solid #d6ad52;
 
-    background:
-        rgba(214,173,82,.10);
+            transition:
+                transform .25s ease,
+                box-shadow .25s ease,
+                background .25s ease;
 
-    border:
-        1px solid rgba(214,173,82,.20);
+            box-shadow:
+                0 0 8px rgba(214,173,82,.35),
+                0 0 18px rgba(214,173,82,.18);
+        }
 
-    border-radius: 20px;
+        .apply-btn:hover {
+            background: #f0ca70;
+            color: #071426;
 
-    padding: 6px 13px;
+            transform: translateY(-3px) scale(1.02);
 
-    font-size: 12px;
+            box-shadow:
+                0 0 10px rgba(214,173,82,.65),
+                0 0 25px rgba(214,173,82,.45),
+                0 8px 25px rgba(214,173,82,.25);
+        }
 
-    font-weight: 700;
+        .apply-btn:active {
+            transform: translateY(-1px) scale(.98);
 
-    text-transform: uppercase;
+            box-shadow:
+                0 0 8px rgba(214,173,82,.5);
+        }
 
-    letter-spacing: .5px;
-}
+        .apply-btn:focus {
+            outline: none;
 
+            box-shadow:
+                0 0 0 3px rgba(214,173,82,.20),
+                0 0 18px rgba(214,173,82,.45);
+        }
 
-/* ================= OPPORTUNITY INFO ================= */
 
-.opportunity-location {
+        /* ================= EMPTY STATE ================= */
 
-    color: #b8c0cb;
+        .empty-box {
+            border: 1px dashed rgba(214,173,82,.25);
 
-    font-size: 14px;
+            border-radius: 18px;
 
-    margin-top: 14px;
-}
+            padding: 50px 20px;
 
-.opportunity-location i {
+            text-align: center;
 
-    color: #d6ad52;
+            background: rgba(255,255,255,.02);
+        }
 
-    margin-right: 5px;
-}
+        .empty-box i {
+            font-size: 40px;
+            color: #d6ad52;
+            margin-bottom: 15px;
+        }
 
-.posted-date {
+        .empty-box h4 {
+            font-weight: 700;
+        }
 
-    color: #707b89;
+        .empty-box p {
+            color: #8d98a6;
+        }
 
-    font-size: 12px;
 
-    margin-top: 6px;
-}
+        /* ================= ALERT ================= */
 
-.opportunity-description {
+        .alert {
+            border-radius: 12px;
+        }
 
-    color: #8d98a6;
 
-    line-height: 1.6;
+        /* ================= FOOTER ================= */
 
-    margin-top: 18px;
+        footer {
+            background: #050f1c;
 
-    min-height: 70px;
-}
+            border-top: 1px solid rgba(255,255,255,.06);
 
-.skills-title {
+            padding: 28px 0;
 
-    color: #f5f1e8;
+            color: #707b89;
+        }
 
-    font-size: 14px;
 
-    font-weight: 700;
-}
+        /* ================= RESPONSIVE ================= */
 
-.skills {
+        @media (max-width: 991px) {
 
-    color: #d6ad52;
+            .navbar-collapse {
+                margin-top: 15px;
+                padding: 10px 0;
 
-    font-size: 14px;
-}
+                background: transparent;
+                border: none;
+                border-radius: 0;
+                box-shadow: none;
+            }
 
+            .navbar-nav {
+                align-items: flex-start !important;
+            }
 
-/* ================================================= */
-/* ================= APPLY BUTTON ================== */
-/* ================================================= */
+            .custom-link {
+                margin-left: 0;
+                padding-left: 0 !important;
+            }
 
-.apply-btn {
+            .logout-link {
+                display: inline-block;
+                margin-left: 0;
+                margin-top: 8px;
+            }
+        }
 
-    display: inline-flex;
 
-    align-items: center;
+        @media (max-width: 768px) {
 
-    justify-content: center;
+            .navbar-custom {
+                padding: 16px 0;
+            }
 
-    gap: 5px;
+            .brand {
+                font-size: 21px;
+            }
 
-    margin-top: 20px;
+            .hero {
+                padding: 55px 20px;
+            }
 
-    padding: 11px 21px;
+            .hero h1 {
+                font-size: 38px;
+                letter-spacing: -1.5px;
+            }
 
-    border-radius: 9px;
+            .hero p {
+                font-size: 16px;
+            }
 
-    background: #d6ad52;
+            .dashboard {
+                padding: 50px 15px 70px;
+            }
 
-    color: #071426;
+            .section-title {
+                font-size: 28px;
+            }
 
-    text-decoration: none;
+            .feature-card {
+                min-height: 280px;
+                padding: 27px;
+            }
 
-    font-weight: 750;
+            .apply-btn {
+                width: 100%;
+                padding: 12px 18px;
+                margin-top: 22px;
+                font-size: 14px;
+            }
+        }
 
-    font-size: 14px;
 
-    border: 1px solid #d6ad52;
+        /* SMALL MOBILE */
 
-    transition:
-        transform .25s ease,
-        box-shadow .25s ease,
-        background .25s ease;
+        @media (max-width: 480px) {
 
-    /* GLOW */
+            .brand {
+                font-size: 19px;
+            }
 
-    box-shadow:
-        0 0 8px rgba(214,173,82,.35),
-        0 0 18px rgba(214,173,82,.18);
-}
+            .brand i {
+                margin-right: 5px;
+            }
 
+            .hero {
+                padding: 45px 18px;
+            }
 
-/* BUTTON HOVER */
+            .hero h1 {
+                font-size: 34px;
+            }
 
-.apply-btn:hover {
+            .hero-label {
+                font-size: 11px;
+                letter-spacing: 1.5px;
+            }
 
-    background: #f0ca70;
+            .dashboard {
+                padding: 45px 12px 60px;
+            }
 
-    color: #071426;
+            .feature-card {
+                padding: 25px;
+                border-radius: 15px;
+            }
 
-    transform:
-        translateY(-3px)
-        scale(1.02);
+            .opportunity-description {
+                min-height: auto;
+            }
+        }
 
-    box-shadow:
-        0 0 10px rgba(214,173,82,.65),
-        0 0 25px rgba(214,173,82,.45),
-        0 8px 25px rgba(214,173,82,.25);
-}
-
-
-/* BUTTON CLICK */
-
-.apply-btn:active {
-
-    transform:
-        translateY(-1px)
-        scale(.98);
-
-    box-shadow:
-        0 0 8px rgba(214,173,82,.5);
-}
-
-
-/* ================= EMPTY STATE ================= */
-
-.empty-box {
-
-    border:
-        1px dashed rgba(214,173,82,.25);
-
-    border-radius: 18px;
-
-    padding: 50px 20px;
-
-    text-align: center;
-
-    background:
-        rgba(255,255,255,.02);
-}
-
-.empty-box i {
-
-    font-size: 40px;
-
-    color: #d6ad52;
-
-    margin-bottom: 15px;
-}
-
-.empty-box h4 {
-
-    font-weight: 700;
-}
-
-.empty-box p {
-
-    color: #8d98a6;
-}
-
-
-/* ================= FOOTER ================= */
-
-footer {
-
-    background: #050f1c;
-
-    border-top:
-        1px solid rgba(255,255,255,.06);
-
-    padding: 28px 0;
-
-    color: #707b89;
-}
-
-
-/* ================================================= */
-/* ================= RESPONSIVE ==================== */
-/* ================================================= */
-
-@media (max-width: 768px) {
-
-    .navbar-custom {
-        padding: 16px 0;
-    }
-
-    .brand {
-        font-size: 21px;
-    }
-
-    .user-area {
-        font-size: 14px;
-    }
-
-    .user-icon {
-        width: 35px;
-        height: 35px;
-    }
-
-    .hero {
-
-        padding: 55px 20px;
-    }
-
-    .hero h1 {
-
-        font-size: 38px;
-
-        letter-spacing: -1.5px;
-    }
-
-    .hero p {
-
-        font-size: 16px;
-    }
-
-    .dashboard {
-
-        padding:
-            50px 15px
-            70px;
-    }
-
-    .section-title {
-
-        font-size: 28px;
-    }
-
-    .feature-card {
-
-        min-height: 280px;
-
-        padding: 27px;
-    }
-
-    /* RESPONSIVE APPLY BUTTON */
-
-    .apply-btn {
-
-        width: 100%;
-
-        padding: 12px 18px;
-
-        margin-top: 22px;
-
-        font-size: 14px;
-    }
-
-}
-
-
-/* SMALL MOBILE */
-
-@media (max-width: 480px) {
-
-    .brand {
-
-        font-size: 19px;
-    }
-
-    .brand i {
-
-        margin-right: 5px;
-    }
-
-    .user-area {
-
-        font-size: 13px;
-    }
-
-    .user-icon {
-
-        width: 32px;
-        height: 32px;
-
-        margin-right: 5px;
-    }
-
-    .hero {
-
-        padding:
-            45px 18px;
-    }
-
-    .hero h1 {
-
-        font-size: 34px;
-    }
-
-    .hero-label {
-
-        font-size: 11px;
-
-        letter-spacing: 1.5px;
-    }
-
-    .dashboard {
-
-        padding:
-            45px 12px
-            60px;
-    }
-
-    .feature-card {
-
-        padding: 25px;
-
-        border-radius: 15px;
-    }
-
-    .opportunity-description {
-
-        min-height: auto;
-    }
-
-}
-
-
-/* ACCESSIBILITY */
-
-.apply-btn:focus {
-
-    outline: none;
-
-    box-shadow:
-        0 0 0 3px rgba(214,173,82,.20),
-        0 0 18px rgba(214,173,82,.45);
-}
-
-</style>
+    </style>
 
 </head>
 
@@ -639,275 +644,529 @@ footer {
 <body>
 
 
-<!-- ================= NAVBAR ================= -->
+    <!-- ================= NAVBAR ================= -->
 
-<nav class="navbar-custom">
+<nav class="navbar-custom navbar navbar-expand-lg">
 
-<div class="container">
+    <div class="container">
 
-<div class="d-flex justify-content-between align-items-center">
+        <!-- BRAND -->
+        <a href="studentDashboard.jsp" class="brand">
+            <i class="bi bi-mortarboard-fill"></i>
+            CampusConnect
+        </a>
 
-<a href="studentDashboard.jsp"
-   class="brand">
+        <!-- MOBILE MENU -->
+        <button class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#studentNav"
+                aria-controls="studentNav"
+                aria-expanded="false"
+                aria-label="Toggle navigation">
 
-<i class="bi bi-mortarboard-fill"></i>
+            <i class="bi bi-list"></i>
 
-CampusConnect
+        </button>
 
-</a>
+        <!-- NAVIGATION -->
+        <div class="collapse navbar-collapse" id="studentNav">
+
+            <ul class="navbar-nav ms-auto align-items-lg-center">
+
+                <!-- DASHBOARD -->
+                <li class="nav-item">
+                    <a class="nav-link custom-link active"
+                       href="studentDashboard.jsp">
+
+                        <i class="bi bi-grid"></i>
+                        Dashboard
+
+                    </a>
+                </li>
 
 
-<div class="user-area">
+                <!-- OPPORTUNITIES -->
+                <li class="nav-item">
+                    <a class="nav-link custom-link"
+                       href="studentDashboard.jsp#opportunities">
 
-<span class="user-icon">
+                        <i class="bi bi-briefcase"></i>
+                        Opportunities
 
-<i class="bi bi-person"></i>
+                    </a>
+                </li>
 
-</span>
 
-<%= user.getName() %>
+                <!-- MY APPLICATIONS -->
+                <li class="nav-item">
+                    <a class="nav-link custom-link"
+                       href="studentDashboard.jsp#applications">
 
-</div>
+                        <i class="bi bi-file-earmark-text"></i>
+                        My Applications
 
-</div>
+                    </a>
+                </li>
 
-</div>
+
+                <!-- MY PROFILE -->
+<li class="nav-item">
+
+    <a class="nav-link custom-link"
+       href="<%= request.getContextPath() %>/studentProfile">
+
+        <i class="bi bi-person-circle"></i>
+        My Profile
+
+    </a>
+
+</li>
+
+
+                <!-- LOGOUT -->
+                <li class="nav-item">
+                    <a class="nav-link logout-link"
+                       href="<%=request.getContextPath()%>/logout">
+
+                        <i class="bi bi-box-arrow-right"></i>
+                        Logout
+
+                    </a>
+                </li>
+
+            </ul>
+
+        </div>
+
+    </div>
 
 </nav>
 
 
+    <!-- ================= SUCCESS MESSAGE ================= -->
 
-<!-- ================= HERO ================= -->
+    <%
+        if (applyMessage != null) {
+    %>
 
-<section class="hero">
+        <div class="container mt-4">
 
-<div class="container">
+            <div class="alert alert-success alert-dismissible fade show"
+                 role="alert">
 
-<div class="hero-label">
+                <i class="bi bi-check-circle-fill me-2"></i>
 
-Student Dashboard
+                <%= applyMessage %>
 
-</div>
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="alert">
+                </button>
 
+            </div>
 
-<h1 class="mt-3">
+        </div>
 
-Welcome,
+    <%
+        }
+    %>
 
-<span style="color:#d6ad52;">
 
-<%= user.getName() %>.
 
-</span>
+    <!-- ================= HERO ================= -->
 
-</h1>
+    <section class="hero">
 
+        <div class="container">
 
-<p class="mt-3 mb-0">
+            <div class="hero-label">
+                Student Dashboard
+            </div>
 
-Discover opportunities, connect with companies
-and take the next step in your career.
+            <h1 class="mt-3">
 
-</p>
+                Welcome,
 
-</div>
+                <span style="color:#d6ad52;">
 
-</section>
+                    <%= user.getName() %>.
 
+                </span>
 
+            </h1>
 
-<!-- ================= OPPORTUNITIES ================= -->
+            <p class="mt-3 mb-0">
 
-<section class="dashboard">
+                Discover opportunities, connect with companies
+                and take the next step in your career.
 
-<div class="container">
+            </p>
 
+        </div>
 
-<h2 class="section-title mb-2">
+    </section>
 
-Latest Opportunities
 
-</h2>
 
+    <!-- ================= OPPORTUNITIES ================= -->
 
-<p style="color:#8d98a6;"
-   class="mb-4">
+    <section class="dashboard" id="opportunities">
 
-Explore jobs and internships posted by companies
-on CampusConnect.
+        <div class="container">
 
-</p>
+            <h2 class="section-title mb-2">
+                Latest Opportunities
+            </h2>
 
+            <p style="color:#8d98a6;" class="mb-4">
 
-<div class="row g-4">
+                Explore jobs and internships posted by companies
+                on CampusConnect.
 
+            </p>
 
-<%
 
-if (opportunities != null && !opportunities.isEmpty()) {
+            <div class="row g-4">
 
-    for (Opportunity opp : opportunities) {
+                <%
 
-%>
+                    if (opportunities != null && !opportunities.isEmpty()) {
 
+                        for (Opportunity opp : opportunities) {
 
-<div class="col-md-6 col-lg-4 d-flex">
+                %>
 
-<div class="feature-card w-100">
 
+                    <div class="col-md-6 col-lg-4 d-flex">
 
-<!-- TYPE -->
+                        <div class="feature-card w-100">
 
-<span class="opportunity-type">
 
-<%= opp.getType() %>
+                            <!-- TYPE -->
 
-</span>
+                            <span class="opportunity-type">
 
+                                <%= opp.getType() %>
 
+                            </span>
 
-<!-- LOCATION -->
 
-<div class="opportunity-location">
+                            <!-- LOCATION -->
 
-<i class="bi bi-geo-alt-fill"></i>
+                            <div class="opportunity-location">
 
-<%= opp.getLocation() %>
+                                <i class="bi bi-geo-alt-fill"></i>
 
-</div>
+                                <%= opp.getLocation() %>
 
+                            </div>
 
 
-<!-- POSTED DATE -->
+                            <!-- POSTED DATE -->
 
-<div class="posted-date">
+                            <div class="posted-date">
 
-Posted:
+                                Posted:
 
-<%= opp.getPostedDate() %>
+                                <%= opp.getPostedDate() %>
 
-</div>
+                            </div>
 
 
+                            <!-- DESCRIPTION -->
 
-<!-- DESCRIPTION -->
+                            <p class="opportunity-description">
 
-<p class="opportunity-description">
+                                <%= opp.getDescription() %>
 
-<%= opp.getDescription() %>
+                            </p>
 
-</p>
 
+                            <!-- SKILLS -->
 
+                            <div>
 
-<!-- SKILLS -->
+                                <span class="skills-title">
+                                    Skills:
+                                </span>
 
-<div>
+                                <span class="skills">
 
-<span class="skills-title">
+                                    <%= opp.getSkillRequired() %>
 
-Skills:
+                                </span>
 
-</span>
+                            </div>
 
-<span class="skills">
 
-<%= opp.getSkillRequired() %>
+                            <!-- APPLY BUTTON -->
 
-</span>
+                            <form action="${pageContext.request.contextPath}/apply"
+                                  method="post">
 
-</div>
+                                <input type="hidden"
+                                       name="oppId"
+                                       value="<%= opp.getOppId() %>">
 
+                                <button type="submit"
+                                        class="apply-btn border-0">
 
+                                    Apply Now
 
-<!-- APPLY BUTTON -->
+                                    <i class="bi bi-arrow-right ms-1"></i>
 
-<form action="${pageContext.request.contextPath}/apply" method="post">
- <input type="hidden"
-           name="oppId"
-           value="<%= opp.getOppId() %>">
+                                </button>
 
-    <button type="submit" class="apply-btn border-0">
+                            </form>
 
-        Apply Now
-        <i class="bi bi-arrow-right ms-1"></i>
 
-    </button>
+                        </div>
 
-</form>
+                    </div>
 
 
-</div>
+                <%
 
-</div>
+                        }
 
+                    } else {
 
-<%
+                %>
 
-    }
 
-} else {
+                    <!-- EMPTY STATE -->
 
-%>
+                    <div class="col-12">
 
+                        <div class="empty-box">
 
-<!-- ================= EMPTY STATE ================= -->
+                            <i class="bi bi-briefcase"></i>
 
-<div class="col-12">
+                            <h4>
+                                No opportunities available
+                            </h4>
 
-<div class="empty-box">
+                            <p>
 
-<i class="bi bi-briefcase"></i>
+                                There are no jobs or internships
+                                posted yet. Please check back later.
 
-<h4>
+                            </p>
 
-No opportunities available
+                        </div>
 
-</h4>
+                    </div>
 
-<p>
 
-There are no jobs or internships posted yet.
+                <%
 
-Please check back later.
+                    }
 
-</p>
+                %>
 
-</div>
+            </div>
 
-</div>
+        </div>
 
+    </section>
 
-<%
 
-}
 
-%>
+    <!-- ================= MY APPLICATIONS ================= -->
 
+    <section class="dashboard" id="applications">
 
-</div>
+        <div class="container">
 
-</div>
+            <h2 class="section-title mb-2">
+                My Applications
+            </h2>
 
-</section>
+            <p style="color:#8d98a6;" class="mb-4">
 
+                Track the status of your job and internship applications.
 
+            </p>
 
-<!-- ================= FOOTER ================= -->
+
+            <div class="row g-4">
+
+                <%
+
+                    if (applications != null && !applications.isEmpty()) {
+
+                        for (Application app : applications) {
+
+                            String status = app.getStatus();
+
+                %>
+
+
+                    <div class="col-md-6 col-lg-4 d-flex">
+
+                        <div class="feature-card w-100">
+
+
+                            <span class="opportunity-type">
+
+                                Application
+
+                            </span>
+
+
+                            <div class="opportunity-location">
+
+                                <i class="bi bi-briefcase-fill"></i>
+
+                                Opportunity #<%= app.getOppId() %>
+
+                            </div>
+
+
+                            <div class="posted-date">
+
+                                Applied:
+
+                                <%= app.getAppliedDate() %>
+
+                            </div>
+
+
+                            <div class="mt-4">
+
+
+                                <% if ("ACCEPTED".equals(status)) { %>
+
+                                    <div class="alert alert-success mb-0">
+
+                                        <i class="bi bi-check-circle-fill me-2"></i>
+
+                                        <strong>
+                                            Application Accepted
+                                        </strong>
+
+                                    </div>
+
+
+                                <% } else if ("REJECTED".equals(status)) { %>
+
+                                    <div class="alert alert-danger mb-0">
+
+                                        <i class="bi bi-x-circle-fill me-2"></i>
+
+                                        <strong>
+                                            Application Rejected
+                                        </strong>
+
+                                    </div>
+
+
+                                <% } else { %>
+
+                                    <div class="alert alert-warning mb-0">
+
+                                        <i class="bi bi-clock-fill me-2"></i>
+
+                                        <strong>
+                                            Application Pending
+                                        </strong>
+
+                                    </div>
+
+                                <% } %>
+
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                <%
+
+                        }
+
+                    } else {
+
+                %>
+
+
+                    <div class="col-12">
+
+                        <div class="empty-box">
+
+                            <i class="bi bi-file-earmark-text"></i>
+
+                            <h4>
+                                No applications yet
+                            </h4>
+
+                            <p>
+
+                                Apply to an opportunity to see
+                                your applications here.
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                <%
+
+                    }
+
+                %>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ================= FOOTER ================= -->
 
 <footer>
 
-<div class="container text-center">
+    <div class="container">
 
-<small>
+        <div class="d-flex justify-content-between
+                    align-items-center flex-wrap gap-3">
 
-© 2026 CampusConnect · Built for students
+            <a href="index.jsp" class="brand">
 
-</small>
+                <i class="bi bi-mortarboard-fill"></i>
 
-</div>
+                CampusConnect
+
+            </a>
+
+
+            <small>
+
+                © 2026 CampusConnect · Connecting
+                students with opportunities.
+
+            </small>
+
+        </div>
+
+    </div>
 
 </footer>
+
+
+
+
+    <!-- Bootstrap JS -->
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+    </script>
 
 
 </body>

@@ -1,14 +1,30 @@
-
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
 <%@ page import="com.campusconnect.model.User" %>
+<%@ page import="com.campusconnect.model.Company" %>
+<%@ page import="com.campusconnect.model.Opportunity" %>
+<%@ page import="java.util.List" %>
 
 <%
     User user = (User) session.getAttribute("user");
 
     if (user == null || !"COMPANY".equals(user.getRole())) {
-        response.sendRedirect("login.jsp");
+        response.sendRedirect(request.getContextPath() + "/login.jsp");
         return;
     }
+
+    Company company = (Company) request.getAttribute("company");
+
+    List<Opportunity> opportunities =
+            (List<Opportunity>) request.getAttribute("opportunities");
+
+    String companyName = "Company";
+
+    if (company != null && company.getCompanyName() != null) {
+        companyName = company.getCompanyName();
+    }
+
+    int postingCount = opportunities != null ? opportunities.size() : 0;
 %>
 
 <!DOCTYPE html>
@@ -16,798 +32,681 @@
 
 <head>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Company Dashboard | CampusConnect</title>
-
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-      rel="stylesheet">
-
-<link rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-
-<style>
-
-/* ================================================= */
-/* ================= GENERAL ======================= */
-/* ================================================= */
-
-* {
-    box-sizing: border-box;
-}
-
-body {
-    margin: 0;
-    background: #071426;
-    color: #f5f1e8;
-    font-family: "Segoe UI", Arial, sans-serif;
-}
-
-
-/* ================================================= */
-/* ================= NAVBAR ========================= */
-/* ================================================= */
-
-.navbar-custom {
-    background: #071426;
-    border-bottom: 1px solid rgba(214,173,82,.18);
-    padding: 20px 0;
-}
-
-.brand {
-    color: #f5f1e8;
-    text-decoration: none;
-    font-size: 24px;
-    font-weight: 750;
-    transition: all .3s ease;
-}
-
-.brand i {
-    color: #d6ad52;
-    margin-right: 8px;
-    transition: all .3s ease;
-}
-
-.brand:hover {
-    color: #ffffff;
-    text-shadow: 0 0 8px rgba(214,173,82,.35);
-}
-
-.brand:hover i {
-    text-shadow:
-        0 0 8px rgba(214,173,82,.65),
-        0 0 18px rgba(214,173,82,.35);
-}
-
-.company-name {
-    color: #b8c0cb;
-    font-weight: 600;
-}
-
-.company-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: rgba(214,173,82,.10);
-    border: 1px solid rgba(214,173,82,.25);
-    color: #d6ad52;
-
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-
-    margin-right: 8px;
-
-    transition: all .3s ease;
-
-    box-shadow:
-        0 0 8px rgba(214,173,82,.15);
-}
-
-.company-icon:hover {
-    transform: scale(1.08);
-
-    box-shadow:
-        0 0 10px rgba(214,173,82,.45),
-        0 0 20px rgba(214,173,82,.20);
-}
-
-
-/* ================================================= */
-/* ================= HERO =========================== */
-/* ================================================= */
-
-.hero {
-    padding: 75px 0;
-
-    background:
-        radial-gradient(
-            circle at 85% 20%,
-            rgba(214,173,82,.12),
-            transparent 30%
-        ),
-        #0a1a2e;
-
-    border-bottom:
-        1px solid rgba(214,173,82,.10);
-}
-
-.hero-label {
-    color: #d6ad52;
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-}
-
-.hero h1 {
-    font-size: 50px;
-    font-weight: 800;
-    letter-spacing: -2px;
-}
-
-.hero p {
-    color: #8d98a6;
-    font-size: 17px;
-    line-height: 1.7;
-}
-
-
-/* ================================================= */
-/* ================= DASHBOARD ===================== */
-/* ================================================= */
-
-.dashboard {
-    padding: 70px 0 90px;
-}
-
-.section-title {
-    font-size: 32px;
-    font-weight: 750;
-}
-
-
-/* ================================================= */
-/* ================= DASHBOARD CARDS ================ */
-/* ================================================= */
-
-.dash-card {
-    height: 100%;
-    min-height: 270px;
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(255,255,255,.045),
-            rgba(255,255,255,.015)
-        );
-
-    border: 1px solid rgba(255,255,255,.09);
-    border-radius: 18px;
-
-    padding: 32px;
-
-    text-decoration: none;
-    color: inherit;
-
-    display: block;
-
-    transition:
-        transform .3s ease,
-        border-color .3s ease,
-        box-shadow .3s ease;
-}
-
-.dash-card:hover {
-    transform: translateY(-7px);
-    color: inherit;
-
-    border-color:
-        rgba(214,173,82,.45);
-
-    box-shadow:
-        0 0 15px rgba(214,173,82,.10),
-        0 20px 45px rgba(0,0,0,.25);
-}
-
-
-/* ================================================= */
-/* ================= ICON BOX ======================= */
-/* ================================================= */
-
-.icon-box {
-    width: 58px;
-    height: 58px;
-
-    border-radius: 15px;
-
-    background:
-        rgba(214,173,82,.10);
-
-    border:
-        1px solid rgba(214,173,82,.25);
-
-    color: #d6ad52;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    font-size: 25px;
-
-    margin-bottom: 25px;
-
-    transition:
-        transform .3s ease,
-        box-shadow .3s ease,
-        background .3s ease;
-}
-
-.dash-card:hover .icon-box {
-    transform: translateY(-2px);
-
-    background:
-        rgba(214,173,82,.14);
-
-    box-shadow:
-        0 0 10px rgba(214,173,82,.35),
-        0 0 22px rgba(214,173,82,.15);
-}
-
-
-/* ================================================= */
-/* ================= CARD CONTENT =================== */
-/* ================================================= */
-
-.dash-card h4 {
-    font-size: 21px;
-    font-weight: 700;
-}
-
-.dash-card p {
-    color: #8d98a6;
-    line-height: 1.7;
-    min-height: 65px;
-}
-
-
-/* ================================================= */
-/* ================= POST BUTTON ==================== */
-/* ================================================= */
-
-.post-btn {
-    display: inline-flex;
-
-    align-items: center;
-    justify-content: center;
-
-    gap: 8px;
-
-    background: #d6ad52;
-    color: #071426;
-
-    border: 1px solid #d6ad52;
-
-    border-radius: 9px;
-
-    padding: 13px 22px;
-
-    font-weight: 750;
-
-    text-decoration: none;
-
-    cursor: pointer;
-
-    transition:
-        transform .25s ease,
-        box-shadow .25s ease,
-        background .25s ease,
-        color .25s ease;
-    
-    box-shadow:
-        0 0 8px rgba(214,173,82,.35),
-        0 0 18px rgba(214,173,82,.18);
-}
-
-
-/* POST BUTTON HOVER */
-
-.post-btn:hover {
-    background: #e3be68;
-    color: #071426;
-
-    transform:
-        translateY(-3px)
-        scale(1.02);
-
-    box-shadow:
-        0 0 10px rgba(214,173,82,.75),
-        0 0 22px rgba(214,173,82,.55),
-        0 8px 25px rgba(214,173,82,.25);
-}
-
-
-/* POST BUTTON ACTIVE */
-
-.post-btn:active {
-    transform:
-        translateY(-1px)
-        scale(.98);
-
-    box-shadow:
-        0 0 8px rgba(214,173,82,.55);
-}
-
-
-/* POST BUTTON FOCUS */
-
-.post-btn:focus {
-    outline: none;
-
-    box-shadow:
-        0 0 0 3px rgba(214,173,82,.20),
-        0 0 18px rgba(214,173,82,.55);
-}
-
-
-/* ================================================= */
-/* ================= COMING SOON ==================== */
-/* ================================================= */
-
-.coming {
-    display: inline-flex;
-
-    align-items: center;
-    justify-content: center;
-
-    padding: 9px 17px;
-
-    border-radius: 9px;
-
-    background:
-        rgba(214,173,82,.10);
-
-    color: #d6ad52;
-
-    border:
-        1px solid rgba(214,173,82,.25);
-
-    font-size: 12px;
-    font-weight: 750;
-
-    letter-spacing: .3px;
-
-    transition:
-        transform .25s ease,
-        box-shadow .25s ease,
-        background .25s ease,
-        color .25s ease;
-
-    box-shadow:
-        0 0 7px rgba(214,173,82,.12);
-}
-
-
-/* COMING SOON HOVER */
-
-.coming:hover {
-    background:
-        rgba(214,173,82,.16);
-
-    color: #f0ca70;
-
-    transform:
-        translateY(-3px)
-        scale(1.02);
-
-    border-color:
-        rgba(214,173,82,.55);
-
-    box-shadow:
-        0 0 8px rgba(214,173,82,.45),
-        0 0 18px rgba(214,173,82,.25);
-}
-
-
-/* COMING SOON ACTIVE */
-
-.coming:active {
-    transform:
-        translateY(-1px)
-        scale(.98);
-
-    box-shadow:
-        0 0 8px rgba(214,173,82,.35);
-}
-
-
-/* COMING SOON FOCUS */
-
-.coming:focus {
-    outline: none;
-
-    box-shadow:
-        0 0 0 3px rgba(214,173,82,.15),
-        0 0 15px rgba(214,173,82,.35);
-}
-
-
-/* ================================================= */
-/* ================= OLD FEATURE SECTION ============ */
-/* ================================================= */
-
-.feature-card {
-    height: 100%;
-    min-height: 300px;
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(255,255,255,.045),
-            rgba(255,255,255,.015)
-        );
-
-    border: 1px solid rgba(255,255,255,.09);
-    border-radius: 18px;
-
-    padding: 32px;
-
-    transition:
-        transform .3s ease,
-        border-color .3s ease,
-        box-shadow .3s ease;
-}
-
-.feature-card:hover {
-    transform: translateY(-7px);
-
-    border-color:
-        rgba(214,173,82,.45);
-
-    box-shadow:
-        0 0 15px rgba(214,173,82,.10),
-        0 20px 45px rgba(0,0,0,.25);
-}
-
-.feature-card h4 {
-    font-size: 21px;
-    font-weight: 700;
-}
-
-.feature-card p {
-    color: #8d98a6;
-    line-height: 1.7;
-    min-height: 60px;
-}
-
-
-/* ================================================= */
-/* ================= FOOTER ========================= */
-/* ================================================= */
-
-footer {
-    background: #050f1c;
-
-    border-top:
-        1px solid rgba(255,255,255,.06);
-
-    padding: 28px 0;
-
-    color: #707b89;
-}
-
-
-/* ================================================= */
-/* ================= TABLET ========================= */
-/* ================================================= */
-
-@media (max-width: 991px) {
-
-    .hero {
-        padding: 60px 25px;
-    }
-
-    .hero h1 {
-        font-size: 44px;
-    }
-
-    .dashboard {
-        padding: 60px 20px 80px;
-    }
-
-    .dash-card {
-        min-height: 270px;
-        padding: 28px;
-    }
-
-    .post-btn {
-        padding: 12px 20px;
-    }
-}
-
-
-/* ================================================= */
-/* ================= MOBILE ========================= */
-/* ================================================= */
-
-@media (max-width: 768px) {
-
-    .navbar-custom {
-        padding: 16px 15px;
-    }
-
-    .brand {
-        font-size: 21px;
-    }
-
-    .company-name {
-        font-size: 14px;
-    }
-
-    .company-icon {
-        width: 35px;
-        height: 35px;
-    }
-
-
-    /* HERO */
-
-    .hero {
-        padding: 55px 20px;
-    }
-
-    .hero h1 {
-        font-size: 38px;
-        letter-spacing: -1.5px;
-    }
-
-    .hero p {
-        font-size: 16px;
-    }
-
-
-    /* DASHBOARD */
-
-    .dashboard {
-        padding: 50px 15px 70px;
-    }
-
-    .section-title {
-        font-size: 28px;
-    }
-
-
-    /* CARDS */
-
-    .dash-card {
-        min-height: 280px;
-        padding: 27px;
-    }
-
-    .dash-card h4 {
-        font-size: 20px;
-    }
-
-    .dash-card p {
-        min-height: auto;
-    }
-
-
-    /* BUTTON */
-
-    .post-btn {
-        width: auto;
-        min-width: 125px;
-
-        padding: 12px 18px;
-
-        font-size: 14px;
-    }
-
-    .coming {
-        padding: 9px 16px;
-        font-size: 12px;
-    }
-}
-
-
-/* ================================================= */
-/* ================= SMALL MOBILE =================== */
-/* ================================================= */
-
-@media (max-width: 480px) {
-
-    .navbar-custom {
-        padding: 15px 12px;
-    }
-
-    .brand {
-        font-size: 19px;
-    }
-
-    .brand i {
-        margin-right: 5px;
-    }
-
-    .company-name {
-        font-size: 13px;
-    }
-
-    .company-icon {
-        width: 32px;
-        height: 32px;
-        margin-right: 5px;
-    }
-
-
-    /* HERO */
-
-    .hero {
-        padding: 45px 18px;
-    }
-
-    .hero h1 {
-        font-size: 34px;
-    }
-
-    .hero-label {
-        font-size: 11px;
-        letter-spacing: 1.5px;
-    }
-
-
-    /* DASHBOARD */
-
-    .dashboard {
-        padding: 45px 12px 60px;
-    }
-
-    .section-title {
-        font-size: 26px;
-    }
-
-
-    /* CARDS */
-
-    .dash-card {
-        padding: 25px;
-        border-radius: 15px;
-        min-height: 260px;
-    }
-
-    .icon-box {
-        width: 54px;
-        height: 54px;
-        font-size: 23px;
-        margin-bottom: 20px;
-    }
-
-
-    /* POST BUTTON */
-
-    .post-btn {
-        width: 100%;
-
-        padding: 12px 16px;
-
-        font-size: 14px;
-    }
-
-
-    /* COMING SOON */
-
-    .coming {
-        padding: 8px 14px;
-        font-size: 11px;
-    }
-}
-
-
-/* ================================================= */
-/* ================= VERY SMALL ===================== */
-/* ================================================= */
-
-@media (max-width: 360px) {
-
-    .brand {
-        font-size: 17px;
-    }
-
-    .company-name {
-        font-size: 12px;
-    }
-
-    .company-icon {
-        width: 30px;
-        height: 30px;
-    }
-
-    .hero h1 {
-        font-size: 30px;
-    }
-
-    .hero p {
-        font-size: 14px;
-    }
-
-    .dashboard {
-        padding: 40px 10px 55px;
-    }
-
-    .dash-card {
-        padding: 22px;
-    }
-
-    .post-btn {
-        padding: 11px 14px;
-        font-size: 13px;
-    }
-
-    .coming {
-        font-size: 10px;
-        padding: 7px 12px;
-    }
-}
-
-
-/* ================================================= */
-/* ================= TOUCH DEVICES ================== */
-/* ================================================= */
-
-@media (hover: none) {
-
-    .post-btn:active {
-        transform: scale(.97);
-    }
-
-    .coming:active {
-        transform: scale(.97);
-    }
-
-    .dash-card:active {
-        transform: translateY(-3px);
-    }
-}
-
-</style>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Company Dashboard | CampusConnect</title>
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            background: #071426;
+            color: #f5f1e8;
+            font-family: "Segoe UI", Arial, sans-serif;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        /* ================= NAVBAR ================= */
+
+        .navbar-custom {
+            background: #071426 !important;
+            border-bottom: 1px solid rgba(255,255,255,.06);
+            padding: 17px 0;
+        }
+
+        .brand {
+            color: #f5f1e8 !important;
+            font-size: 23px;
+            font-weight: 800;
+            letter-spacing: -.5px;
+        }
+
+        .brand i {
+            color: #d6ad52;
+            margin-right: 8px;
+        }
+
+        .custom-link {
+            position: relative;
+            color: #b8c0cb !important;
+            font-size: 13px;
+            font-weight: 600;
+            margin-left: 12px;
+            padding: 10px 8px !important;
+            transition: color .25s ease;
+        }
+
+        .custom-link i {
+            color: #d6ad52;
+            margin-right: 5px;
+        }
+
+        .custom-link:hover,
+        .custom-link.active {
+            color: #f5f1e8 !important;
+        }
+
+        .custom-link::after {
+            content: "";
+            position: absolute;
+            left: 50%;
+            bottom: 3px;
+            width: 0;
+            height: 2px;
+            transform: translateX(-50%);
+            background: #d6ad52;
+            border-radius: 5px;
+            box-shadow: 0 0 8px rgba(214,173,82,.7);
+            transition: width .25s ease;
+        }
+
+        .custom-link:hover::after,
+        .custom-link.active::after {
+            width: 55%;
+        }
+
+        .logout-link {
+            color: #d6ad52 !important;
+            border: 1px solid rgba(214,173,82,.28);
+            border-radius: 9px;
+            padding: 9px 13px !important;
+            margin-left: 15px;
+        }
+
+        .logout-link:hover {
+            color: #071426 !important;
+            background: #d6ad52 !important;
+            box-shadow: 0 0 18px rgba(214,173,82,.28);
+        }
+
+        .logout-link::after {
+            display: none;
+        }
+
+        .navbar-toggler {
+            border: 1px solid rgba(214,173,82,.35);
+            padding: 7px 10px;
+            border-radius: 8px;
+        }
+
+        .navbar-toggler i {
+            color: #d6ad52;
+            font-size: 21px;
+        }
+
+        .navbar-toggler:focus {
+            box-shadow: none;
+        }
+
+        /* ================= HERO ================= */
+
+        .hero {
+            padding: 65px 0 60px;
+            background:
+                radial-gradient(
+                    circle at 85% 15%,
+                    rgba(214,173,82,.12),
+                    transparent 32%
+                ),
+                #0a1a2e;
+            border-bottom: 1px solid rgba(214,173,82,.09);
+        }
+
+        .hero-label {
+            color: #d6ad52;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .hero h1 {
+            margin: 14px 0 12px;
+            color: #f5f1e8;
+            font-size: clamp(32px, 5vw, 48px);
+            font-weight: 800;
+            letter-spacing: -1.8px;
+        }
+
+        .hero h1 span {
+            color: #d6ad52;
+        }
+
+        .hero p {
+            max-width: 600px;
+            margin: 0;
+            color: #8d98a6;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        /* ================= DASHBOARD ================= */
+
+        .dashboard {
+            padding: 55px 0 70px;
+        }
+
+        .section-title {
+            color: #f5f1e8;
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: -.7px;
+        }
+
+        .section-subtitle {
+            color: #8d98a6;
+            font-size: 13px;
+            margin: 7px 0 0;
+        }
+
+        /* ================= SMALL FEATURE CARDS ================= */
+
+        .feature-card {
+            height: 100%;
+            padding: 23px;
+            border-radius: 14px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(255,255,255,.045),
+                    rgba(255,255,255,.012)
+                );
+
+            border: 1px solid rgba(255,255,255,.08);
+
+            transition:
+                transform .25s ease,
+                border-color .25s ease,
+                box-shadow .25s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(214,173,82,.4);
+
+            box-shadow:
+                0 0 14px rgba(214,173,82,.08),
+                0 12px 30px rgba(0,0,0,.22);
+        }
+
+        .icon-box {
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            margin-bottom: 18px;
+
+            border-radius: 12px;
+            color: #d6ad52;
+            background: rgba(214,173,82,.09);
+            border: 1px solid rgba(214,173,82,.22);
+
+            font-size: 20px;
+        }
+
+        .feature-card h4 {
+            color: #f5f1e8;
+            font-size: 17px;
+            font-weight: 700;
+            margin-bottom: 9px;
+        }
+
+        .feature-card p {
+            min-height: 48px;
+            margin-bottom: 18px;
+
+            color: #8d98a6;
+            font-size: 12px;
+            line-height: 1.65;
+        }
+
+        .dashboard-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+
+            padding: 9px 14px;
+            border-radius: 8px;
+
+            color: #071426;
+            background: #d6ad52;
+            border: 1px solid #d6ad52;
+
+            font-size: 12px;
+            font-weight: 800;
+
+            box-shadow:
+                0 0 9px rgba(214,173,82,.2);
+
+            transition: .25s ease;
+        }
+
+        .dashboard-btn:hover {
+            color: #071426;
+            background: #f0ca70;
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 0 12px rgba(214,173,82,.5),
+                0 0 25px rgba(214,173,82,.18);
+        }
+
+        /* ================= MY POSTINGS ================= */
+
+        .postings-section {
+            padding: 10px 0 90px;
+            scroll-margin-top: 90px;
+        }
+
+        .postings-heading {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .small-post-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+
+            padding: 9px 13px;
+            border-radius: 8px;
+
+            color: #d6ad52;
+            border: 1px solid rgba(214,173,82,.3);
+
+            font-size: 12px;
+            font-weight: 700;
+            white-space: nowrap;
+
+            transition: .25s ease;
+        }
+
+        .small-post-btn:hover {
+            color: #071426;
+            background: #d6ad52;
+            box-shadow: 0 0 15px rgba(214,173,82,.25);
+        }
+
+        .postings-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 17px;
+        }
+
+        /* ================= SMALL POSTING CARD ================= */
+
+        .posting-card {
+            min-width: 0;
+            padding: 20px;
+            border-radius: 13px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(255,255,255,.045),
+                    rgba(255,255,255,.012)
+                );
+
+            border: 1px solid rgba(255,255,255,.08);
+
+            transition:
+                transform .25s ease,
+                border-color .25s ease,
+                box-shadow .25s ease;
+        }
+
+        .posting-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(214,173,82,.4);
+
+            box-shadow:
+                0 0 13px rgba(214,173,82,.08),
+                0 12px 28px rgba(0,0,0,.2);
+        }
+
+        .posting-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .opportunity-type {
+            display: inline-block;
+            max-width: 80%;
+
+            padding: 5px 8px;
+            border-radius: 20px;
+
+            color: #d6ad52;
+            background: rgba(214,173,82,.08);
+            border: 1px solid rgba(214,173,82,.2);
+
+            font-size: 9px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: .4px;
+
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .posting-icon {
+            color: #d6ad52;
+            font-size: 16px;
+        }
+
+        .posting-title {
+            color: #f5f1e8;
+            font-size: 16px;
+            font-weight: 700;
+            line-height: 1.35;
+
+            margin: 16px 0 8px;
+
+            word-break: break-word;
+        }
+
+        .posting-location {
+            color: #aab5c2;
+            font-size: 11px;
+            margin-bottom: 13px;
+        }
+
+        .posting-location i {
+            color: #d6ad52;
+            margin-right: 4px;
+        }
+
+        .posting-description {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+
+            min-height: 53px;
+            margin: 0 0 18px;
+
+            color: #8d98a6;
+            font-size: 11px;
+            line-height: 1.6;
+        }
+
+        .posting-bottom {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+
+            padding-top: 13px;
+            border-top: 1px solid rgba(255,255,255,.07);
+        }
+
+        .posting-date {
+            color: #69788b;
+            font-size: 10px;
+        }
+
+        .posting-date i {
+            color: #d6ad52;
+            margin-right: 3px;
+        }
+
+        .posting-status {
+            padding: 4px 7px;
+            border-radius: 20px;
+
+            color: #9ed6ae;
+            background: rgba(80,180,105,.09);
+            border: 1px solid rgba(80,180,105,.18);
+
+            font-size: 9px;
+            font-weight: 700;
+        }
+
+        /* ================= EMPTY STATE ================= */
+
+        .empty-postings {
+            padding: 45px 20px;
+            text-align: center;
+
+            border: 1px dashed rgba(214,173,82,.25);
+            border-radius: 14px;
+            background: rgba(255,255,255,.015);
+        }
+
+        .empty-postings i {
+            display: block;
+            color: #d6ad52;
+            font-size: 34px;
+            margin-bottom: 13px;
+        }
+
+        .empty-postings h4 {
+            color: #f5f1e8;
+            font-size: 17px;
+            font-weight: 700;
+        }
+
+        .empty-postings p {
+            color: #8d98a6;
+            font-size: 12px;
+            margin-bottom: 20px;
+        }
+
+        /* ================= FOOTER ================= */
+
+        footer {
+            padding: 25px 0;
+            background: #050f1c;
+            border-top: 1px solid rgba(255,255,255,.06);
+
+            color: #69788b;
+            font-size: 11px;
+            text-align: center;
+        }
+
+        footer i {
+            color: #d6ad52;
+            margin-right: 4px;
+        }
+
+        /* ================= RESPONSIVE ================= */
+
+        @media (max-width: 991px) {
+
+            .navbar-collapse {
+                margin-top: 15px;
+            }
+
+            .navbar-nav {
+                align-items: flex-start !important;
+            }
+
+            .custom-link {
+                margin-left: 0;
+                padding-left: 0 !important;
+            }
+
+            .logout-link {
+                margin-left: 0;
+                margin-top: 8px;
+            }
+
+            .postings-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+        }
+
+        @media (max-width: 600px) {
+
+            .hero {
+                padding: 50px 0;
+            }
+
+            .hero h1 {
+                font-size: 34px;
+            }
+
+            .dashboard {
+                padding: 45px 0 60px;
+            }
+
+            .postings-heading {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .small-post-btn {
+                width: 100%;
+            }
+
+            .postings-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .feature-card {
+                padding: 21px;
+            }
+
+        }
+
+    </style>
 
 </head>
-
 
 <body>
 
 
-<!-- ================================================= -->
-<!-- ================= NAVBAR ======================== -->
-<!-- ================================================= -->
+<!-- ================= NAVBAR ================= -->
 
-<nav class="navbar-custom">
+<nav class="navbar navbar-expand-lg navbar-custom">
 
     <div class="container">
 
-        <div class="d-flex justify-content-between align-items-center">
+        <a class="brand"
+           href="<%= request.getContextPath() %>/companyDashboard">
 
-            <a href="companyDashboard.jsp"
-               class="brand">
+            <i class="bi bi-mortarboard-fill"></i>
+            CampusConnect
 
-                <i class="bi bi-mortarboard-fill"></i>
-                CampusConnect
-
-            </a>
+        </a>
 
 
-            <div class="company-name">
+        <button class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#companyNav"
+                aria-controls="companyNav"
+                aria-expanded="false"
+                aria-label="Toggle navigation">
 
-                <span class="company-icon">
+            <i class="bi bi-list"></i>
 
-                    <i class="bi bi-building"></i>
+        </button>
 
-                </span>
 
-                <%= user.getName() %>
+        <div class="collapse navbar-collapse"
+             id="companyNav">
 
-            </div>
+            <ul class="navbar-nav ms-auto align-items-lg-center">
+
+                <li class="nav-item">
+
+                    <a class="nav-link custom-link active"
+                       href="<%= request.getContextPath() %>/companyDashboard">
+
+                        <i class="bi bi-grid"></i>
+                        Dashboard
+
+                    </a>
+
+                </li>
+
+
+                <li class="nav-item">
+
+                    <a class="nav-link custom-link"
+                       href="<%= request.getContextPath() %>/postJob.jsp">
+
+                        <i class="bi bi-plus-circle"></i>
+                        Post Opportunity
+
+                    </a>
+
+                </li>
+
+
+                <li class="nav-item">
+
+                    <a class="nav-link custom-link"
+                       href="<%= request.getContextPath() %>/companyDashboard#postings">
+
+                        <i class="bi bi-briefcase"></i>
+                        My Postings
+
+                    </a>
+
+                </li>
+
+
+                <li class="nav-item">
+
+                    <a class="nav-link custom-link"
+                       href="<%= request.getContextPath() %>/companyapplications">
+
+                        <i class="bi bi-people"></i>
+                        Applicants
+
+                    </a>
+
+                </li>
+
+
+                <li class="nav-item">
+
+                    <a class="nav-link logout-link"
+                       href="<%= request.getContextPath() %>/logout">
+
+                        <i class="bi bi-box-arrow-right"></i>
+                        Logout
+
+                    </a>
+
+                </li>
+
+            </ul>
 
         </div>
 
@@ -816,9 +715,7 @@ footer {
 </nav>
 
 
-<!-- ================================================= -->
-<!-- ================= HERO ========================== -->
-<!-- ================================================= -->
+<!-- ================= HERO ================= -->
 
 <section class="hero">
 
@@ -828,25 +725,16 @@ footer {
             Company Dashboard
         </div>
 
-
-        <h1 class="mt-3">
-
+        <h1>
             Welcome,
-
             <span style="color:#d6ad52;">
-
-                <%= user.getName() %>.
-
+            <%= user.getName() %>.
             </span>
-
         </h1>
 
-
-        <p class="mt-3 mb-0">
-
-            Connect with talented students and build
-            your next generation of talent.
-
+        <p>
+            Manage your opportunities, connect with students,
+            and find the right talent for your company.
         </p>
 
     </div>
@@ -854,133 +742,115 @@ footer {
 </section>
 
 
-<!-- ================================================= -->
-<!-- ================= DASHBOARD ==================== -->
-<!-- ================================================= -->
+<!-- ================= DASHBOARD CARDS ================= -->
 
 <section class="dashboard">
 
     <div class="container">
 
-        <h2 class="section-title mb-4">
-            Company Tools
+        <h2 class="section-title">
+            Company Dashboard
         </h2>
 
+        <p class="section-subtitle mb-4">
+            Manage your opportunities and student applications from one place.
+        </p>
 
-        <div class="row g-4">
+
+        <div class="row g-3">
 
 
-            <!-- ================================================= -->
             <!-- POST OPPORTUNITY -->
-            <!-- ================================================= -->
 
-            <div class="col-md-4">
+            <div class="col-md-6 col-lg-4">
 
-                <a href="postJob.jsp"
-                   class="dash-card">
+                <div class="feature-card">
 
                     <div class="icon-box">
-
-                        <i class="bi bi-briefcase-fill"></i>
-
+                        <i class="bi bi-plus-circle"></i>
                     </div>
-
 
                     <h4>
                         Post Opportunity
                     </h4>
 
-
                     <p>
-
-                        Create and publish a new
-                        job or internship opportunity
-                        for students.
-
+                        Create and publish a new job or internship opportunity.
                     </p>
 
+                    <a href="<%= request.getContextPath() %>/postJob.jsp"
+                       class="dashboard-btn">
 
-                    <span class="post-btn mt-2">
+                        Post Now
+                        <i class="bi bi-arrow-right"></i>
 
-                        <i class="bi bi-plus-lg"></i>
+                    </a>
 
-                        Post now
-
-                    </span>
-
-                </a>
+                </div>
 
             </div>
 
 
-            <!-- ================================================= -->
             <!-- MY POSTINGS -->
-            <!-- ================================================= -->
 
-            <div class="col-md-4">
+            <div class="col-md-6 col-lg-4">
 
-                <a href="#"
-                   class="dash-card">
+                <div class="feature-card">
 
                     <div class="icon-box">
-
-                        <i class="bi bi-list-check"></i>
-
+                        <i class="bi bi-briefcase"></i>
                     </div>
-
 
                     <h4>
                         My Postings
                     </h4>
 
-
                     <p>
-
-                        View and manage all the
-                        jobs and internships you
-                        have posted.
-
+                        View all jobs and internships posted by your company.
                     </p>
 
+                    <a href="#postings"
+                       class="dashboard-btn">
 
-                    <span class="badge coming mt-2">
+                        View Postings
+                        <i class="bi bi-arrow-down"></i>
 
-                        Coming Soon
+                    </a>
 
-                    </span>
-
-                </a>
+                </div>
 
             </div>
 
 
-           <div class="col-md-4">
+            <!-- APPLICANTS -->
 
-    <a href="${pageContext.request.contextPath}/companyapplications"
-       class="dash-card">
+            <div class="col-md-6 col-lg-4">
 
-        <div class="icon-box">
-            <i class="bi bi-people-fill"></i>
-        </div>
+                <div class="feature-card">
 
-        <h4>
-            View Applicants
-        </h4>
+                    <div class="icon-box">
+                        <i class="bi bi-people"></i>
+                    </div>
 
-        <p>
-            Review students who applied
-            to your job and internship
-            opportunities.
-        </p>
+                    <h4>
+                        View Applicants
+                    </h4>
 
-        <span class="post-btn mt-2">
-            <i class="bi bi-eye-fill"></i>
-            View applicants
-        </span>
+                    <p>
+                        Review students who applied to your opportunities.
+                    </p>
 
-    </a>
+                    <a href="<%= request.getContextPath() %>/companyapplications"
+                       class="dashboard-btn">
 
-</div>
+                        View Applicants
+                        <i class="bi bi-arrow-right"></i>
+
+                    </a>
+
+                </div>
+
+            </div>
 
 
         </div>
@@ -990,24 +860,170 @@ footer {
 </section>
 
 
-<!-- ================================================= -->
-<!-- ================= FOOTER ======================== -->
-<!-- ================================================= -->
+<!-- ================= MY POSTINGS ================= -->
+
+<section class="postings-section" id="postings">
+
+    <div class="container">
+
+        <div class="postings-heading">
+
+            <div>
+
+                <div class="hero-label">
+                    Your Activity
+                </div>
+
+                <h2 class="section-title mt-2">
+                    My Postings
+                </h2>
+
+                <p class="section-subtitle">
+                    View all opportunities posted from your company account.
+                </p>
+
+            </div>
+
+
+            <a href="<%= request.getContextPath() %>/postJob.jsp"
+               class="small-post-btn">
+
+                <i class="bi bi-plus-circle"></i>
+                Post New Opportunity
+
+            </a>
+
+        </div>
+
+
+        <% if (opportunities != null && !opportunities.isEmpty()) { %>
+
+            <div class="postings-grid">
+
+                <% for (Opportunity opportunity : opportunities) { %>
+
+                    <div class="posting-card">
+
+                        <div class="posting-top">
+
+                            <span class="opportunity-type">
+                                <%= opportunity.getType() %>
+                            </span>
+
+                            <i class="bi bi-briefcase posting-icon"></i>
+
+                        </div>
+
+
+                        <h3 class="posting-title">
+                            <%= opportunity.getTitle() %>
+                        </h3>
+
+
+                        <div class="posting-location">
+
+                            <i class="bi bi-geo-alt"></i>
+
+                            <%= opportunity.getLocation() %>
+
+                        </div>
+
+
+                        <p class="posting-description">
+
+                            <%= opportunity.getDescription() %>
+
+                        </p>
+
+
+                        <div class="posting-bottom">
+
+                            <span class="posting-date">
+
+                                <i class="bi bi-calendar3"></i>
+                                Posted opportunity
+
+                            </span>
+
+                            <span class="posting-status">
+                                Active
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                <% } %>
+
+            </div>
+
+        <% } else { %>
+
+            <div class="empty-postings">
+
+                <i class="bi bi-briefcase"></i>
+
+                <h4>
+                    No postings yet
+                </h4>
+
+                <p>
+                    You have not posted any job or internship opportunities.
+                </p>
+
+                <a href="<%= request.getContextPath() %>/postJob.jsp"
+                   class="dashboard-btn">
+
+                    <i class="bi bi-plus-circle"></i>
+                    Post Your First Opportunity
+
+                </a>
+
+            </div>
+
+        <% } %>
+
+    </div>
+
+</section>
+
+
+<!-- ================= FOOTER ================= -->
 
 <footer>
 
-    <div class="container text-center">
+    <div class="container">
 
-        <small>
+        <div class="d-flex justify-content-between
+                    align-items-center flex-wrap gap-3">
 
-            © 2026 CampusConnect · Built for companies
+            <a href="index.jsp" class="brand">
 
-        </small>
+                <i class="bi bi-mortarboard-fill"></i>
+
+                CampusConnect
+
+            </a>
+
+
+            <small>
+
+                © 2026 CampusConnect · Connecting
+                students with opportunities.
+
+            </small>
+
+        </div>
 
     </div>
 
 </footer>
 
+
+
+<script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+</script>
 
 </body>
 

@@ -10,6 +10,7 @@ public class Application {
     private Date appliedDate;
     private String studentName;
 
+
     public Application() {}
 
     public Application(int appId, int studentId, int oppId, String status, Date appliedDate) {
@@ -39,7 +40,8 @@ public class Application {
         return studentName;
     }
 
-    public void setStudentName(String studentName) {
+    public void setStudentName(String studentName) 
+    {
         this.studentName = studentName;
     }
 }

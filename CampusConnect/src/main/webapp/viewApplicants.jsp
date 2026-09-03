@@ -8,7 +8,9 @@
     User user = (User) session.getAttribute("user");
 
     if (user == null || !"COMPANY".equals(user.getRole())) {
-        response.sendRedirect("login.jsp");
+        response.sendRedirect(
+            request.getContextPath() + "/login.jsp"
+        );
         return;
     }
 
@@ -17,7 +19,6 @@
 %>
 
 <!DOCTYPE html>
-
 <html lang="en">
 
 <head>
@@ -29,10 +30,12 @@
 
     <title>View Applicants | CampusConnect</title>
 
+    <!-- Bootstrap -->
     <link
         href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
         rel="stylesheet">
 
+    <!-- Bootstrap Icons -->
     <link
         rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -50,20 +53,21 @@
             font-family: "Segoe UI", Arial, sans-serif;
         }
 
-        /* NAVBAR */
+
+        /* ================= NAVBAR ================= */
 
         .navbar-custom {
             background: #071426;
-            border-bottom: 1px solid rgba(214,173,82,.18);
-            padding: 20px 0;
+            border-bottom: 1px solid rgba(255,255,255,.06);
+            padding: 18px 0;
         }
 
         .brand {
             color: #f5f1e8;
             text-decoration: none;
-            font-size: 24px;
-            font-weight: 750;
-            transition: all .3s ease;
+            font-size: 23px;
+            font-weight: 800;
+            letter-spacing: -.5px;
         }
 
         .brand i {
@@ -72,46 +76,190 @@
         }
 
         .brand:hover {
-            color: #ffffff;
-            text-shadow: 0 0 10px rgba(214,173,82,.5);
+            color: #f5f1e8;
         }
 
-        .back-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 7px;
 
-            padding: 9px 16px;
+        /* NORMAL NAV LINKS */
 
+        .custom-link {
+            position: relative;
+            color: #b8c0cb !important;
+            font-size: 14px;
+            font-weight: 600;
+            margin-left: 10px;
+            padding: 10px 8px !important;
+
+            background: transparent !important;
+            border: none !important;
+            border-radius: 0 !important;
+            box-shadow: none !important;
+
+            transition: color .3s ease;
+        }
+
+        .custom-link i {
             color: #d6ad52;
-            border: 1px solid rgba(214,173,82,.35);
-            border-radius: 9px;
+            margin-right: 5px;
 
-            text-decoration: none;
-            font-weight: 650;
-
-            transition: all .25s ease;
-
-            box-shadow:
-                0 0 7px rgba(214,173,82,.12);
+            transition:
+                color .3s ease,
+                text-shadow .3s ease;
         }
 
-        .back-btn:hover {
-            color: #071426;
+        .custom-link:hover {
+            color: #f5f1e8 !important;
+            background: transparent !important;
+            box-shadow: none !important;
+            transform: none !important;
+        }
+
+        .custom-link:hover i {
+            color: #f0ca70;
+
+            text-shadow:
+                0 0 8px rgba(214,173,82,.7);
+        }
+
+
+        /* GOLD UNDERLINE */
+
+        .custom-link::after {
+            content: "";
+
+            position: absolute;
+
+            left: 50%;
+            bottom: 4px;
+
+            width: 0;
+            height: 2px;
+
             background: #d6ad52;
 
-            transform: translateY(-2px);
+            transform: translateX(-50%);
+
+            border-radius: 5px;
 
             box-shadow:
-                0 0 10px rgba(214,173,82,.7),
-                0 0 22px rgba(214,173,82,.35);
+                0 0 7px rgba(214,173,82,.7);
+
+            transition: width .3s ease;
         }
 
-        /* PAGE */
+        .custom-link:hover::after {
+            width: 55%;
+        }
+
+
+        /* ACTIVE LINK */
+
+        .custom-link.active {
+            color: #f5f1e8 !important;
+            background: transparent !important;
+            box-shadow: none !important;
+        }
+
+        .custom-link.active::after {
+            width: 55%;
+        }
+
+        .custom-link.active i {
+            color: #f0ca70;
+
+            text-shadow:
+                0 0 8px rgba(214,173,82,.7);
+        }
+
+
+        /* COMPANY NAME */
+
+        .company-name {
+            cursor: default;
+            color: #b8c0cb !important;
+        }
+
+        .company-name i {
+            color: #d6ad52;
+        }
+
+
+        /* LOGOUT */
+
+        .logout-link {
+            color: #d6ad52 !important;
+
+            font-size: 14px;
+            font-weight: 700;
+
+            margin-left: 14px;
+
+            padding: 10px 14px !important;
+
+            border: 1px solid rgba(214,173,82,.25);
+
+            border-radius: 10px;
+
+            background: transparent;
+
+            transition: .3s ease;
+        }
+
+        .logout-link i {
+            margin-right: 5px;
+        }
+
+        .logout-link:hover {
+            color: #071426 !important;
+
+            background: #d6ad52 !important;
+
+            border-color: #d6ad52;
+
+            box-shadow:
+                0 0 10px rgba(214,173,82,.35),
+                0 0 25px rgba(214,173,82,.15);
+
+            transform: translateY(-2px);
+        }
+
+        .logout-link:hover i {
+            color: #071426;
+            text-shadow: none;
+        }
+
+
+        /* NAVBAR TOGGLER */
+
+        .navbar-toggler {
+            border: 1px solid rgba(214,173,82,.35);
+
+            border-radius: 8px;
+
+            padding: 7px 10px;
+
+            color: #d6ad52;
+
+            background: transparent;
+        }
+
+        .navbar-toggler i {
+            color: #d6ad52;
+            font-size: 22px;
+        }
+
+        .navbar-toggler:focus {
+            box-shadow: none;
+        }
+
+
+        /* ================= PAGE ================= */
 
         .page {
             padding: 65px 15px 90px;
-            min-height: calc(100vh - 80px);
+
+            min-height:
+                calc(100vh - 80px);
         }
 
         .page-header {
@@ -120,24 +268,34 @@
 
         .page-label {
             color: #d6ad52;
+
             font-size: 13px;
+
             font-weight: 700;
+
             letter-spacing: 2px;
+
             text-transform: uppercase;
         }
 
         .page-header h1 {
             font-size: 42px;
+
             font-weight: 800;
+
             margin-top: 10px;
+
+            margin-bottom: 10px;
         }
 
         .page-header p {
             color: #8d98a6;
+
             font-size: 16px;
         }
 
-        /* APPLICATION CARD */
+
+        /* ================= APPLICATION CARD ================= */
 
         .application-card {
             background:
@@ -169,6 +327,9 @@
                 0 20px 45px rgba(0,0,0,.25);
         }
 
+
+        /* APPLICATION ICON */
+
         .application-icon {
             width: 55px;
             height: 55px;
@@ -176,12 +337,15 @@
             border-radius: 14px;
 
             display: flex;
+
             align-items: center;
             justify-content: center;
 
-            background: rgba(214,173,82,.10);
+            background:
+                rgba(214,173,82,.10);
 
-            border: 1px solid rgba(214,173,82,.25);
+            border:
+                1px solid rgba(214,173,82,.25);
 
             color: #d6ad52;
 
@@ -190,40 +354,74 @@
             margin-bottom: 18px;
         }
 
+
         .application-card h4 {
             font-size: 20px;
+
             font-weight: 700;
+
+            margin-bottom: 15px;
         }
 
         .application-card p {
             color: #8d98a6;
+
             margin-bottom: 8px;
         }
 
-        /* STATUS */
+        .application-card strong {
+            color: #dce1e7;
+        }
+
+
+        /* ================= STATUS ================= */
 
         .status {
             display: inline-flex;
+
             align-items: center;
 
             padding: 7px 13px;
 
             border-radius: 8px;
 
-            background: rgba(214,173,82,.10);
+            background:
+                rgba(214,173,82,.10);
 
-            border: 1px solid rgba(214,173,82,.25);
+            border:
+                1px solid rgba(214,173,82,.25);
 
             color: #d6ad52;
 
             font-size: 12px;
+
             font-weight: 750;
 
             box-shadow:
                 0 0 7px rgba(214,173,82,.12);
         }
 
-        /* EMPTY */
+
+        /* ================= BUTTONS ================= */
+
+        .btn-success,
+        .btn-danger {
+            border-radius: 8px;
+
+            font-weight: 600;
+
+            padding: 8px 15px;
+
+            transition: .25s ease;
+        }
+
+        .btn-success:hover,
+        .btn-danger:hover {
+            transform: translateY(-2px);
+        }
+
+
+        /* ================= EMPTY ================= */
 
         .empty-box {
             text-align: center;
@@ -237,14 +435,17 @@
                     rgba(255,255,255,.015)
                 );
 
-            border: 1px solid rgba(255,255,255,.09);
+            border:
+                1px solid rgba(255,255,255,.09);
 
             border-radius: 18px;
         }
 
         .empty-box i {
             font-size: 50px;
+
             color: #d6ad52;
+
             margin-bottom: 20px;
         }
 
@@ -256,23 +457,63 @@
             color: #8d98a6;
         }
 
-        /* ERROR */
+
+        /* ================= ERROR ================= */
 
         .error-box {
             padding: 18px;
 
             border-radius: 10px;
 
-            background: rgba(214,173,82,.08);
+            background:
+                rgba(214,173,82,.08);
 
-            border: 1px solid rgba(214,173,82,.25);
+            border:
+                1px solid rgba(214,173,82,.25);
 
             color: #d6ad52;
 
             margin-bottom: 25px;
         }
 
-        /* RESPONSIVE */
+
+        /* ================= RESPONSIVE ================= */
+
+        @media (max-width: 991px) {
+
+            .navbar-collapse {
+                margin-top: 15px;
+
+                padding: 10px 0;
+
+                background: transparent;
+
+                border: none;
+
+                border-radius: 0;
+
+                box-shadow: none;
+            }
+
+            .navbar-nav {
+                align-items: flex-start !important;
+            }
+
+            .custom-link {
+                margin-left: 0;
+
+                padding-left: 0 !important;
+            }
+
+            .logout-link {
+                display: inline-block;
+
+                margin-left: 0;
+
+                margin-top: 8px;
+            }
+        }
+
 
         @media (max-width: 768px) {
 
@@ -295,17 +536,17 @@
             .application-card {
                 padding: 24px;
             }
-
-            .back-btn {
-                padding: 8px 12px;
-                font-size: 14px;
-            }
         }
+
 
         @media (max-width: 480px) {
 
             .brand {
                 font-size: 19px;
+            }
+
+            .brand i {
+                margin-right: 5px;
             }
 
             .page {
@@ -318,12 +559,8 @@
 
             .application-card {
                 padding: 22px;
-                border-radius: 15px;
-            }
 
-            .back-btn {
-                padding: 7px 10px;
-                font-size: 13px;
+                border-radius: 15px;
             }
         }
 
@@ -331,36 +568,130 @@
 
 </head>
 
+
 <body>
 
 
-<!-- NAVBAR -->
+<!-- ================= NAVBAR ================= -->
 
-<nav class="navbar-custom">
+<nav class="navbar-custom navbar navbar-expand-lg">
 
     <div class="container">
 
-        <div class="d-flex
-                    justify-content-between
-                    align-items-center">
+        <!-- BRAND -->
 
-            <a href="companyDashboard.jsp"
-               class="brand">
+        <a href="<%= request.getContextPath() %>/companyDashboard.jsp"
+           class="brand">
 
-                <i class="bi bi-mortarboard-fill"></i>
+            <i class="bi bi-mortarboard-fill"></i>
 
-                CampusConnect
+            CampusConnect
 
-            </a>
+        </a>
 
-            <a href="companyDashboard.jsp"
-               class="back-btn">
 
-                <i class="bi bi-arrow-left"></i>
+        <!-- MOBILE MENU -->
 
-                Dashboard
+        <button class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#companyNav"
+                aria-controls="companyNav"
+                aria-expanded="false"
+                aria-label="Toggle navigation">
 
-            </a>
+            <i class="bi bi-list"></i>
+
+        </button>
+
+
+        <!-- NAVIGATION -->
+
+        <div class="collapse navbar-collapse"
+             id="companyNav">
+
+            <ul class="navbar-nav ms-auto align-items-lg-center">
+
+
+                <!-- DASHBOARD -->
+
+                <li class="nav-item">
+
+                    <a class="nav-link custom-link"
+                       href="<%= request.getContextPath() %>/companyDashboard.jsp">
+
+                        <i class="bi bi-grid"></i>
+
+                        Dashboard
+
+                    </a>
+
+                </li>
+
+
+                <!-- POST OPPORTUNITY -->
+
+                <li class="nav-item">
+
+                    <a class="nav-link custom-link"
+                       href="<%= request.getContextPath() %>/postJob.jsp">
+
+                        <i class="bi bi-plus-circle"></i>
+
+                        Post Opportunity
+
+                    </a>
+
+                </li>
+
+                <!-- APPLICANTS - ACTIVE -->
+
+                <li class="nav-item">
+
+                    <a class="nav-link custom-link active"
+                       href="<%= request.getContextPath() %>/companyapplications">
+
+                        <i class="bi bi-people"></i>
+
+                        Applicants
+
+                    </a>
+
+                </li>
+
+
+                <!-- COMPANY NAME -->
+
+                <li class="nav-item">
+
+                    <span class="nav-link custom-link company-name">
+
+                        <i class="bi bi-building"></i>
+
+                        <%= user.getName() %>
+
+                    </span>
+
+                </li>
+
+
+                <!-- LOGOUT -->
+
+                <li class="nav-item">
+
+                    <a class="nav-link logout-link"
+                       href="<%= request.getContextPath() %>/logout">
+
+                        <i class="bi bi-box-arrow-right"></i>
+
+                        Logout
+
+                    </a>
+
+                </li>
+
+
+            </ul>
 
         </div>
 
@@ -369,7 +700,8 @@
 </nav>
 
 
-<!-- PAGE -->
+
+<!-- ================= PAGE ================= -->
 
 <section class="page">
 
@@ -411,6 +743,7 @@
         <% } %>
 
 
+
         <!-- APPLICATIONS -->
 
         <%
@@ -420,7 +753,10 @@
         %>
 
 
+        <!-- APPLICATION CARD -->
+
         <div class="application-card">
+
 
             <div class="application-icon">
 
@@ -428,26 +764,37 @@
 
             </div>
 
-            
+
+            <h4>
+                <%= app.getStudentName() %>
+            </h4>
+
+
             <p>
-              <strong>Student ID:</strong>
-              <%= app.getStudentId() %>
+                <strong>Student ID:</strong>
+                <%= app.getStudentId() %>
             </p>
+
 
             <p>
                 <strong>Opportunity ID:</strong>
                 <%= app.getOppId() %>
             </p>
 
+
             <p>
                 <strong>Application ID:</strong>
                 <%= app.getAppId() %>
             </p>
 
+
             <p>
                 <strong>Applied Date:</strong>
                 <%= app.getAppliedDate() %>
             </p>
+
+
+            <!-- STATUS -->
 
             <div class="mt-3">
 
@@ -460,6 +807,67 @@
                 </span>
 
             </div>
+
+
+            <!-- ACCEPT / REJECT -->
+
+            <% if ("PENDING".equals(app.getStatus())) { %>
+
+                <div class="mt-3 d-flex gap-2">
+
+                    <!-- ACCEPT -->
+
+                    <form action="<%= request.getContextPath() %>/applicationStatus"
+                          method="post">
+
+                        <input type="hidden"
+                               name="appId"
+                               value="<%= app.getAppId() %>">
+
+                        <input type="hidden"
+                               name="status"
+                               value="ACCEPTED">
+
+                        <button type="submit"
+                                class="btn btn-success">
+
+                            <i class="bi bi-check-circle"></i>
+
+                            Accept
+
+                        </button>
+
+                    </form>
+
+
+                    <!-- REJECT -->
+
+                    <form action="<%= request.getContextPath() %>/applicationStatus"
+                          method="post">
+
+                        <input type="hidden"
+                               name="appId"
+                               value="<%= app.getAppId() %>">
+
+                        <input type="hidden"
+                               name="status"
+                               value="REJECTED">
+
+                        <button type="submit"
+                                class="btn btn-danger">
+
+                            <i class="bi bi-x-circle"></i>
+
+                            Reject
+
+                        </button>
+
+                    </form>
+
+                </div>
+
+            <% } %>
+
 
         </div>
 
@@ -497,6 +905,14 @@
     </div>
 
 </section>
+
+
+
+<!-- Bootstrap JS -->
+
+<script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+</script>
 
 
 </body>

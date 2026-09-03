@@ -1,5 +1,16 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="com.campusconnect.model.User" %>
 
+<%
+    User user = (User) session.getAttribute("user");
+
+    if (user == null || !"COMPANY".equals(user.getRole())) {
+        response.sendRedirect(
+            request.getContextPath() + "/login.jsp"
+        );
+        return;
+    }
+%>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -66,7 +77,263 @@
             text-shadow:
                 0 0 10px rgba(214,173,82,.9);
         }
+/* ================= NAVBAR ================= */
 
+.navbar-custom {
+    background: #071426;
+    border-bottom: 1px solid rgba(255,255,255,.06);
+    padding: 18px 0;
+}
+
+.brand {
+    color: #f5f1e8;
+    text-decoration: none;
+    font-size: 23px;
+    font-weight: 800;
+    letter-spacing: -.5px;
+}
+
+.brand i {
+    color: #d6ad52;
+    margin-right: 8px;
+}
+
+.brand:hover {
+    color: #f5f1e8;
+}
+
+
+/* ================= NAV LINKS ================= */
+
+.custom-link {
+    position: relative;
+    color: #b8c0cb !important;
+    font-size: 14px;
+    font-weight: 600;
+    margin-left: 10px;
+    padding: 10px 8px !important;
+
+    background: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+
+    transition: color .3s ease;
+}
+
+.custom-link i {
+    color: #d6ad52;
+    margin-right: 5px;
+
+    transition:
+        color .3s ease,
+        text-shadow .3s ease;
+}
+
+.custom-link:hover {
+    color: #f5f1e8 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    transform: none !important;
+}
+
+.custom-link:hover i {
+    color: #f0ca70;
+
+    text-shadow:
+        0 0 8px rgba(214,173,82,.7);
+}
+
+
+/* ================= GOLD UNDERLINE ================= */
+
+.custom-link::after {
+    content: "";
+
+    position: absolute;
+
+    left: 50%;
+    bottom: 4px;
+
+    width: 0;
+    height: 2px;
+
+    background: #d6ad52;
+
+    transform: translateX(-50%);
+
+    border-radius: 5px;
+
+    box-shadow:
+        0 0 7px rgba(214,173,82,.7);
+
+    transition: width .3s ease;
+}
+
+.custom-link:hover::after {
+    width: 55%;
+}
+
+
+/* ================= ACTIVE LINK ================= */
+
+.custom-link.active {
+    color: #f5f1e8 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+.custom-link.active::after {
+    width: 55%;
+}
+
+.custom-link.active i {
+    color: #f0ca70;
+
+    text-shadow:
+        0 0 8px rgba(214,173,82,.7);
+}
+
+
+/* ================= COMPANY NAME ================= */
+
+.company-name {
+    cursor: default;
+    color: #b8c0cb !important;
+}
+
+.company-name i {
+    color: #d6ad52;
+}
+
+
+/* ================= LOGOUT ================= */
+
+.logout-link {
+    color: #d6ad52 !important;
+
+    font-size: 14px;
+    font-weight: 700;
+
+    margin-left: 14px;
+
+    padding: 10px 14px !important;
+
+    border: 1px solid rgba(214,173,82,.25);
+
+    border-radius: 10px;
+
+    background: transparent;
+
+    transition: .3s ease;
+}
+
+.logout-link i {
+    margin-right: 5px;
+}
+
+.logout-link:hover {
+    color: #071426 !important;
+
+    background: #d6ad52 !important;
+
+    border-color: #d6ad52;
+
+    box-shadow:
+        0 0 10px rgba(214,173,82,.35),
+        0 0 25px rgba(214,173,82,.15);
+
+    transform: translateY(-2px);
+}
+
+.logout-link:hover i {
+    color: #071426;
+    text-shadow: none;
+}
+
+
+/* ================= MOBILE TOGGLER ================= */
+
+.navbar-toggler {
+    border: 1px solid rgba(214,173,82,.35);
+
+    border-radius: 8px;
+
+    padding: 7px 10px;
+
+    color: #d6ad52;
+
+    background: transparent;
+}
+
+.navbar-toggler i {
+    color: #d6ad52;
+    font-size: 22px;
+}
+
+.navbar-toggler:focus {
+    box-shadow: none;
+}
+
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 991px) {
+
+    .navbar-collapse {
+        margin-top: 15px;
+        padding: 10px 0;
+
+        background: transparent;
+        border: none;
+        border-radius: 0;
+        box-shadow: none;
+    }
+
+    .navbar-nav {
+        align-items: flex-start !important;
+    }
+
+    .custom-link {
+        margin-left: 0;
+        padding-left: 0 !important;
+    }
+
+    .logout-link {
+        display: inline-block;
+
+        margin-left: 0;
+        margin-top: 8px;
+    }
+}
+
+
+@media (max-width: 768px) {
+
+    .navbar-custom {
+        padding: 16px 0;
+    }
+
+    .brand {
+        font-size: 21px;
+    }
+}
+
+
+@media (max-width: 480px) {
+
+    .navbar-custom {
+        padding: 14px 12px;
+    }
+
+    .brand {
+        font-size: 19px;
+    }
+
+    .brand i {
+        margin-right: 5px;
+    }
+}
 
         /* ================= DASHBOARD BUTTON ================= */
 
@@ -568,30 +835,93 @@
 
 <!-- ================= NAVBAR ================= -->
 
-<nav class="navbar-custom">
+<!-- ================= NAVBAR ================= -->
+<nav class="navbar-custom navbar navbar-expand-lg">
 
     <div class="container">
 
-        <div class="d-flex justify-content-between align-items-center">
+        <!-- BRAND -->
+        <a href="<%= request.getContextPath() %>/companyDashboard.jsp"
+           class="brand">
 
-            <a href="companyDashboard.jsp"
-               class="brand">
+            <i class="bi bi-mortarboard-fill"></i>
+            CampusConnect
 
-                <i class="bi bi-mortarboard-fill"></i>
+        </a>
 
-                CampusConnect
+        <!-- MOBILE MENU -->
+        <button class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#companyNav"
+                aria-controls="companyNav"
+                aria-expanded="false"
+                aria-label="Toggle navigation">
 
-            </a>
+            <i class="bi bi-list"></i>
 
+        </button>
 
-            <a href="companyDashboard.jsp"
-               class="back-link">
+        <!-- NAVIGATION -->
+        <div class="collapse navbar-collapse" id="companyNav">
 
-                <i class="bi bi-arrow-left"></i>
+            <ul class="navbar-nav ms-auto align-items-lg-center">
 
-                Dashboard
+                <!-- DASHBOARD -->
+                <li class="nav-item">
+                    <a class="nav-link custom-link"
+                       href="<%= request.getContextPath() %>/companyDashboard.jsp">
 
-            </a>
+                        <i class="bi bi-grid"></i>
+                        Dashboard
+
+                    </a>
+                </li>
+
+                <!-- POST OPPORTUNITY -->
+                <li class="nav-item">
+                    <a class="nav-link custom-link active"
+                       href="<%= request.getContextPath() %>/postJob.jsp">
+
+                        <i class="bi bi-plus-circle"></i>
+                        Post Opportunity
+
+                    </a>
+                </li>
+
+                <!-- APPLICANTS -->
+                <li class="nav-item">
+                    <a class="nav-link custom-link"
+                       href="<%= request.getContextPath() %>/companyapplications">
+
+                        <i class="bi bi-people"></i>
+                        Applicants
+
+                    </a>
+                </li>
+
+                <!-- COMPANY NAME -->
+                <li class="nav-item">
+                    <span class="nav-link custom-link company-name">
+
+                        <i class="bi bi-building"></i>
+                        <%= user.getName() %>
+
+                    </span>
+                </li>
+
+                <!-- LOGOUT -->
+                <li class="nav-item">
+                    <a class="nav-link logout-link"
+                       href="<%= request.getContextPath() %>/logout">
+
+                        <i class="bi bi-box-arrow-right"></i>
+                        Logout
+
+                    </a>
+                </li>
+
+            </ul>
 
         </div>
 

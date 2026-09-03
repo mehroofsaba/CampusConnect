@@ -56,11 +56,19 @@ public class PostOpportunityServlet extends HttpServlet {
         boolean success = oppDAO.addOpportunity(opp);
 
         if (success) {
-            request.setAttribute("message", "Opportunity posted successfully!");
-        } else {
-            request.setAttribute("error", "Failed to post opportunity.");
-        }
 
-        request.getRequestDispatcher("postJob.jsp").forward(request, response);
+            response.sendRedirect(
+                request.getContextPath() + "/companyDashboard"
+            );
+
+            return;
+
+        } else {
+
+            request.setAttribute("error", "Failed to post opportunity.");
+
+            request.getRequestDispatcher("/postJob.jsp")
+                   .forward(request, response);
+        }
     }
 }

@@ -36,6 +36,7 @@ public class CompanyApplicationsServlet extends HttpServlet {
 
         // Get logged in UserId
         int userId = user.getUserId();
+        
 
         // Get applications
         ApplicationDAO applicationDAO = new ApplicationDAO();

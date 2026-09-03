@@ -18,7 +18,7 @@ public class UserDAO {
             ps.setString(4, user.getRole());
 
             int rows = ps.executeUpdate();
-            return rows > 0;
+            return rows > 0; 
 
         } catch (SQLException e) {
             e.printStackTrace();
