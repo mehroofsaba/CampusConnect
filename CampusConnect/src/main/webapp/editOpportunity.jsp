@@ -102,6 +102,39 @@
                 message = "Unable to update the opportunity.";
             }
         }
+        String minCgpaParam = request.getParameter("minCgpa");
+        String departments = request.getParameter("eligibleDepartments");
+        String graduationYearParam = request.getParameter("graduationYear");
+
+        try {
+            double minCgpa = (minCgpaParam == null || minCgpaParam.trim().isEmpty())
+                    ? 0.0 : Double.parseDouble(minCgpaParam);
+
+            if (minCgpa < 0 || minCgpa > 10) {
+                throw new NumberFormatException();
+            }
+
+            Integer graduationYear = null;
+
+            if (graduationYearParam != null && !graduationYearParam.trim().isEmpty()) {
+                graduationYear = Integer.parseInt(graduationYearParam);
+
+                if (graduationYear < 2000 || graduationYear > 2100) {
+                    throw new NumberFormatException();
+                }
+            }
+
+            if (departments != null && departments.trim().isEmpty()) {
+                departments = null;
+            }
+
+            opportunity.setMinCgpa(minCgpa);
+            opportunity.setEligibleDepartments(departments);
+            opportunity.setGraduationYear(graduationYear);
+
+        } catch (NumberFormatException e) {
+            message = "Please enter valid eligibility details.";
+        }
     }
 %>
 
@@ -1121,7 +1154,35 @@
 
                 </div>
 
+               <div class="mb-3">
+    <label class="form-label">Minimum CGPA</label>
+    <input type="number"
+           name="minCgpa"
+           class="form-control"
+           min="0"
+           max="10"
+           step="0.01"
+           value="<%= opportunity.getMinCgpa() %>">
+</div>
 
+<div class="mb-3">
+    <label class="form-label">Eligible Departments</label>
+    <input type="text"
+           name="eligibleDepartments"
+           class="form-control"
+           value="<%= opportunity.getEligibleDepartments() == null ? "" : opportunity.getEligibleDepartments() %>"
+           placeholder="e.g. CSE, IT, ECE">
+</div>
+
+<div class="mb-3">
+    <label class="form-label">Required Graduation Year</label>
+    <input type="number"
+           name="graduationYear"
+           class="form-control"
+           min="2000"
+           max="2100"
+           value="<%= opportunity.getGraduationYear() == null ? "" : opportunity.getGraduationYear() %>">
+</div>
 
                 <!-- DESCRIPTION -->
 

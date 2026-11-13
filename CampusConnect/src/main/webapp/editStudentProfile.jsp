@@ -1174,7 +1174,83 @@ footer i {
 
             </div>
 
+            <!-- ACADEMIC DETAILS -->
 
+<div class="row">
+
+    <div class="col-md-6 mb-3">
+
+        <label class="form-label">
+            Department
+        </label>
+
+        <input
+            type="text"
+            name="department"
+            class="form-control"
+            maxlength="100"
+            placeholder="Computer Science and Engineering"
+            value="<%= profile != null && profile.getDepartment() != null
+                ? profile.getDepartment() : "" %>">
+
+    </div>
+
+
+    <div class="col-md-6 mb-3">
+
+        <label class="form-label">
+            CGPA (out of 10)
+        </label>
+
+        <input
+            type="number"
+            name="cgpa"
+            class="form-control"
+            min="0"
+            max="10"
+            step="0.01"
+            placeholder="8.25"
+            value="<%= profile != null && profile.getCgpa() != null
+                ? profile.getCgpa().toPlainString() : "" %>">
+
+    </div>
+
+</div>
+
+
+<div class="mb-3">
+
+    <label class="form-label">
+        Expected Graduation Year
+    </label>
+
+    <input
+        type="number"
+        name="graduationYear"
+        class="form-control"
+        min="2000"
+        max="2100"
+        placeholder="2028"
+        value="<%= profile != null && profile.getGraduationYear() != null
+            ? profile.getGraduationYear() : "" %>">
+
+</div>
+
+
+<div class="mb-3">
+
+    <label class="form-label">
+        Academic Achievements
+    </label>
+
+    <textarea
+        name="achievements"
+        class="form-control"
+        rows="3"
+        placeholder="Certifications, awards, hackathons, achievements"><%= profile != null && profile.getAchievements() != null
+            ? profile.getAchievements() : "" %></textarea>
+
+</div>
 
             <!-- =================================================
                  SKILLS

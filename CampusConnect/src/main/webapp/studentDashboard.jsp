@@ -6,6 +6,8 @@
 <%@ page import="com.campusconnect.model.Opportunity" %>
 <%@ page import="com.campusconnect.dao.ApplicationDAO" %>
 <%@ page import="com.campusconnect.model.Application" %>
+<%@ page import="java.time.LocalDate" %>
+<%@ page import="com.campusconnect.dao.NotificationDAO" %>
 
 <%
     User user = (User) session.getAttribute("user");
@@ -14,9 +16,19 @@
         response.sendRedirect("login.jsp");
         return;
     }
-
+    NotificationDAO notificationDAO = new NotificationDAO();
+    int unreadNotificationCount =
+            notificationDAO.getUnreadCount(user.getUserId());
+    
     OpportunityDAO opportunityDAO = new OpportunityDAO();
-    List<Opportunity> opportunities = opportunityDAO.getAllOpportunities();
+
+    String keyword = request.getParameter("keyword");
+    String type = request.getParameter("type");
+    String location = request.getParameter("location");
+    String skill = request.getParameter("skill");
+
+    List<Opportunity> opportunities =
+            opportunityDAO.searchOpportunities(keyword, type, location, skill);
 
     ApplicationDAO applicationDAO = new ApplicationDAO();
     List<Application> applications =
@@ -697,7 +709,39 @@ text-shadow: none;
                 min-height: auto;
             }
         }
+/* ================= SEARCH AND FILTER ================= */
 
+.form-label {
+    color: #d6ad52;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.form-control,
+.form-select {
+    background: #0a1a2e;
+    border: 1px solid rgba(214,173,82,.25);
+    color: #f5f1e8;
+    border-radius: 9px;
+    padding: 11px 13px;
+}
+
+.form-control:focus,
+.form-select:focus {
+    background: #0a1a2e;
+    color: #f5f1e8;
+    border-color: #d6ad52;
+    box-shadow: 0 0 0 3px rgba(214,173,82,.12);
+}
+
+.form-control::placeholder {
+    color: #707b89;
+}
+
+.form-select option {
+    background: #071426;
+    color: #f5f1e8;
+}
     </style>
 
 </head>
@@ -828,7 +872,20 @@ text-shadow: none;
 
                 </li>
 
+                <li class="nav-item">
+    <a class="nav-link custom-link"
+       href="<%= request.getContextPath() %>/notifications">
 
+        <i class="bi bi-bell"></i> Notifications
+
+        <% if (unreadNotificationCount > 0) { %>
+            <span class="badge bg-danger ms-1">
+                <%= unreadNotificationCount %>
+            </span>
+        <% } %>
+
+    </a>
+</li>
                 <!-- LOGOUT -->
 
                 <li class="nav-item">
@@ -935,7 +992,100 @@ text-shadow: none;
                 on CampusConnect.
 
             </p>
+            <!-- ================= SEARCH AND FILTER ================= -->
 
+<div class="feature-card mb-4" style="min-height:auto; padding:25px;">
+
+    <form action="studentDashboard.jsp" method="get">
+
+        <div class="row g-3 align-items-end">
+
+            <!-- KEYWORD SEARCH -->
+            <div class="col-lg-6 col-md-12">
+
+                <label class="form-label">Search Opportunities</label>
+
+                <input type="text"
+                       name="keyword"
+                       class="form-control"
+                       placeholder="Search by job title or company name"
+                       value="<%= keyword == null ? "" : keyword.replace("&","&amp;").replace("\"","&quot;").replace("<","&lt;").replace(">","&gt;") %>">
+
+            </div>
+
+            <!-- TYPE FILTER -->
+            <div class="col-lg-2 col-md-4">
+
+                <label class="form-label">Type</label>
+
+                <select name="type" class="form-select">
+
+                    <option value="">All Types</option>
+
+                    <option value="JOB"
+                        <%= "JOB".equalsIgnoreCase(type) ? "selected" : "" %>>
+                        Job
+                    </option>
+
+                    <option value="INTERNSHIP"
+                        <%= "INTERNSHIP".equalsIgnoreCase(type) ? "selected" : "" %>>
+                        Internship
+                    </option>
+
+                </select>
+
+            </div>
+
+            <!-- LOCATION FILTER -->
+            <div class="col-lg-2 col-md-4">
+
+                <label class="form-label">Location</label>
+
+                <input type="text"
+                       name="location"
+                       class="form-control"
+                       placeholder="e.g. Remote"
+                       value="<%= location == null ? "" : location.replace("&","&amp;").replace("\"","&quot;").replace("<","&lt;").replace(">","&gt;") %>">
+
+            </div>
+
+            <!-- SKILL FILTER -->
+            <div class="col-lg-2 col-md-4">
+
+                <label class="form-label">Skills</label>
+
+                <input type="text"
+                       name="skill"
+                       class="form-control"
+                       placeholder="e.g. Java"
+                       value="<%= skill == null ? "" : skill.replace("&","&amp;").replace("\"","&quot;").replace("<","&lt;").replace(">","&gt;") %>">
+
+            </div>
+
+            <!-- BUTTONS -->
+            <div class="col-12 d-flex gap-2">
+
+                <button type="submit" class="apply-btn mt-2">
+
+                    <i class="bi bi-search"></i>
+                    Search
+
+                </button>
+
+                <a href="studentDashboard.jsp"
+                   class="btn btn-outline-secondary mt-2">
+
+                    Clear Filters
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </form>
+
+</div>
 
             <div class="row g-4">
 
@@ -944,6 +1094,10 @@ text-shadow: none;
                     if (opportunities != null && !opportunities.isEmpty()) {
 
                         for (Opportunity opp : opportunities) {
+                        	boolean deadlinePassed =
+                        		    opp.getApplicationDeadline() != null &&
+                        		    opp.getApplicationDeadline().toLocalDate()
+                        		       .isBefore(LocalDate.now());
 
                 %>
 
@@ -959,6 +1113,13 @@ text-shadow: none;
                                         <%= opp.getCompanyName() %>
 
                             </div>
+                            <!-- JOB TITLE -->
+
+<h4 class="mt-3 mb-3" style="color:#f5f1e8; font-weight:750;">
+
+    <%= opp.getTitle() %>
+
+</h4>
                             <!-- TYPE -->
 
                             <span class="opportunity-type">
@@ -981,13 +1142,38 @@ text-shadow: none;
 
                             <!-- POSTED DATE -->
 
-                            <div class="posted-date">
+<div class="posted-date">
 
-                                Posted:
+    <i class="bi bi-calendar-check me-1"></i>
 
-                                <%= opp.getPostedDate() %>
+    Posted: <%= opp.getPostedDate() %>
 
-                            </div>
+</div>
+
+
+<!-- APPLICATION DEADLINE -->
+
+<div class="posted-date mt-2">
+
+    <i class="bi bi-calendar-event me-1"></i>
+
+    Application Deadline:
+
+    <% if (opp.getApplicationDeadline() != null) { %>
+
+        <span style="color:<%= deadlinePassed ? "#ff7777" : "#d6ad52" %>;">
+            <%= opp.getApplicationDeadline() %>
+        </span>
+
+    <% } else { %>
+
+        <span style="color:#8d98a6;">
+            No deadline specified
+        </span>
+
+    <% } %>
+
+</div>
 
 
                             <!-- DESCRIPTION -->
@@ -1016,25 +1202,43 @@ text-shadow: none;
                             </div>
 
 
-                            <!-- APPLY BUTTON -->
+                            <!-- APPLY BUTTON / APPLICATION CLOSED -->
 
-                            <form action="${pageContext.request.contextPath}/apply"
-                                  method="post">
+<% if (!deadlinePassed) { %>
 
-                                <input type="hidden"
-                                       name="oppId"
-                                       value="<%= opp.getOppId() %>">
+    <form action="${pageContext.request.contextPath}/apply"
+          method="post">
 
-                                <button type="submit"
-                                        class="apply-btn border-0">
+        <input type="hidden"
+               name="oppId"
+               value="<%= opp.getOppId() %>">
 
-                                    Apply Now
+        <button type="submit"
+                class="apply-btn border-0">
 
-                                    <i class="bi bi-arrow-right ms-1"></i>
+            Apply Now
 
-                                </button>
+            <i class="bi bi-arrow-right ms-1"></i>
 
-                            </form>
+        </button>
+
+    </form>
+
+<% } else { %>
+
+    <div class="mt-4">
+
+        <span class="badge bg-danger p-2">
+
+            <i class="bi bi-lock-fill me-1"></i>
+
+            Application Closed
+
+        </span>
+
+    </div>
+
+<% } %>
 
 
                         </div>

@@ -1,6 +1,8 @@
 package com.campusconnect.servlet;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.Locale;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,24 +18,93 @@ import com.campusconnect.model.Company;
 @WebServlet("/register")
 public class RegisterServlet extends HttpServlet {
 
+    private static final long serialVersionUID = 1L;
+
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
+        request.setCharacterEncoding("UTF-8");
 
         String name = request.getParameter("name");
         String email = request.getParameter("email");
         String password = request.getParameter("password");
         String role = request.getParameter("role");
 
-        UserDAO userDAO = new UserDAO();
+        // Check empty fields
+        if (name == null || email == null ||
+            password == null || role == null ||
+            name.trim().isEmpty() ||
+            email.trim().isEmpty() ||
+            password.isEmpty() ||
+            role.trim().isEmpty()) {
 
-        // Check if email already exists
-        if (userDAO.emailExists(email)) {
-            request.setAttribute("error", "Email already registered!");
-            request.getRequestDispatcher("register.jsp").forward(request, response);
+            showError(request, response, "All fields are required.");
             return;
         }
 
-        // Create User object
+        // Normalize name and email
+        name = name.trim();
+        email = email.trim().toLowerCase(Locale.ROOT);
+        role = role.trim().toUpperCase(Locale.ROOT);
+
+        // Validate name
+        if (name.length() < 2) {
+            showError(request, response,
+                    "Name must contain at least 2 characters.");
+            return;
+        }
+
+        // Validate email
+        if (email.length() > 254 ||
+            !email.matches("^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$")) {
+
+            showError(request, response,
+                    "Please enter a valid email address.");
+            return;
+        }
+
+        // Validate password length
+        int passwordBytes =
+                password.getBytes(StandardCharsets.UTF_8).length;
+
+        if (password.length() < 8) {
+            showError(request, response,
+                    "Password must contain at least 8 characters.");
+            return;
+        }
+     // Require at least one special character
+        if (!password.matches(".*[^a-zA-Z0-9\\s].*")) {
+            showError(request, response,
+                    "Password must contain at least one special character (e.g. @, #, $, !).");
+            return;
+        }
+        // BCrypt supports a maximum of 72 UTF-8 bytes
+        if (passwordBytes > 72) {
+            showError(request, response,
+                    "Password is too long. Please use a shorter password.");
+            return;
+        }
+
+        // Only STUDENT and COMPANY registrations are allowed
+        if (!"STUDENT".equals(role) &&
+            !"COMPANY".equals(role)) {
+
+            showError(request, response,
+                    "Invalid registration role.");
+            return;
+        }
+
+        UserDAO userDAO = new UserDAO();
+
+        // Check duplicate email
+        if (userDAO.emailExists(email)) {
+            showError(request, response,
+                    "Email already registered!");
+            return;
+        }
+
+        // Create user
         User user = new User();
 
         user.setName(name);
@@ -41,21 +112,16 @@ public class RegisterServlet extends HttpServlet {
         user.setPassword(password);
         user.setRole(role);
 
-        // Register user
+        // Register user (BCrypt hashing happens inside UserDAO)
         boolean success = userDAO.registerUser(user);
 
         if (!success) {
-            request.setAttribute("error", "Registration failed. Try again.");
-            request.getRequestDispatcher("register.jsp").forward(request, response);
+            showError(request, response,
+                    "Registration failed. Please try again.");
             return;
         }
 
-        /*
-         * COMPANY REGISTRATION
-         *
-         * After the user is registered, fetch the newly created
-         * user so that we get the generated user_id.
-         */
+        // COMPANY REGISTRATION
         if ("COMPANY".equals(role)) {
 
             User newUser = userDAO.login(email, password);
@@ -64,16 +130,9 @@ public class RegisterServlet extends HttpServlet {
 
                 Company company = new Company();
 
-                // Link company profile to the newly created user
                 company.setUserId(newUser.getUserId());
-
-                // Use registered name as initial company name
                 company.setCompanyName(name);
 
-                /*
-                 * Other company profile fields are initially empty.
-                 * The user can complete them later from Company Profile.
-                 */
                 company.setIndustry("");
                 company.setDescription("");
                 company.setLocation("");
@@ -101,11 +160,22 @@ public class RegisterServlet extends HttpServlet {
 
         // Registration successful
         request.setAttribute(
-            "message",
-            "Registration successful! Please login."
+                "message",
+                "Registration successful! Please login."
         );
 
-        request.getRequestDispatcher("login.jsp")
+        request.getRequestDispatcher("/login.jsp")
+               .forward(request, response);
+    }
+
+    private void showError(HttpServletRequest request,
+                           HttpServletResponse response,
+                           String message)
+            throws ServletException, IOException {
+
+        request.setAttribute("error", message);
+
+        request.getRequestDispatcher("/register.jsp")
                .forward(request, response);
     }
 }

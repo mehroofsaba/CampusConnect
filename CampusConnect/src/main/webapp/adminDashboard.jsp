@@ -1317,15 +1317,22 @@
 
                                         <% if (!"ADMIN".equalsIgnoreCase(u.getRole())) { %>
 
-                                            <a
-                                                href="<%= request.getContextPath() %>/deleteUser?userId=<%= u.getUserId() %>"
-                                                class="delete-btn"
-                                                onclick="return confirm('Are you sure you want to delete this user?');">
+                                            <form action="<%= request.getContextPath() %>/deleteUser"
+      method="post"
+      style="display:inline;"
+      onsubmit="return confirm('Are you sure you want to delete this user?');">
 
-                                                <i class="bi bi-trash3"></i>
-                                                Delete
+    <input type="hidden" name="userId"
+           value="<%= u.getUserId() %>">
 
-                                            </a>
+    <button type="submit" class="delete-btn">
+
+        <i class="bi bi-trash3"></i>
+        Delete
+
+    </button>
+
+</form>
 
                                         <% } else { %>
 

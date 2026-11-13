@@ -631,7 +631,29 @@ text-shadow: none;
 
 
 <body>
+<%
+String applicationMessage =
+        (String) session.getAttribute("applicationMessage");
 
+if (applicationMessage != null) {
+    session.removeAttribute("applicationMessage");
+%>
+
+<div class="alert alert-info alert-dismissible fade show"
+     role="alert">
+
+    <%= applicationMessage %>
+
+    <button type="button"
+            class="btn-close"
+            data-bs-dismiss="alert">
+    </button>
+
+</div>
+
+<%
+}
+%>
 
 <!-- =====================================================
      NAVBAR

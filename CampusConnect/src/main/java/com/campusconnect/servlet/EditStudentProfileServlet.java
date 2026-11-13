@@ -2,6 +2,8 @@ package com.campusconnect.servlet;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -17,134 +19,206 @@ import com.campusconnect.model.StudentProfile;
 import com.campusconnect.model.User;
 
 @WebServlet("/editStudentProfile")
+
 @MultipartConfig(
     maxFileSize = 5 * 1024 * 1024,
     maxRequestSize = 6 * 1024 * 1024
 )
+
 public class EditStudentProfileServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
 
 
-    // OPEN EDIT PAGE
-    protected void doGet(HttpServletRequest request,
-                          HttpServletResponse response)
-            throws ServletException, IOException {
+    // OPEN EDIT PROFILE PAGE
 
-        HttpSession session = request.getSession(false);
+    @Override
+    protected void doGet(
+            HttpServletRequest request,
+            HttpServletResponse response
+    ) throws ServletException, IOException {
 
-        if (session == null) {
-            response.sendRedirect("login.jsp");
-            return;
-        }
+        User user = getStudent(request, response);
 
-        User user = (User) session.getAttribute("user");
-
-        if (user == null || !"STUDENT".equals(user.getRole())) {
-            response.sendRedirect("login.jsp");
+        if (user == null) {
             return;
         }
 
         StudentProfileDAO dao = new StudentProfileDAO();
 
         StudentProfile profile =
-                dao.getProfileByUserId(user.getUserId());
+            dao.getProfileByUserId(user.getUserId());
 
         request.setAttribute("profile", profile);
 
-        request.getRequestDispatcher("editStudentProfile.jsp")
+        request.getRequestDispatcher("/editStudentProfile.jsp")
                .forward(request, response);
     }
 
 
     // SAVE PROFILE
-    protected void doPost(HttpServletRequest request,
-                           HttpServletResponse response)
-            throws ServletException, IOException {
+
+    @Override
+    protected void doPost(
+            HttpServletRequest request,
+            HttpServletResponse response
+    ) throws ServletException, IOException {
 
         request.setCharacterEncoding("UTF-8");
 
-        HttpSession session = request.getSession(false);
+        User user = getStudent(request, response);
 
-        if (session == null) {
-            response.sendRedirect("login.jsp");
+        if (user == null) {
             return;
         }
 
-        User user = (User) session.getAttribute("user");
+        String phone = trim(request.getParameter("phone"));
+        String location = trim(request.getParameter("location"));
+        String bio = trim(request.getParameter("bio"));
 
-        if (user == null || !"STUDENT".equals(user.getRole())) {
-            response.sendRedirect("login.jsp");
+        String education = trim(request.getParameter("education"));
+        String skills = trim(request.getParameter("skills"));
+
+        String github = trim(request.getParameter("githubLink"));
+        String linkedin = trim(request.getParameter("linkedinLink"));
+
+        // New fields
+
+        String department = trim(request.getParameter("department"));
+        String cgpaText = trim(request.getParameter("cgpa"));
+
+        String yearText = trim(request.getParameter("graduationYear"));
+
+        String achievements = trim(request.getParameter("achievements"));
+
+
+        StudentProfileDAO dao = new StudentProfileDAO();
+
+        StudentProfile existing =
+            dao.getProfileByUserId(user.getUserId());
+
+
+        // CGPA VALIDATION
+
+        BigDecimal cgpa = null;
+
+        Integer graduationYear = null;
+
+        try {
+
+            if (!cgpaText.isEmpty()) {
+
+                cgpa = new BigDecimal(cgpaText);
+
+                if (cgpa.compareTo(BigDecimal.ZERO) < 0 ||
+                    cgpa.compareTo(new BigDecimal("10.00")) > 0) {
+
+                    forwardWithError(
+                        request,
+                        response,
+                        existing,
+                        "CGPA must be between 0 and 10."
+                    );
+
+                    return;
+                }
+
+                cgpa = cgpa.setScale(2, RoundingMode.HALF_UP);
+            }
+
+
+            // GRADUATION YEAR VALIDATION
+
+            if (!yearText.isEmpty()) {
+
+                graduationYear = Integer.valueOf(yearText);
+
+                if (graduationYear < 2000 ||
+                    graduationYear > 2100) {
+
+                    forwardWithError(
+                        request,
+                        response,
+                        existing,
+                        "Enter a valid graduation year."
+                    );
+
+                    return;
+                }
+            }
+
+        } catch (NumberFormatException e) {
+
+            forwardWithError(
+                request,
+                response,
+                existing,
+                "Enter valid CGPA and graduation year."
+            );
+
             return;
         }
 
 
-        int userId = user.getUserId();
+        // FIELD LENGTH VALIDATION
 
+        if (phone.length() > 20 ||
+            location.length() > 100 ||
+            department.length() > 100 ||
+            skills.length() > 255 ||
+            education.length() > 255 ||
+            github.length() > 255 ||
+            linkedin.length() > 255) {
 
-        // GET FORM DATA
+            forwardWithError(
+                request,
+                response,
+                existing,
+                "One or more fields exceed the allowed length."
+            );
 
-        String phone =
-                request.getParameter("phone");
-
-        String location =
-                request.getParameter("location");
-
-        String bio =
-                request.getParameter("bio");
-
-        String education =
-                request.getParameter("education");
-
-        String skills =
-                request.getParameter("skills");
-
-        String githubLink =
-                request.getParameter("githubLink");
-
-        String linkedinLink =
-                request.getParameter("linkedinLink");
-
-
-        StudentProfileDAO dao =
-                new StudentProfileDAO();
-
-        StudentProfile existingProfile =
-                dao.getProfileByUserId(userId);
-
-
-        String resumePath = null;
-
-
-        // KEEP OLD RESUME IF NO NEW FILE IS SELECTED
-
-        if (existingProfile != null) {
-            resumePath = existingProfile.getResumePath();
+            return;
         }
 
 
-        // HANDLE NEW RESUME
+        // URL VALIDATION
 
-        Part resumePart =
-                request.getPart("resume");
+        if (!validOptionalUrl(github) ||
+            !validOptionalUrl(linkedin)) {
+
+            forwardWithError(
+                request,
+                response,
+                existing,
+                "Enter valid HTTP/HTTPS GitHub and LinkedIn URLs."
+            );
+
+            return;
+        }
 
 
-        if (resumePart != null &&
-            resumePart.getSize() > 0) {
+        // RESUME MANAGEMENT
 
-            String contentType =
-                    resumePart.getContentType();
+        String resumePath =
+            existing == null ? null : existing.getResumePath();
 
-            String submittedName =
-                    resumePart.getSubmittedFileName();
+        Part resumePart = request.getPart("resume");
 
+        if (resumePart != null && resumePart.getSize() > 0) {
 
-            if (contentType == null ||
-                !"application/pdf".equalsIgnoreCase(contentType) ||
-                submittedName == null ||
-                !submittedName.toLowerCase().endsWith(".pdf")) {
+            String submittedName = resumePart.getSubmittedFileName();
 
-                response.getWriter().println(
+            String contentType = resumePart.getContentType();
+
+            if (submittedName == null ||
+                !submittedName.toLowerCase().endsWith(".pdf") ||
+                contentType == null ||
+                !"application/pdf".equalsIgnoreCase(contentType)) {
+
+                forwardWithError(
+                    request,
+                    response,
+                    existing,
                     "Only PDF resumes are allowed."
                 );
 
@@ -152,82 +226,174 @@ public class EditStudentProfileServlet extends HttpServlet {
             }
 
 
-            // CREATE UPLOAD DIRECTORY
-
             String uploadPath =
-                    getServletContext()
-                    .getRealPath("/uploads/resumes");
+                getServletContext().getRealPath("/uploads/resumes");
 
+            if (uploadPath == null) {
 
-            File uploadDirectory =
-                    new File(uploadPath);
+                forwardWithError(
+                    request,
+                    response,
+                    existing,
+                    "Resume upload directory is unavailable."
+                );
 
-            if (!uploadDirectory.exists()) {
-                uploadDirectory.mkdirs();
+                return;
+            }
+
+            File directory = new File(uploadPath);
+
+            if (!directory.exists() && !directory.mkdirs()) {
+
+                forwardWithError(
+                    request,
+                    response,
+                    existing,
+                    "Could not create resume directory."
+                );
+
+                return;
             }
 
 
-            // UNIQUE NAME BASED ON USER ID
-
             String fileName =
-                    "resume_" + userId + ".pdf";
+                "resume_" + user.getUserId() + ".pdf";
 
+            File destination =
+                new File(directory, fileName);
 
-            File savedFile =
-                    new File(uploadDirectory, fileName);
+            resumePart.write(destination.getAbsolutePath());
 
-
-            resumePart.write(savedFile.getAbsolutePath());
-
-
-            resumePath =
-                    "uploads/resumes/" + fileName;
+            resumePath = "uploads/resumes/" + fileName;
         }
 
 
         // CREATE OR UPDATE PROFILE
 
-        StudentProfile profile;
+        StudentProfile profile =
+            existing == null ? new StudentProfile() : existing;
+
+        profile.setUserId(user.getUserId());
+
+        profile.setPhone(phone);
+        profile.setLocation(location);
+        profile.setBio(bio);
+
+        profile.setEducation(education);
+        profile.setSkills(skills);
+
+        profile.setGithubLink(github);
+        profile.setLinkedinLink(linkedin);
+
+        // New fields
+
+        profile.setDepartment(department);
+        profile.setCgpa(cgpa);
+        profile.setGraduationYear(graduationYear);
+        profile.setAchievements(achievements);
+
+        profile.setResumePath(resumePath);
 
 
-        if (existingProfile == null) {
+        boolean saved =
+            existing == null
+            ? dao.createProfile(profile)
+            : dao.updateProfile(profile);
 
-            profile = new StudentProfile();
 
-            profile.setUserId(userId);
+        if (!saved) {
 
-            profile.setSkills(skills);
-            profile.setEducation(education);
-            profile.setResumePath(resumePath);
+            forwardWithError(
+                request,
+                response,
+                profile,
+                "Profile could not be saved. Check the database and server console."
+            );
 
-            profile.setPhone(phone);
-            profile.setLocation(location);
-            profile.setBio(bio);
-
-            profile.setGithubLink(githubLink);
-            profile.setLinkedinLink(linkedinLink);
-
-            dao.createProfile(profile);
-
-        } else {
-
-            existingProfile.setSkills(skills);
-            existingProfile.setEducation(education);
-            existingProfile.setResumePath(resumePath);
-
-            existingProfile.setPhone(phone);
-            existingProfile.setLocation(location);
-            existingProfile.setBio(bio);
-
-            existingProfile.setGithubLink(githubLink);
-            existingProfile.setLinkedinLink(linkedinLink);
-
-            dao.updateProfile(existingProfile);
+            return;
         }
 
 
         response.sendRedirect(
-            request.getContextPath() + "/studentProfile"
+            request.getContextPath() + "/studentProfile?updated=1"
         );
+    }
+
+
+    // CHECK STUDENT SESSION
+
+    private User getStudent(
+            HttpServletRequest request,
+            HttpServletResponse response
+    ) throws IOException {
+
+        HttpSession session = request.getSession(false);
+
+        User user = session == null
+            ? null
+            : (User) session.getAttribute("user");
+
+        if (user == null || !"STUDENT".equals(user.getRole())) {
+
+            response.sendRedirect(
+                request.getContextPath() + "/login.jsp"
+            );
+
+            return null;
+        }
+
+        return user;
+    }
+
+
+    // ERROR HANDLING
+
+    private void forwardWithError(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            StudentProfile profile,
+            String message
+    ) throws ServletException, IOException {
+
+        request.setAttribute("profile", profile);
+
+        request.setAttribute("errorMessage", message);
+
+        request.getRequestDispatcher("/editStudentProfile.jsp")
+               .forward(request, response);
+    }
+
+
+    // TRIM INPUT
+
+    private String trim(String value) {
+
+        return value == null ? "" : value.trim();
+    }
+
+
+    // URL VALIDATION
+
+    private boolean validOptionalUrl(String value) {
+
+        if (value == null || value.isEmpty()) {
+            return true;
+        }
+
+        try {
+
+            java.net.URI uri = new java.net.URI(value);
+
+            String scheme = uri.getScheme();
+
+            return uri.getHost() != null &&
+                   scheme != null &&
+                   ("http".equalsIgnoreCase(scheme) ||
+                    "https".equalsIgnoreCase(scheme));
+
+        } catch (java.net.URISyntaxException e) {
+
+            return false;
+        }
     }
 }

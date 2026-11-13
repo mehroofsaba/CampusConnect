@@ -4,80 +4,73 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 
 import com.campusconnect.model.StudentProfile;
 import com.campusconnect.util.DBConnection;
 
 public class StudentProfileDAO {
 
-
-    // =========================================================
-    // GET PROFILE
-    // =========================================================
+    // GET STUDENT PROFILE
 
     public StudentProfile getProfileByUserId(int userId) {
 
         String sql =
-                "SELECT * FROM student_profile WHERE user_id = ?";
+            "SELECT * FROM student_profile WHERE user_id = ?";
 
-        try (
-            Connection conn = DBConnection.getConnection();
-            PreparedStatement ps = conn.prepareStatement(sql)
-        ) {
+        try (Connection conn = DBConnection.getConnection()) {
 
-            ps.setInt(1, userId);
+            if (conn == null) {
+                System.err.println("Database connection is null.");
+                return null;
+            }
 
-            ResultSet rs = ps.executeQuery();
+            try (PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            if (rs.next()) {
+                ps.setInt(1, userId);
 
-                StudentProfile profile = new StudentProfile();
+                try (ResultSet rs = ps.executeQuery()) {
 
-                profile.setProfileId(
-                    rs.getInt("profile_id")
-                );
+                    if (rs.next()) {
 
-                profile.setUserId(
-                    rs.getInt("user_id")
-                );
+                        StudentProfile profile = new StudentProfile();
 
-                profile.setSkills(
-                    rs.getString("skills")
-                );
+                        profile.setProfileId(rs.getInt("profile_id"));
+                        profile.setUserId(rs.getInt("user_id"));
 
-                profile.setEducation(
-                    rs.getString("education")
-                );
+                        profile.setSkills(rs.getString("skills"));
+                        profile.setEducation(rs.getString("education"));
+                        profile.setResumePath(rs.getString("resume_path"));
 
-                profile.setResumePath(
-                    rs.getString("resume_path")
-                );
+                        profile.setPhone(rs.getString("phone"));
+                        profile.setLocation(rs.getString("location"));
+                        profile.setBio(rs.getString("bio"));
 
-                profile.setPhone(
-                    rs.getString("phone")
-                );
+                        profile.setGithubLink(rs.getString("github_link"));
+                        profile.setLinkedinLink(rs.getString("linkedin_link"));
 
-                profile.setLocation(
-                    rs.getString("location")
-                );
+                        // New fields
 
-                profile.setBio(
-                    rs.getString("bio")
-                );
+                        profile.setDepartment(rs.getString("department"));
 
-                profile.setGithubLink(
-                    rs.getString("github_link")
-                );
+                        profile.setCgpa(rs.getBigDecimal("cgpa"));
 
-                profile.setLinkedinLink(
-                    rs.getString("linkedin_link")
-                );
+                        int year = rs.getInt("graduation_year");
 
-                return profile;
+                        profile.setGraduationYear(
+                            rs.wasNull() ? null : year
+                        );
+
+                        profile.setAchievements(
+                            rs.getString("achievements")
+                        );
+
+                        return profile;
+                    }
+                }
             }
 
         } catch (SQLException e) {
-
             e.printStackTrace();
         }
 
@@ -85,72 +78,31 @@ public class StudentProfileDAO {
     }
 
 
-    // =========================================================
-    // CREATE PROFILE
-    // =========================================================
+    // CREATE STUDENT PROFILE
 
     public boolean createProfile(StudentProfile profile) {
 
         String sql =
-                "INSERT INTO student_profile "
-              + "(user_id, skills, education, resume_path, "
-              + "phone, location, bio, github_link, linkedin_link) "
-              + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            "INSERT INTO student_profile "
+            + "(user_id, skills, education, resume_path, phone, "
+            + "location, bio, github_link, linkedin_link, "
+            + "department, cgpa, graduation_year, achievements) "
+            + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-        try (
-            Connection conn = DBConnection.getConnection();
-            PreparedStatement ps = conn.prepareStatement(sql)
-        ) {
+        try (Connection conn = DBConnection.getConnection()) {
 
-            ps.setInt(
-                1,
-                profile.getUserId()
-            );
+            if (conn == null) {
+                return false;
+            }
 
-            ps.setString(
-                2,
-                profile.getSkills()
-            );
+            try (PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            ps.setString(
-                3,
-                profile.getEducation()
-            );
+                bindProfile(ps, profile, false);
 
-            ps.setString(
-                4,
-                profile.getResumePath()
-            );
-
-            ps.setString(
-                5,
-                profile.getPhone()
-            );
-
-            ps.setString(
-                6,
-                profile.getLocation()
-            );
-
-            ps.setString(
-                7,
-                profile.getBio()
-            );
-
-            ps.setString(
-                8,
-                profile.getGithubLink()
-            );
-
-            ps.setString(
-                9,
-                profile.getLinkedinLink()
-            );
-
-            return ps.executeUpdate() > 0;
+                return ps.executeUpdate() > 0;
+            }
 
         } catch (SQLException e) {
-
             e.printStackTrace();
         }
 
@@ -158,81 +110,83 @@ public class StudentProfileDAO {
     }
 
 
-    // =========================================================
-    // UPDATE PROFILE
-    // =========================================================
+    // UPDATE STUDENT PROFILE
 
     public boolean updateProfile(StudentProfile profile) {
 
         String sql =
-                "UPDATE student_profile SET "
-              + "skills = ?, "
-              + "education = ?, "
-              + "resume_path = ?, "
-              + "phone = ?, "
-              + "location = ?, "
-              + "bio = ?, "
-              + "github_link = ?, "
-              + "linkedin_link = ? "
-              + "WHERE user_id = ?";
+            "UPDATE student_profile SET "
+            + "skills=?, education=?, resume_path=?, "
+            + "phone=?, location=?, bio=?, "
+            + "github_link=?, linkedin_link=?, "
+            + "department=?, cgpa=?, "
+            + "graduation_year=?, achievements=? "
+            + "WHERE user_id=?";
 
-        try (
-            Connection conn = DBConnection.getConnection();
-            PreparedStatement ps = conn.prepareStatement(sql)
-        ) {
+        try (Connection conn = DBConnection.getConnection()) {
 
-            ps.setString(
-                1,
-                profile.getSkills()
-            );
+            if (conn == null) {
+                return false;
+            }
 
-            ps.setString(
-                2,
-                profile.getEducation()
-            );
+            try (PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            ps.setString(
-                3,
-                profile.getResumePath()
-            );
+                bindProfile(ps, profile, true);
 
-            ps.setString(
-                4,
-                profile.getPhone()
-            );
-
-            ps.setString(
-                5,
-                profile.getLocation()
-            );
-
-            ps.setString(
-                6,
-                profile.getBio()
-            );
-
-            ps.setString(
-                7,
-                profile.getGithubLink()
-            );
-
-            ps.setString(
-                8,
-                profile.getLinkedinLink()
-            );
-
-            ps.setInt(
-                9,
-                profile.getUserId()
-            );
-
-            return ps.executeUpdate() > 0;
+                return ps.executeUpdate() > 0;
+            }
 
         } catch (SQLException e) {
-
             e.printStackTrace();
         }
 
         return false;
+    }
+
+
+    // COMMON PARAMETER BINDING
+
+    private void bindProfile(
+            PreparedStatement ps,
+            StudentProfile profile,
+            boolean update
+    ) throws SQLException {
+
+        int i = 1;
+
+        if (!update) {
+            ps.setInt(i++, profile.getUserId());
+        }
+
+        ps.setString(i++, profile.getSkills());
+        ps.setString(i++, profile.getEducation());
+        ps.setString(i++, profile.getResumePath());
+
+        ps.setString(i++, profile.getPhone());
+        ps.setString(i++, profile.getLocation());
+        ps.setString(i++, profile.getBio());
+
+        ps.setString(i++, profile.getGithubLink());
+        ps.setString(i++, profile.getLinkedinLink());
+
+        ps.setString(i++, profile.getDepartment());
+
+        if (profile.getCgpa() == null) {
+            ps.setNull(i++, Types.DECIMAL);
+        } else {
+            ps.setBigDecimal(i++, profile.getCgpa());
+        }
+
+        if (profile.getGraduationYear() == null) {
+            ps.setNull(i++, Types.INTEGER);
+        } else {
+            ps.setInt(i++, profile.getGraduationYear());
+        }
+
+        ps.setString(i++, profile.getAchievements());
+
+        if (update) {
+            ps.setInt(i, profile.getUserId());
+        }
     }
 }

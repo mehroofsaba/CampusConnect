@@ -1,5 +1,7 @@
 package com.campusconnect.model;
 
+import java.math.BigDecimal;
+
 public class StudentProfile {
 
     private int profileId;
@@ -8,45 +10,38 @@ public class StudentProfile {
     private String skills;
     private String education;
     private String resumePath;
-
     private String phone;
     private String location;
     private String bio;
-
     private String githubLink;
     private String linkedinLink;
 
+    // New fields
+    private String department;
+    private BigDecimal cgpa;
+    private Integer graduationYear;
+    private String achievements;
 
     public StudentProfile() {
     }
 
-
-    public StudentProfile(int profileId,
-                          int userId,
-                          String skills,
-                          String education,
-                          String resumePath,
-                          String phone,
-                          String location,
-                          String bio,
-                          String githubLink,
-                          String linkedinLink) {
+    // Existing constructor
+    public StudentProfile(int profileId, int userId, String skills,
+            String education, String resumePath, String phone,
+            String location, String bio, String githubLink,
+            String linkedinLink) {
 
         this.profileId = profileId;
         this.userId = userId;
-
         this.skills = skills;
         this.education = education;
         this.resumePath = resumePath;
-
         this.phone = phone;
         this.location = location;
         this.bio = bio;
-
         this.githubLink = githubLink;
         this.linkedinLink = linkedinLink;
     }
-
 
     public int getProfileId() {
         return profileId;
@@ -56,7 +51,6 @@ public class StudentProfile {
         this.profileId = profileId;
     }
 
-
     public int getUserId() {
         return userId;
     }
@@ -64,7 +58,6 @@ public class StudentProfile {
     public void setUserId(int userId) {
         this.userId = userId;
     }
-
 
     public String getSkills() {
         return skills;
@@ -74,7 +67,6 @@ public class StudentProfile {
         this.skills = skills;
     }
 
-
     public String getEducation() {
         return education;
     }
@@ -82,7 +74,6 @@ public class StudentProfile {
     public void setEducation(String education) {
         this.education = education;
     }
-
 
     public String getResumePath() {
         return resumePath;
@@ -92,7 +83,6 @@ public class StudentProfile {
         this.resumePath = resumePath;
     }
 
-
     public String getPhone() {
         return phone;
     }
@@ -100,7 +90,6 @@ public class StudentProfile {
     public void setPhone(String phone) {
         this.phone = phone;
     }
-
 
     public String getLocation() {
         return location;
@@ -110,7 +99,6 @@ public class StudentProfile {
         this.location = location;
     }
 
-
     public String getBio() {
         return bio;
     }
@@ -118,7 +106,6 @@ public class StudentProfile {
     public void setBio(String bio) {
         this.bio = bio;
     }
-
 
     public String getGithubLink() {
         return githubLink;
@@ -128,12 +115,45 @@ public class StudentProfile {
         this.githubLink = githubLink;
     }
 
-
     public String getLinkedinLink() {
         return linkedinLink;
     }
 
     public void setLinkedinLink(String linkedinLink) {
         this.linkedinLink = linkedinLink;
+    }
+
+    // New getters and setters
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
+    public BigDecimal getCgpa() {
+        return cgpa;
+    }
+
+    public void setCgpa(BigDecimal cgpa) {
+        this.cgpa = cgpa;
+    }
+
+    public Integer getGraduationYear() {
+        return graduationYear;
+    }
+
+    public void setGraduationYear(Integer graduationYear) {
+        this.graduationYear = graduationYear;
+    }
+
+    public String getAchievements() {
+        return achievements;
+    }
+
+    public void setAchievements(String achievements) {
+        this.achievements = achievements;
     }
 }

@@ -1,56 +1,114 @@
 package com.campusconnect.dao;
 
 import java.sql.*;
+import org.mindrot.jbcrypt.BCrypt;
 import com.campusconnect.model.User;
 import com.campusconnect.util.DBConnection;
 
 public class UserDAO {
 
     // Register a new user (student, company, or admin)
-    public boolean registerUser(User user) {
-        String sql = "INSERT INTO user (name, email, password, role) VALUES (?, ?, ?, ?)";
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+	// REGISTER USER WITH BCRYPT PASSWORD HASHING
 
-            ps.setString(1, user.getName());
-            ps.setString(2, user.getEmail());
-            ps.setString(3, user.getPassword());
-            ps.setString(4, user.getRole());
+	public boolean registerUser(User user) {
 
-            int rows = ps.executeUpdate();
-            return rows > 0; 
+	    String sql =
+	        "INSERT INTO user (name, email, password, role) VALUES (?, ?, ?, ?)";
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
+	    String hashedPassword =
+	        BCrypt.hashpw(user.getPassword(), BCrypt.gensalt(12));
+
+	    try (Connection conn = DBConnection.getConnection();
+	         PreparedStatement ps = conn.prepareStatement(sql)) {
+
+	        ps.setString(1, user.getName());
+	        ps.setString(2, user.getEmail());
+	        ps.setString(3, hashedPassword);
+	        ps.setString(4, user.getRole());
+
+	        return ps.executeUpdate() > 0;
+
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        return false;
+	    }
+	}
 
     // Login: check email + password, return matching User or null
-    public User login(String email, String password) {
-        String sql = "SELECT * FROM user WHERE email = ? AND password = ?";
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+	// LOGIN WITH BCRYPT + AUTOMATIC LEGACY PASSWORD MIGRATION
 
-            ps.setString(1, email);
-            ps.setString(2, password);
+	public User login(String email, String password) {
 
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                User user = new User();
-                user.setUserId(rs.getInt("user_id"));
-                user.setName(rs.getString("name"));
-                user.setEmail(rs.getString("email"));
-                user.setPassword(rs.getString("password"));
-                user.setRole(rs.getString("role"));
-                return user;
-            }
+	    String sql = "SELECT * FROM user WHERE email = ?";
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
+	    try (Connection conn = DBConnection.getConnection();
+	         PreparedStatement ps = conn.prepareStatement(sql)) {
+
+	        ps.setString(1, email);
+
+	        try (ResultSet rs = ps.executeQuery()) {
+
+	            if (rs.next()) {
+
+	                String storedPassword = rs.getString("password");
+
+	                boolean passwordMatches = false;
+
+	                // Check whether password is already BCrypt-hashed
+	                if (storedPassword != null &&
+	                    (storedPassword.startsWith("$2a$") ||
+	                     storedPassword.startsWith("$2b$") ||
+	                     storedPassword.startsWith("$2y$"))) {
+
+	                    passwordMatches =
+	                        BCrypt.checkpw(password, storedPassword);
+
+	                } else {
+
+	                    // Legacy plain-text password
+	                    passwordMatches =
+	                        storedPassword != null &&
+	                        storedPassword.equals(password);
+
+	                    // Automatically upgrade old password
+	                    if (passwordMatches) {
+
+	                        String newHash =
+	                            BCrypt.hashpw(password, BCrypt.gensalt(12));
+
+	                        try (PreparedStatement update =
+	                            conn.prepareStatement(
+	                                "UPDATE user SET password = ? WHERE user_id = ?")) {
+
+	                            update.setString(1, newHash);
+	                            update.setInt(2, rs.getInt("user_id"));
+
+	                            update.executeUpdate();
+	                        }
+	                    }
+	                }
+
+	                if (passwordMatches) {
+
+	                    User user = new User();
+
+	                    user.setUserId(rs.getInt("user_id"));
+	                    user.setName(rs.getString("name"));
+	                    user.setEmail(rs.getString("email"));
+	                    user.setRole(rs.getString("role"));
+
+	                    return user;
+	                }
+	            }
+
+	        }
+
+	    } catch (SQLException | IllegalArgumentException e) {
+	        e.printStackTrace();
+	    }
+
+	    return null;
+	}
 
     // Check if an email is already registered (used during registration)
     public boolean emailExists(String email) {
@@ -81,7 +139,6 @@ public class UserDAO {
                 user.setUserId(rs.getInt("user_id"));
                 user.setName(rs.getString("name"));
                 user.setEmail(rs.getString("email"));
-                user.setPassword(rs.getString("password"));
                 user.setRole(rs.getString("role"));
                 return user;
             }
@@ -109,7 +166,6 @@ public class UserDAO {
                 user.setUserId(rs.getInt("user_id"));
                 user.setName(rs.getString("name"));
                 user.setEmail(rs.getString("email"));
-                user.setPassword(rs.getString("password"));
                 user.setRole(rs.getString("role"));
 
                 users.add(user);

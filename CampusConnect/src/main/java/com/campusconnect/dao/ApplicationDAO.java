@@ -238,31 +238,37 @@ public class ApplicationDAO {
     // UPDATE APPLICATION STATUS
     // ACCEPTED / REJECTED
     // --------------------------------------------------
-    public boolean updateApplicationStatus(int appId, String status) {
+    // UPDATE APPLICATION STATUS
+    // Only the company that owns the opportunity can update it.
 
-        String sql =
-                "UPDATE application "
-              + "SET status = ? "
-              + "WHERE app_id = ?";
+ public boolean updateApplicationStatus(
+         int appId,
+         int companyUserId,
+         String status) {
 
-        try (
-            Connection conn = DBConnection.getConnection();
-            PreparedStatement ps = conn.prepareStatement(sql)
-        ) {
+     String sql =
+             "UPDATE application a " +
+             "JOIN opportunity o ON a.opp_id = o.opp_id " +
+             "JOIN company c ON o.company_id = c.company_id " +
+             "SET a.status = ? " +
+             "WHERE a.app_id = ? AND c.user_id = ?";
 
-            ps.setString(1, status);
-            ps.setInt(2, appId);
+     try (
+         Connection conn = DBConnection.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)
+     ) {
 
-            int rows = ps.executeUpdate();
+         ps.setString(1, status);
+         ps.setInt(2, appId);
+         ps.setInt(3, companyUserId);
 
-            return rows > 0;
+         return ps.executeUpdate() > 0;
 
-        } catch (SQLException e) {
-
-            e.printStackTrace();
-            return false;
-        }
-    }
+     } catch (SQLException e) {
+         e.printStackTrace();
+         return false;
+     }
+ }
     public String getResumePathForCompany(int appId, int companyUserId) {
 
         String sql =
@@ -297,7 +303,39 @@ public class ApplicationDAO {
 
         return null;
     }
+ // =========================================================
+ // GET STUDENT ID FOR A COMPANY-OWNED APPLICATION
+ // =========================================================
 
+ public int getStudentIdForApplication(int appId, int companyUserId) {
+
+     String sql =
+             "SELECT a.student_id " +
+             "FROM application a " +
+             "JOIN opportunity o ON a.opp_id = o.opp_id " +
+             "JOIN company c ON o.company_id = c.company_id " +
+             "WHERE a.app_id = ? AND c.user_id = ?";
+
+     try (
+         Connection conn = DBConnection.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)
+     ) {
+
+         ps.setInt(1, appId);
+         ps.setInt(2, companyUserId);
+
+         ResultSet rs = ps.executeQuery();
+
+         if (rs.next()) {
+             return rs.getInt("student_id");
+         }
+
+     } catch (SQLException e) {
+         e.printStackTrace();
+     }
+
+     return -1;
+ }
  // =========================================================
  // GET ALL APPLICATIONS FOR ADMIN
  // =========================================================

@@ -12,6 +12,10 @@ public class Opportunity {
     private String description;
     private Date postedDate;
     private String companyName;
+    private double minCgpa;
+    private String eligibleDepartments;
+    private Integer graduationYear;
+    private Date applicationDeadline;
 
     public Opportunity() {}
 
@@ -57,5 +61,35 @@ public class Opportunity {
 
     public void setCompanyName(String companyName) {
         this.companyName = companyName;
+    }
+    public double getMinCgpa() {
+        return minCgpa;
+    }
+
+    public void setMinCgpa(double minCgpa) {
+        this.minCgpa = minCgpa;
+    }
+
+    public String getEligibleDepartments() {
+        return eligibleDepartments;
+    }
+
+    public void setEligibleDepartments(String eligibleDepartments) {
+        this.eligibleDepartments = eligibleDepartments;
+    }
+
+    public Integer getGraduationYear() {
+        return graduationYear;
+    }
+
+    public void setGraduationYear(Integer graduationYear) {
+        this.graduationYear = graduationYear;
+    }
+    public Date getApplicationDeadline() {
+        return applicationDeadline;
+    }
+
+    public void setApplicationDeadline(Date applicationDeadline) {
+        this.applicationDeadline = applicationDeadline;
     }
 }

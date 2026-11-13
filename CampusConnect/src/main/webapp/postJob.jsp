@@ -1189,8 +1189,67 @@ text-shadow: none;
 
             </div>
 
+           <hr class="my-4">
 
+<h5 class="mb-3">
+    <i class="bi bi-person-check"></i> Candidate Eligibility
+</h5>
 
+<div class="mb-3">
+    <label class="form-label">Minimum CGPA</label>
+    <input type="number"
+           name="minCgpa"
+           class="form-control"
+           min="0"
+           max="10"
+           step="0.01"
+           placeholder="e.g. 7.5">
+    <small class="text-muted">
+        Leave empty or enter 0 if there is no minimum CGPA.
+    </small>
+</div>
+
+<div class="mb-3">
+    <label class="form-label">Eligible Departments</label>
+    <input type="text"
+           name="eligibleDepartments"
+           class="form-control"
+           placeholder="e.g. CSE, IT, ECE">
+    <small class="text-muted">
+        Separate multiple departments using commas. Leave empty for all departments.
+    </small>
+</div>
+
+<div class="mb-3">
+    <label class="form-label">Required Graduation Year</label>
+    <input type="number"
+           name="graduationYear"
+           class="form-control"
+           min="2000"
+           max="2100"
+           placeholder="e.g. 2028">
+    <small class="text-muted">
+        Leave empty if students from all graduation years can apply.
+    </small>
+</div>
+            <!-- APPLICATION DEADLINE -->
+
+<div class="mb-4">
+
+    <label class="form-label">
+        Application Deadline
+    </label>
+
+    <input type="date"
+           name="applicationDeadline"
+           id="applicationDeadline"
+           class="form-control">
+
+    <small class="text-muted">
+        Select the last date students can apply. Leave empty if there is no deadline.
+    </small>
+
+</div>
             <!-- LOCATION -->
 
             <div class="mb-4">
@@ -1262,7 +1321,16 @@ text-shadow: none;
     </div>
 
 </section>
+<script>
+    const deadlineInput = document.getElementById("applicationDeadline");
 
+    const today = new Date();
+    const localDate = new Date(
+        today.getTime() - today.getTimezoneOffset() * 60000
+    ).toISOString().split("T")[0];
+
+    deadlineInput.min = localDate;
+</script>
 
 </body>
 

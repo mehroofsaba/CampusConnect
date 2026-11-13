@@ -2,8 +2,11 @@
 
 <%@ page import="com.campusconnect.model.User" %>
 <%@ page import="com.campusconnect.model.StudentProfile" %>
+<%@ page import="java.util.List" %>
+<%@ page import="com.campusconnect.model.StudentProject" %>
 
 <%
+
     // =========================================================
     // GET LOGGED-IN USER
     // =========================================================
@@ -36,6 +39,10 @@
     String githubLink = "";
     String linkedinLink = "";
     String resumePath = "";
+    String department = "";
+    String cgpa = "";
+    String graduationYear = "";
+    String achievements = "";
 
 
     // =========================================================
@@ -43,6 +50,23 @@
     // =========================================================
 
     if (profile != null) {
+
+        if (profile.getDepartment() != null) {
+            department = profile.getDepartment();
+        }
+
+        if (profile.getCgpa() != null) {
+            cgpa = profile.getCgpa().toPlainString();
+        }
+
+        if (profile.getGraduationYear() != null) {
+            graduationYear =
+                    String.valueOf(profile.getGraduationYear());
+        }
+
+        if (profile.getAchievements() != null) {
+            achievements = profile.getAchievements();
+        }
 
         if (profile.getPhone() != null) {
             phone = profile.getPhone();
@@ -76,6 +100,19 @@
             resumePath = profile.getResumePath();
         }
     }
+
+
+    // =========================================================
+    // LOAD STUDENT PROJECTS
+    // =========================================================
+
+    List<StudentProject> projects =
+            (List<StudentProject>) request.getAttribute("projects");
+
+    if (projects == null) {
+        projects = new java.util.ArrayList<>();
+    }
+
 %>
 
 
@@ -1023,6 +1060,175 @@ footer i {
     .info-box {
         padding: 17px;
     }
+} 
+/* =========================================================
+   PROJECT PORTFOLIO
+========================================================= */
+
+.projects-section {
+    margin-top: 40px;
+    padding-top: 30px;
+    border-top: 1px solid rgba(214,173,82,0.15);
+}
+
+.projects-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 22px;
+}
+
+.projects-heading h3 {
+    color: #d6ad52;
+    font-size: 1.35rem;
+    font-weight: 750;
+    margin: 0;
+}
+
+.projects-heading p {
+    color: #8291a5;
+    font-size: 0.82rem;
+    margin: 6px 0 0;
+}
+
+.project-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.project-card {
+    background: rgba(5,15,29,0.65);
+    border: 1px solid rgba(214,173,82,0.16);
+    border-radius: 15px;
+    padding: 22px;
+    transition: 0.25s ease;
+    min-width: 0;
+}
+
+.project-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(214,173,82,0.4);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+.project-card h5 {
+    color: #f5f1e8;
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+    overflow-wrap: anywhere;
+}
+
+.project-description {
+    color: #aeb9c8;
+    font-size: 0.84rem;
+    line-height: 1.7;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.project-technologies {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin: 15px 0;
+}
+
+.project-tech {
+    background: rgba(214,173,82,0.08);
+    border: 1px solid rgba(214,173,82,0.2);
+    color: #e2c56d;
+    border-radius: 20px;
+    padding: 5px 10px;
+    font-size: 0.72rem;
+}
+
+.project-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+    margin-top: 18px;
+}
+
+.project-action-btn {
+    border: 1px solid rgba(214,173,82,0.25);
+    background: rgba(214,173,82,0.07);
+    color: #d6ad52;
+    border-radius: 7px;
+    padding: 7px 12px;
+    font-size: 0.76rem;
+    font-weight: 650;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.project-action-btn:hover {
+    background: #d6ad52;
+    color: #071426;
+}
+
+.project-empty {
+    text-align: center;
+    padding: 35px 15px;
+    border: 1px dashed rgba(214,173,82,0.25);
+    border-radius: 15px;
+    color: #8291a5;
+}
+
+.project-empty i {
+    display: block;
+    font-size: 35px;
+    color: #d6ad52;
+    margin-bottom: 12px;
+}
+
+.project-modal .modal-content {
+    background: #0e233b;
+    color: #f5f1e8;
+    border: 1px solid rgba(214,173,82,0.3);
+    border-radius: 15px;
+}
+
+.project-modal .modal-header {
+    border-bottom: 1px solid rgba(214,173,82,0.15);
+}
+
+.project-modal .modal-footer {
+    border-top: 1px solid rgba(214,173,82,0.15);
+}
+
+.project-modal .form-label {
+    color: #d6ad52;
+    font-size: 0.85rem;
+    font-weight: 650;
+}
+
+.project-modal .form-control {
+    background: #071426;
+    color: #f5f1e8;
+    border: 1px solid rgba(214,173,82,0.2);
+}
+
+.project-modal .form-control:focus {
+    border-color: #d6ad52;
+    box-shadow: 0 0 0 0.2rem rgba(214,173,82,0.12);
+}
+
+.project-modal .btn-close {
+    filter: invert(1);
+}
+
+@media (max-width: 768px) {
+    .project-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .projects-heading {
+        align-items: flex-start;
+        flex-direction: column;
+    }
 }
 
 </style>
@@ -1247,7 +1453,60 @@ footer i {
             </div>
 
 
+            <%
+    int completedFields = 0;
 
+    int totalFields = 12;
+
+    if (!phone.isEmpty()) completedFields++;
+    if (!location.isEmpty()) completedFields++;
+    if (!bio.isEmpty()) completedFields++;
+    if (!education.isEmpty()) completedFields++;
+
+    if (!department.isEmpty()) completedFields++;
+    if (!cgpa.isEmpty()) completedFields++;
+    if (!graduationYear.isEmpty()) completedFields++;
+
+    if (!skills.isEmpty()) completedFields++;
+    if (!achievements.isEmpty()) completedFields++;
+
+    if (!githubLink.isEmpty()) completedFields++;
+    if (!linkedinLink.isEmpty()) completedFields++;
+    if (!resumePath.isEmpty()) completedFields++;
+
+    int completionPercent =
+        (completedFields * 100) / totalFields;
+%>
+
+<div class="mb-4 p-3"
+     style="border-radius:14px;background:#f8f5ed;">
+
+    <div class="d-flex justify-content-between mb-2">
+
+        <strong>Profile Completion</strong>
+
+        <strong><%= completionPercent %>%</strong>
+
+    </div>
+
+    <div class="progress" style="height:9px;">
+
+        <div class="progress-bar"
+             role="progressbar"
+             style="width:<%= completionPercent %>%"
+             aria-valuenow="<%= completionPercent %>"
+             aria-valuemin="0"
+             aria-valuemax="100">
+
+        </div>
+
+    </div>
+
+    <small class="text-muted">
+        Complete your profile to help recruiters understand your background.
+    </small>
+
+</div>
             <!-- =================================================
                  DETAILS
             ================================================== -->
@@ -1351,7 +1610,68 @@ footer i {
                     </div>
 
                 </div>
+                <!-- DEPARTMENT -->
 
+<div class="info-box">
+
+    <div class="info-label">
+        Department
+    </div>
+
+    <div class="info-value">
+        <%= department.isEmpty()
+            ? "Not provided" : department %>
+    </div>
+
+</div>
+
+
+<!-- CGPA -->
+
+<div class="info-box">
+
+    <div class="info-label">
+        CGPA
+    </div>
+
+    <div class="info-value">
+        <%= cgpa.isEmpty()
+            ? "Not provided" : cgpa + " / 10" %>
+    </div>
+
+</div>
+
+
+<!-- GRADUATION YEAR -->
+
+<div class="info-box">
+
+    <div class="info-label">
+        Graduation Year
+    </div>
+
+    <div class="info-value">
+        <%= graduationYear.isEmpty()
+            ? "Not provided" : graduationYear %>
+    </div>
+
+</div>
+
+
+<!-- ACHIEVEMENTS -->
+
+<div class="info-box">
+
+    <div class="info-label">
+        Achievements
+    </div>
+
+    <div class="info-value">
+        <%= achievements.isEmpty()
+            ? "Not provided" : achievements %>
+    </div>
+
+</div>
 
 
                 <!-- ABOUT ME -->
@@ -1602,7 +1922,178 @@ footer i {
             </div>
 
 
+                        <!-- =================================================
+                 STUDENT PROJECT PORTFOLIO
+            ================================================== -->
 
+            <div class="projects-section">
+
+                <div class="projects-heading">
+
+                    <div>
+                        <h3>
+                            <i class="bi bi-code-square me-2"></i>
+                            My Projects
+                        </h3>
+
+                        <p>
+                            Showcase your technical work and achievements.
+                        </p>
+                    </div>
+
+                    <button type="button"
+                            class="profile-btn"
+                            data-bs-toggle="modal"
+                            data-bs-target="#addProjectModal">
+
+                        <i class="bi bi-plus-circle"></i>
+                        Add Project
+
+                    </button>
+
+                </div>
+
+
+                <% if (projects.isEmpty()) { %>
+
+                    <div class="project-empty">
+
+                        <i class="bi bi-folder2-open"></i>
+
+                        <h5>No projects added yet</h5>
+
+                        <p>
+                            Add your first project to showcase your skills
+                            to recruiters.
+                        </p>
+
+                    </div>
+
+                <% } else { %>
+
+                    <div class="project-grid">
+
+                        <% for (StudentProject project : projects) { %>
+
+                            <div class="project-card">
+
+                                <h5>
+                                    <i class="bi bi-terminal me-2"
+                                       style="color:#d6ad52;"></i>
+
+                                    <%= project.getProjectTitle() %>
+                                </h5>
+
+
+                                <div class="project-description">
+
+                                    <%= project.getDescription() == null
+                                        || project.getDescription().trim().isEmpty()
+                                        ? "No description provided."
+                                        : project.getDescription() %>
+
+                                </div>
+
+
+                                <% if (project.getTechnologies() != null
+                                      && !project.getTechnologies().trim().isEmpty()) { %>
+
+                                    <div class="project-technologies">
+
+                                        <% for (String tech :
+                                                project.getTechnologies().split(",")) {
+
+                                            tech = tech.trim();
+
+                                            if (!tech.isEmpty()) {
+                                        %>
+
+                                            <span class="project-tech">
+                                                <%= tech %>
+                                            </span>
+
+                                        <%
+                                            }
+                                        } %>
+
+                                    </div>
+
+                                <% } %>
+
+
+                                <div class="project-actions">
+
+                                    <% if (project.getProjectLink() != null
+                                          && !project.getProjectLink().trim().isEmpty()) { %>
+
+                                        <a href="<%= project.getProjectLink() %>"
+                                           target="_blank"
+                                           rel="noopener noreferrer"
+                                           class="project-action-btn">
+
+                                            <i class="bi bi-box-arrow-up-right"></i>
+                                            View Project
+
+                                        </a>
+
+                                    <% } %>
+
+
+                                    <button type="button"
+                                            class="project-action-btn edit-project-btn"
+
+                                            data-id="<%= project.getProjectId() %>"
+
+                                            data-title="<%= project.getProjectTitle() %>"
+
+                                            data-description="<%= project.getDescription() == null ? "" : project.getDescription() %>"
+
+                                            data-technologies="<%= project.getTechnologies() == null ? "" : project.getTechnologies() %>"
+
+                                            data-link="<%= project.getProjectLink() == null ? "" : project.getProjectLink() %>"
+
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#editProjectModal">
+
+                                        <i class="bi bi-pencil"></i>
+                                        Edit
+
+                                    </button>
+
+
+                                    <form method="post"
+                                          action="<%= request.getContextPath() %>/studentProjects"
+                                          onsubmit="return confirm('Are you sure you want to delete this project?');">
+
+                                        <input type="hidden"
+                                               name="action"
+                                               value="delete">
+
+                                        <input type="hidden"
+                                               name="projectId"
+                                               value="<%= project.getProjectId() %>">
+
+                                        <button type="submit"
+                                                class="project-action-btn">
+
+                                            <i class="bi bi-trash"></i>
+                                            Delete
+
+                                        </button>
+
+                                    </form>
+
+                                </div>
+
+                            </div>
+
+                        <% } %>
+
+                    </div>
+
+                <% } %>
+
+            </div>
             <!-- =================================================
                  EDIT BUTTON
             ================================================== -->
@@ -1666,7 +2157,266 @@ footer i {
 
 
     </div>
+<!-- =========================================================
+     ADD PROJECT MODAL
+========================================================== -->
 
+<div class="modal fade project-modal"
+     id="addProjectModal"
+     tabindex="-1">
+
+    <div class="modal-dialog modal-dialog-centered">
+
+        <div class="modal-content">
+
+            <form method="post"
+                  action="<%= request.getContextPath() %>/studentProjects">
+
+                <div class="modal-header">
+
+                    <h5 class="modal-title">
+                        <i class="bi bi-plus-circle me-2"></i>
+                        Add New Project
+                    </h5>
+
+                    <button type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"></button>
+
+                </div>
+
+
+                <div class="modal-body">
+
+                    <input type="hidden"
+                           name="action"
+                           value="add">
+
+
+                    <div class="mb-3">
+
+                        <label class="form-label">
+                            Project Title *
+                        </label>
+
+                        <input type="text"
+                               name="projectTitle"
+                               class="form-control"
+                               maxlength="150"
+                               required>
+
+                    </div>
+
+
+                    <div class="mb-3">
+
+                        <label class="form-label">
+                            Description
+                        </label>
+
+                        <textarea name="description"
+                                  class="form-control"
+                                  rows="3"
+                                  placeholder="Describe your project..."></textarea>
+
+                    </div>
+
+
+                    <div class="mb-3">
+
+                        <label class="form-label">
+                            Technologies Used
+                        </label>
+
+                        <input type="text"
+                               name="technologies"
+                               class="form-control"
+                               maxlength="500"
+                               placeholder="Java, JSP, MySQL, Bootstrap">
+
+                        <small class="text-secondary">
+                            Separate technologies using commas.
+                        </small>
+
+                    </div>
+
+
+                    <div class="mb-3">
+
+                        <label class="form-label">
+                            GitHub / Live Project URL
+                        </label>
+
+                        <input type="url"
+                               name="projectLink"
+                               class="form-control"
+                               maxlength="500"
+                               placeholder="https://github.com/username/project">
+
+                    </div>
+
+                </div>
+
+
+                <div class="modal-footer">
+
+                    <button type="button"
+                            class="btn btn-secondary"
+                            data-bs-dismiss="modal">
+
+                        Cancel
+
+                    </button>
+
+                    <button type="submit"
+                            class="profile-btn">
+
+                        <i class="bi bi-check-circle"></i>
+                        Save Project
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================================================
+     EDIT PROJECT MODAL
+========================================================== -->
+
+<div class="modal fade project-modal"
+     id="editProjectModal"
+     tabindex="-1">
+
+    <div class="modal-dialog modal-dialog-centered">
+
+        <div class="modal-content">
+
+            <form method="post"
+                  action="<%= request.getContextPath() %>/studentProjects">
+
+                <div class="modal-header">
+
+                    <h5 class="modal-title">
+                        <i class="bi bi-pencil-square me-2"></i>
+                        Edit Project
+                    </h5>
+
+                    <button type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"></button>
+
+                </div>
+
+
+                <div class="modal-body">
+
+                    <input type="hidden"
+                           name="action"
+                           value="update">
+
+                    <input type="hidden"
+                           name="projectId"
+                           id="editProjectId">
+
+
+                    <div class="mb-3">
+
+                        <label class="form-label">
+                            Project Title *
+                        </label>
+
+                        <input type="text"
+                               name="projectTitle"
+                               id="editProjectTitle"
+                               class="form-control"
+                               maxlength="150"
+                               required>
+
+                    </div>
+
+
+                    <div class="mb-3">
+
+                        <label class="form-label">
+                            Description
+                        </label>
+
+                        <textarea name="description"
+                                  id="editProjectDescription"
+                                  class="form-control"
+                                  rows="3"></textarea>
+
+                    </div>
+
+
+                    <div class="mb-3">
+
+                        <label class="form-label">
+                            Technologies Used
+                        </label>
+
+                        <input type="text"
+                               name="technologies"
+                               id="editProjectTechnologies"
+                               class="form-control"
+                               maxlength="500">
+
+                    </div>
+
+
+                    <div class="mb-3">
+
+                        <label class="form-label">
+                            GitHub / Live Project URL
+                        </label>
+
+                        <input type="url"
+                               name="projectLink"
+                               id="editProjectLink"
+                               class="form-control"
+                               maxlength="500">
+
+                    </div>
+
+                </div>
+
+
+                <div class="modal-footer">
+
+                    <button type="button"
+                            class="btn btn-secondary"
+                            data-bs-dismiss="modal">
+
+                        Cancel
+
+                    </button>
+
+                    <button type="submit"
+                            class="profile-btn">
+
+                        <i class="bi bi-check-circle"></i>
+                        Update Project
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
 </section>
 
 
@@ -1691,6 +2441,32 @@ footer i {
 
 <script
     src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+<script>
+
+document.querySelectorAll(".edit-project-btn").forEach(button => {
+
+    button.addEventListener("click", function () {
+
+        document.getElementById("editProjectId").value =
+            this.dataset.id;
+
+        document.getElementById("editProjectTitle").value =
+            this.dataset.title;
+
+        document.getElementById("editProjectDescription").value =
+            this.dataset.description;
+
+        document.getElementById("editProjectTechnologies").value =
+            this.dataset.technologies;
+
+        document.getElementById("editProjectLink").value =
+            this.dataset.link;
+
+    });
+
+});
+
+</script>
 </script>
 
 

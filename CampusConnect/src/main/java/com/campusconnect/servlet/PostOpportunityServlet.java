@@ -1,6 +1,9 @@
 package com.campusconnect.servlet;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
+import java.sql.Date;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -152,15 +155,92 @@ public class PostOpportunityServlet extends HttpServlet {
             return;
         }
 
-        // =====================================================
-        // 5. GET OPPORTUNITY FORM DATA
-        // =====================================================
+     // =====================================================
+     // 5. GET OPPORTUNITY FORM DATA
+     // =====================================================
 
-        String title = request.getParameter("title");
-        String type = request.getParameter("type");
-        String skillRequired = request.getParameter("skillRequired");
-        String location = request.getParameter("location");
-        String description = request.getParameter("description");
+     String title = request.getParameter("title");
+     String type = request.getParameter("type");
+     String skillRequired = request.getParameter("skillRequired");
+     String location = request.getParameter("location");
+     String description = request.getParameter("description");
+
+     String minCgpaParam = request.getParameter("minCgpa");
+     String departments = request.getParameter("eligibleDepartments");
+     String graduationYearParam = request.getParameter("graduationYear");
+     String deadlineParam = request.getParameter("applicationDeadline");
+
+     double minCgpa = 0.0;
+     Integer graduationYear = null;
+     Date applicationDeadline = null;
+
+     try {
+
+         // Validate minimum CGPA
+         if (minCgpaParam != null && !minCgpaParam.trim().isEmpty()) {
+             minCgpa = Double.parseDouble(minCgpaParam);
+         }
+
+         if (minCgpa < 0 || minCgpa > 10) {
+             request.setAttribute("error",
+                     "Minimum CGPA must be between 0 and 10.");
+             request.getRequestDispatcher("postJob.jsp").forward(request, response);
+             return;
+         }
+
+         // Validate graduation year
+         if (graduationYearParam != null && !graduationYearParam.trim().isEmpty()) {
+
+             graduationYear = Integer.parseInt(graduationYearParam);
+
+             if (graduationYear < 2000 || graduationYear > 2100) {
+                 throw new NumberFormatException();
+             }
+         }
+
+         // Validate application deadline
+         if (deadlineParam != null && !deadlineParam.trim().isEmpty()) {
+
+             LocalDate selectedDate = LocalDate.parse(deadlineParam);
+
+             if (selectedDate.isBefore(LocalDate.now())) {
+
+                 request.setAttribute("error",
+                         "Application deadline cannot be in the past.");
+
+                 request.getRequestDispatcher("postJob.jsp").forward(request, response);
+                 return;
+             }
+
+             applicationDeadline = Date.valueOf(selectedDate);
+         }
+
+     } catch (NumberFormatException e) {
+
+         request.setAttribute("error",
+                 "Please enter valid eligibility details.");
+
+         request.getRequestDispatcher("postJob.jsp").forward(request, response);
+         return;
+
+     } catch (DateTimeParseException e) {
+
+         request.setAttribute("error",
+                 "Please enter a valid application deadline.");
+
+         request.getRequestDispatcher("postJob.jsp").forward(request, response);
+         return;
+     }
+
+     // Clean department input
+     if (departments != null) {
+
+         departments = departments.trim();
+
+         if (departments.isEmpty()) {
+             departments = null;
+         }
+     }
 
         // =====================================================
         // 6. CREATE OPPORTUNITY
@@ -174,6 +254,10 @@ public class PostOpportunityServlet extends HttpServlet {
         opp.setSkillRequired(skillRequired);
         opp.setLocation(location);
         opp.setDescription(description);
+        opp.setMinCgpa(minCgpa);
+        opp.setEligibleDepartments(departments);
+        opp.setGraduationYear(graduationYear);
+        opp.setApplicationDeadline(applicationDeadline);
 
         OpportunityDAO oppDAO = new OpportunityDAO();
 
@@ -185,17 +269,16 @@ public class PostOpportunityServlet extends HttpServlet {
 
         if (success) {
 
-        	session.setAttribute(
-        		    "profileMessage",
-        		    "Please complete your profile to publish an opportunity."
-        		);
+            session.setAttribute(
+                "successMessage",
+                "Opportunity posted successfully!"
+            );
 
-        		response.sendRedirect(
-        		    request.getContextPath() + "/companyProfile"
-        		);
+            response.sendRedirect(
+                request.getContextPath() + "/companyDashboard"
+            );
 
-        		return;
-
+            return;
         } else {
 
             request.setAttribute(
