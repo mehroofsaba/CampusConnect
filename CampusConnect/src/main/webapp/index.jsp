@@ -54,22 +54,6 @@
             margin-right: 8px;
         }
 
-        .nav-login {
-            color: #d6ad52;
-            text-decoration: none;
-            font-weight: 650;
-            padding: 9px 18px;
-            border: 1px solid rgba(214, 173, 82, 0.5);
-            border-radius: 8px;
-            transition: .25s;
-        }
-
-        .nav-login:hover {
-            background: #d6ad52;
-            color: #071426;
-        }
-        
-
         /* ================= HERO ================= */
 
         .hero {
@@ -181,132 +165,70 @@
 
             margin-bottom: 35px;
         }
-
-
-        /* ================= BUTTONS ================= */
+/* ================= BUTTONS ================= */
 
 .btn-gold {
     display: inline-flex;
     align-items: center;
     gap: 9px;
-
-    background: #d6ad52;
+    background: #c8a049; /* Slightly muted, richer gold */
     color: #071426;
-
-    border: none;
-
-    padding: 14px 25px;
-
-    border-radius: 9px;
-
-    font-weight: 750;
-
+    border: 1px solid #d6ad52;
+    padding: 13px 25px;
+    border-radius: 8px;
+    font-weight: 700;
     text-decoration: none;
-
-    transition: all .3s ease;
-
-    /* PERMANENT GOLD GLOW */
-    box-shadow:
-        0 0 6px rgba(214, 173, 82, 0.55),
-        0 0 15px rgba(214, 173, 82, 0.35),
-        0 8px 25px rgba(214, 173, 82, 0.18);
+    transition: all 0.25s ease;
+    /* Subtle depth instead of neon glow */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
 }
-
 
 .btn-gold:hover {
-    background: #e3be68;
+    background: #d6ad52;
     color: #071426;
-
-    transform: translateY(-3px);
-
-    /* STRONGER GLOW ON HOVER */
-    box-shadow:
-        0 0 8px rgba(214, 173, 82, 0.9),
-        0 0 20px rgba(214, 173, 82, 0.65),
-        0 0 35px rgba(214, 173, 82, 0.35);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(200, 160, 73, 0.22);
 }
-
 
 .btn-outline-gold {
     display: inline-flex;
     align-items: center;
     gap: 9px;
-
-    background: transparent;
-
+    background: rgba(214, 173, 82, 0.04);
     color: #d6ad52;
-
-    border: 1px solid rgba(214, 173, 82, 0.55);
-
+    border: 1px solid rgba(214, 173, 82, 0.35);
     padding: 13px 24px;
-
-    border-radius: 9px;
-
-    font-weight: 650;
-
+    border-radius: 8px;
+    font-weight: 600;
     text-decoration: none;
-
-    transition: all .3s ease;
-
+    transition: all 0.25s ease;
     margin-left: 10px;
-
-    /* PERMANENT GOLD OUTLINE GLOW */
-    box-shadow:
-        0 0 5px rgba(214, 173, 82, 0.35),
-        0 0 12px rgba(214, 173, 82, 0.18);
+    box-shadow: none; /* Removed outer glow */
 }
-
 
 .btn-outline-gold:hover {
-    background: rgba(214, 173, 82, 0.08);
-
+    background: rgba(214, 173, 82, 0.12);
     color: #e3be68;
-
-    border-color: #d6ad52;
-
+    border-color: rgba(214, 173, 82, 0.7);
     transform: translateY(-2px);
-
-    /* STRONGER GLOW ON HOVER */
-    box-shadow:
-        0 0 8px rgba(214, 173, 82, 0.75),
-        0 0 18px rgba(214, 173, 82, 0.45),
-        0 0 28px rgba(214, 173, 82, 0.25);
 }
-
 
 .nav-login {
     color: #d6ad52;
-
     text-decoration: none;
-
-    font-weight: 650;
-
-    padding: 9px 18px;
-
-    border: 1px solid rgba(214, 173, 82, 0.5);
-
+    font-weight: 600;
+    padding: 8px 18px;
+    border: 1px solid rgba(214, 173, 82, 0.35);
     border-radius: 8px;
-
-    transition: all .3s ease;
-
-    /* NAVBAR GLOW */
-    box-shadow:
-        0 0 5px rgba(214, 173, 82, 0.35),
-        0 0 12px rgba(214, 173, 82, 0.18);
+    transition: all 0.25s ease;
+    box-shadow: none; /* Removed navbar glow */
 }
 
-
 .nav-login:hover {
-    background: #d6ad52;
-
-    color: #071426;
-
-    transform: translateY(-2px);
-
-    box-shadow:
-        0 0 8px rgba(214, 173, 82, 0.8),
-        0 0 18px rgba(214, 173, 82, 0.5),
-        0 0 28px rgba(214, 173, 82, 0.3);
+    background: rgba(214, 173, 82, 0.12);
+    color: #e3be68;
+    border-color: #d6ad52;
+    transform: translateY(-1px);
 }
 
 
@@ -392,106 +314,64 @@
 
             line-height: 1.7;
         }
-
-
-        /* ================= CARDS ================= */
+/* ================= CARDS ================= */
 
         .feature-card {
             height: 100%;
-
             min-height: 300px;
-
-            background:
-                linear-gradient(
-                    145deg,
-                    rgba(255,255,255,.045),
-                    rgba(255,255,255,.015)
-                );
-
-            border: 1px solid rgba(255,255,255,.09);
-
+            background: linear-gradient(
+                145deg,
+                rgba(255, 255, 255, 0.04),
+                rgba(255, 255, 255, 0.015)
+            );
+            border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 18px;
-
             padding: 32px;
-
             position: relative;
-
             overflow: hidden;
-
-            transition: .3s;
+            transition: all 0.25s ease;
         }
-
 
         .feature-card::after {
             content: "";
-
             position: absolute;
-
             width: 110px;
             height: 110px;
-
             border-radius: 50%;
-
-            background: rgba(214,173,82,.06);
-
+           
+            background: rgba(255, 255, 255, 0.02);
             right: -45px;
             bottom: -45px;
         }
 
-
         .feature-card:hover {
-            transform: translateY(-8px);
-
-            border-color:
-                rgba(214,173,82,.45);
-
-            box-shadow:
-                0 20px 45px rgba(0,0,0,.25);
+            transform: translateY(-5px);
+         
+            border-color: rgba(214, 173, 82, 0.28);
+            box-shadow: 0 16px 35px rgba(0, 0, 0, 0.28);
         }
-
 
         .icon-box {
-            width: 58px;
-            height: 58px;
-
-            border-radius: 15px;
-
-            background:
-                rgba(214,173,82,.10);
-
-            border:
-                1px solid rgba(214,173,82,.25);
-
-            color: #d6ad52;
-
+            width: 54px;
+            height: 54px;
+            border-radius: 14px;
+        
+            background: rgba(214, 173, 82, 0.06);
+            border: 1px solid rgba(214, 173, 82, 0.16);
+            color: #c8a049; 
             display: flex;
-
             align-items: center;
             justify-content: center;
-
-            font-size: 25px;
-
-            margin-bottom: 25px;
+            font-size: 23px;
+            margin-bottom: 24px;
+            transition: all 0.25s ease;
         }
 
-
-        .feature-card h4 {
-            font-size: 21px;
-
-            font-weight: 700;
-
-            margin-bottom: 13px;
+        .feature-card:hover .icon-box {
+            background: rgba(214, 173, 82, 0.10);
+            border-color: rgba(214, 173, 82, 0.30);
+            color: #d6ad52;
         }
-
-
-        .feature-card p {
-            color: #8d98a6;
-
-            line-height: 1.7;
-
-            margin-bottom: 0;
-        }
-
 
         /* ================= CTA ================= */
 
@@ -665,7 +545,7 @@
 
                 <span></span>
 
-                Campus opportunities, reimagined
+                Campus opportunities,reimagined
 
             </div>
 
@@ -686,7 +566,7 @@
             <p class="hero-description">
 
                 CampusConnect brings students and companies
-                together in one simple platform — making it
+                together in one simple platform - making it
                 easier to discover opportunities, connect with
                 talent and build what comes next.
 
@@ -699,8 +579,6 @@
                    class="btn-gold">
 
                     Get started
-
-                    <i class="bi bi-arrow-right"></i>
 
                 </a>
 
@@ -1018,8 +896,6 @@
                class="btn-gold">
 
                 Join CampusConnect
-
-                <i class="bi bi-arrow-right"></i>
 
             </a>
 

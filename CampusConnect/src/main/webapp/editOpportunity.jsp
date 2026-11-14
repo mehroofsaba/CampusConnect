@@ -882,9 +882,6 @@
 
             <a href="adminDashboard.jsp"
                class="back-btn">
-
-                <i class="bi bi-arrow-left"></i>
-
                 <span>Back</span>
 
             </a>

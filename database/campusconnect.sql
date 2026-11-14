@@ -142,8 +142,5 @@ CREATE TABLE IF NOT EXISTS notifications (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
-<<<<<<< HEAD
 -- CampusConnect database structure created successfully.
-=======
 -- CampusConnect database structure created successfully.
->>>>>>> branch 'main' of https://github.com/mehroofsaba/CampusConnect.git

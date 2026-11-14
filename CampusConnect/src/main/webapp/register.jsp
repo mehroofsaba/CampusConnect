@@ -518,7 +518,6 @@
 
             <a href="index.jsp" class="home-link">
 
-                <i class="bi bi-arrow-left me-1"></i>
 
                 Home
 
@@ -806,6 +805,11 @@
 
                                     </option>
 
+                                    <option value="ADMIN">
+
+                                        Admin
+
+                                    </option>
 
                                 </select>
 
@@ -824,8 +828,6 @@
                             class="register-btn">
 
                             Create account
-
-                            <i class="bi bi-arrow-right ms-2"></i>
 
                         </button>
 

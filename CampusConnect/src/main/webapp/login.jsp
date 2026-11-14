@@ -26,9 +26,7 @@
 
     <style>
 
-        /* ================================================= */
         /* ================= GENERAL ======================= */
-        /* ================================================= */
 
         * {
             box-sizing: border-box;
@@ -44,15 +42,8 @@
             color: #f5f1e8;
         }
 
-
-        
-       
-
-
-        /* ================================================= */
         /* ================= NAVBAR ======================== */
-        /* ================================================= */
-
+     
         .navbar-custom {
     padding: 22px 0;
 
@@ -62,98 +53,62 @@
         1px solid rgba(214, 173, 82, .18);
 }
 
-        /* ================================================= */
         /* ================= BRAND ========================= */
-        /* ================================================= */
 
         .brand {
             color: #f5f1e8;
-
             text-decoration: none;
-
             font-size: 25px;
             font-weight: 750;
-
-            transition: .3s ease;
+            transition: 0.25s ease;
         }
 
         .brand i {
-            color: #d6ad52;
-
+            color: #c8a049;
             margin-right: 8px;
-
-            transition: .3s ease;
+            transition: 0.25s ease;
         }
 
         .brand:hover {
             color: #ffffff;
-
-            text-shadow:
-                0 0 8px rgba(214, 173, 82, .35);
         }
 
         .brand:hover i {
-            text-shadow:
-                0 0 10px rgba(214, 173, 82, .9);
+            color: #d6ad52;
         }
 
 
-        /* ================================================= */
-        /* ================= HOME BUTTON ==================== */
-        /* ================================================= */
+/* ================= HOME BUTTON ==================== */
 
         .home-link {
             display: inline-flex;
-
             align-items: center;
             justify-content: center;
-
-            gap: 5px;
-
+            gap: 6px;
             color: #d6ad52;
-
             text-decoration: none;
-
-            font-weight: 650;
-
-            padding: 9px 18px;
-
-            border:
-                1px solid rgba(214, 173, 82, .55);
-
+            font-weight: 600;
+            padding: 8px 18px;
+            border: 1px solid rgba(214, 173, 82, 0.35);
             border-radius: 8px;
-
-            transition: all .3s ease;
-
-            box-shadow:
-                0 0 6px rgba(214, 173, 82, .35),
-                0 0 14px rgba(214, 173, 82, .12);
+            transition: all 0.25s ease;
+            box-shadow: none;
         }
 
         .home-link:hover {
-            background: #d6ad52;
-            color: #071426;
-
-            transform: translateY(-2px);
-
-            box-shadow:
-                0 0 8px rgba(214, 173, 82, .9),
-                0 0 18px rgba(214, 173, 82, .65),
-                0 0 30px rgba(214, 173, 82, .35);
+            background: rgba(214, 173, 82, 0.12);
+            color: #e3be68;
+            border-color: #d6ad52;
+            transform: translateY(-1px);
+            box-shadow: none;
         }
 
         .home-link:active {
             transform: translateY(0);
-
-            box-shadow:
-                0 0 5px rgba(214, 173, 82, .7);
         }
-
-
-        /* ================================================= */
+        
         /* ================= LOGIN SECTION ================== */
-        /* ================================================= */
-
+     
         .login-section {
             min-height: calc(100vh - 90px);
 
@@ -262,29 +217,18 @@
             border-right:
                 1px solid rgba(214, 173, 82, .12);
         }
-
-
-        /* ================================================= */
-        /* ================= GOLD LINE ====================== */
-        /* ================================================= */
+/* ================= GOLD LINE ====================== */
 
         .gold-line {
-            width: 45px;
+            width: 42px;
             height: 3px;
-
-            background: #d6ad52;
-
+            background: #c8a049;
             margin-bottom: 25px;
-
-            box-shadow:
-                0 0 10px rgba(214, 173, 82, .45);
+            border-radius: 2px;
+            box-shadow: none;
         }
 
-
-        /* ================================================= */
         /* ================= LEFT CONTENT =================== */
-        /* ================================================= */
-
         .login-info h1 {
             font-size: 45px;
 
@@ -300,35 +244,22 @@
 
             max-width: 400px;
         }
-
-
-        /* ================================================= */
-        /* ================= INFO ITEMS ===================== */
-        /* ================================================= */
+/* ================= INFO ITEMS ===================== */
 
         .info-item {
             margin-top: 28px;
-
             display: flex;
-
             align-items: center;
-
             gap: 13px;
-
             color: #c4ccd5;
         }
 
         .info-item i {
-            color: #d6ad52;
-
+            color: #c8a049;
             font-size: 20px;
-
-            text-shadow:
-                0 0 8px rgba(214, 173, 82, .45);
+            text-shadow: none;
         }
 
-
-        /* ================================================= */
         /* ================= LOGIN FORM ===================== */
         /* ================================================= */
 
@@ -362,25 +293,15 @@
 
             margin-bottom: 8px;
         }
-
-
-        /* ================================================= */
-        /* ================= INPUT GROUP ==================== */
-        /* ================================================= */
+/* ================= INPUT GROUP ==================== */
 
         .input-group-text {
             background: #10263f;
-
-            border-color:
-                rgba(255, 255, 255, .12);
-
-            color: #d6ad52;
+            border-color: rgba(255, 255, 255, 0.12);
+            color: #c8a049;
         }
 
-
-        /* ================================================= */
         /* ================= FORM CONTROL =================== */
-        /* ================================================= */
 
         .form-control {
             padding: 13px;
@@ -407,154 +328,93 @@
             box-shadow:
                 0 0 0 3px rgba(214, 173, 82, .12);
         }
-
-
-        /* ================================================= */
-        /* ================= LOGIN AS ======================= */
-        /* ================================================= */
+   
+   /* ================= LOGIN AS ======================= */
 
         .role-select {
             width: 100%;
-
             padding: 13px 15px;
-
             background-color: #071426;
-
             color: #f5f1e8;
-
-            border:
-                1px solid rgba(255, 255, 255, .12);
-
+            border: 1px solid rgba(255, 255, 255, 0.12);
             border-radius: 7px;
-
             cursor: pointer;
-
-            transition: all .3s ease;
-
-            box-shadow:
-                0 0 6px rgba(214, 173, 82, .08);
+            transition: all 0.25s ease;
+            box-shadow: none;
         }
 
         .role-select:hover {
-            border-color:
-                rgba(214, 173, 82, .45);
-
-            box-shadow:
-                0 0 8px rgba(214, 173, 82, .15);
+            border-color: rgba(214, 173, 82, 0.35);
+            box-shadow: none;
         }
 
         .role-select:focus {
             outline: none;
-
             border-color: #d6ad52;
-
-            box-shadow:
-                0 0 0 3px rgba(214, 173, 82, .12),
-                0 0 15px rgba(214, 173, 82, .20);
+            box-shadow: 0 0 0 3px rgba(214, 173, 82, 0.10);
         }
 
         .role-select option {
             background: #071426;
-
             color: #f5f1e8;
         }
-
-
-        /* ================================================= */
-        /* ================= LOGIN BUTTON =================== */
-        /* ================================================= */
+   
+/* ================= LOGIN BUTTON =================== */
 
         .login-btn {
             width: 100%;
-
             padding: 13px 20px;
-
-            border: none;
-
-            border-radius: 9px;
-
-            background: #d6ad52;
-
+            border: 1px solid #d6ad52;
+            border-radius: 8px;
+            background: #c8a049;
             color: #071426;
-
-            font-weight: 750;
-
+            font-weight: 700;
             cursor: pointer;
-
-            transition: all .3s ease;
-
-            box-shadow:
-                0 0 8px rgba(214, 173, 82, .45),
-                0 8px 25px rgba(214, 173, 82, .18);
+            transition: all 0.25s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
         }
 
         .login-btn:hover {
-            background: #e3be68;
-
+            background: #d6ad52;
             color: #071426;
-
-            transform: translateY(-3px);
-
-            box-shadow:
-                0 0 10px rgba(214, 173, 82, 1),
-                0 0 22px rgba(214, 173, 82, .7),
-                0 12px 35px rgba(214, 173, 82, .30);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(200, 160, 73, 0.22);
         }
 
         .login-btn:active {
             transform: translateY(0);
-
-            box-shadow:
-                0 0 8px rgba(214, 173, 82, .7);
+            box-shadow: none;
         }
 
 
-        /* ================================================= */
-        /* ================= REGISTER ======================= */
-        /* ================================================= */
+/* ================= REGISTER ======================= */
 
         .register-text {
             text-align: center;
-
             margin-top: 25px;
-
             color: #7f8a98;
         }
 
         .register-text a {
             display: inline-block;
-
-            color: #d6ad52;
-
-            font-weight: 700;
-
+            color: #c8a049;
+            font-weight: 650;
             text-decoration: none;
-
             padding: 4px 8px;
-
             border-radius: 6px;
-
-            transition: all .3s ease;
+            transition: all 0.25s ease;
         }
 
         .register-text a:hover {
             color: #e3be68;
-
-            background:
-                rgba(214, 173, 82, .06);
-
-            text-shadow:
-                0 0 8px rgba(214, 173, 82, .8);
-
-            box-shadow:
-                0 0 10px rgba(214, 173, 82, .18);
+            background: rgba(214, 173, 82, 0.08);
+            text-shadow: none;
+            box-shadow: none;
         }
 
 
-        /* ================================================= */
         /* ================= ERROR ========================== */
-        /* ================================================= */
-
+      
         .alert {
             background:
                 rgba(180, 70, 70, .12);
@@ -566,12 +426,8 @@
 
             border-radius: 9px;
         }
-
-
-        /* ================================================= */
         /* ================= TABLET ========================= */
-        /* ================================================= */
-
+    
         @media (max-width: 991px) {
 
             .login-card {
@@ -589,11 +445,7 @@
             }
 
         }
-
-
-        /* ================================================= */
         /* ================= MOBILE ========================= */
-        /* ================================================= */
 
         @media (max-width: 768px) {
 
@@ -649,11 +501,7 @@
             }
 
         }
-
-
-        /* ================================================= */
         /* ================= SMALL MOBILE =================== */
-        /* ================================================= */
 
         @media (max-width: 480px) {
 
@@ -742,10 +590,7 @@
 
         }
 
-
-        /* ================================================= */
         /* ================= VERY SMALL ===================== */
-        /* ================================================= */
 
         @media (max-width: 360px) {
 
@@ -813,8 +658,6 @@
             <!-- ================= HOME ================= -->
 
             <a href="index.jsp" class="home-link">
-
-                <i class="bi bi-arrow-left"></i>
 
                 Home
 
@@ -1075,8 +918,6 @@
                                     class="login-btn">
 
                                 Sign in
-
-                                <i class="bi bi-arrow-right ms-2"></i>
 
                             </button>
 

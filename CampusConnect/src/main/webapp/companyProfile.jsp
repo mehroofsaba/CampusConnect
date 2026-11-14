@@ -371,7 +371,7 @@ text-shadow: none;
                 class="back-btn"
                 onclick="history.back()">
 
-            <i class="bi bi-arrow-left"></i>
+           
             Back
 
         </button>

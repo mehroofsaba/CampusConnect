@@ -55,44 +55,33 @@
 
 <style>
 /* ================= BACK BUTTON ================= */
-
 .back-btn {
-
-
-display: inline-flex;
-align-items: center;
-gap: 5px;
-
-color: #d6ad52 !important;
-
-font-size: 14px;
-font-weight: 700;
-
-margin-left: 0;
-
-padding: 10px 14px !important;
-
-border: 1px solid rgba(214,173,82,.25);
-
-border-radius: 10px;
-
-background: transparent;
-
-cursor: pointer;
-
-transition: .3s ease;
-
-
-}
-
-.back-btn i {
-margin-right: 5px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: #d6ad52 !important;
+    font-size: 13px;
+    font-weight: 700;
+    margin-right: 16px;
+    padding: 7px 12px !important;
+    border: 1px solid rgba(214,173,82,0.25);
+    border-radius: 9px;
+    background: transparent;
+    cursor: pointer;
+    transition: 0.3s ease;
 }
 
 .back-btn:hover {
+    color: #071426 !important;
+    background: #d6ad52 !important;
+    border-color: #d6ad52;
+    box-shadow: 0 0 18px rgba(214,173,82,0.35);
+    transform: translateY(-2px);
+}
 
-
-color: #071426 !important;
+.back-btn:hover i {
+    color: #071426;
+}
 
 background: #d6ad52 !important;
 
@@ -104,16 +93,12 @@ box-shadow:
 
 transform: translateY(-2px);
 
-
 }
-
 .back-btn:hover i {
-
 
 color: #071426;
 
 text-shadow: none;
-
 
 }
 /* =========================================================
@@ -921,12 +906,6 @@ footer i {
 
 <body>
 
-<div class="back-container">
-    <button type="button" class="back-btn" onclick="history.back()">
-        <i class="bi bi-arrow-left"></i>
-        Back
-    </button>
-</div>
 <!-- =====================================================
      NAVBAR
 ====================================================== -->
@@ -934,16 +913,22 @@ footer i {
 
     <div class="container">
 
+        <!-- BACK BUTTON + LOGO GROUP -->
+        <div class="d-flex align-items-center">
+            <button type="button" class="back-btn" onclick="history.back()">
+               
+                Back
+            </button>
+
+        </div>
+
         <!-- LOGO -->
         <a class="brand"
            href="<%= request.getContextPath() %>/studentDashboard.jsp">
 
             <i class="bi bi-mortarboard-fill"></i>
             CampusConnect
-
         </a>
-
-
         <!-- MOBILE TOGGLE -->
         <button
             class="navbar-toggler"
@@ -953,9 +938,7 @@ footer i {
             aria-controls="studentNavbar"
             aria-expanded="false"
             aria-label="Toggle navigation">
-
             <i class="bi bi-list"></i>
-
         </button>
 
 
