@@ -46,6 +46,18 @@ public class CompanyDashboardServlet extends HttpServlet {
 
         Company company = companyDAO.getCompanyByUserId(user.getUserId());
 
+        System.out.println("========== COMPANY PROFILE DEBUG ==========");
+        System.out.println("Logged-in User ID: " + user.getUserId());
+        System.out.println("Company Object: " + company);
+
+        if (company != null) {
+            System.out.println("Company ID: " + company.getCompanyId());
+            System.out.println("Company Name: " + company.getCompanyName());
+            System.out.println("Industry: [" + company.getIndustry() + "]");
+        }
+
+        System.out.println("===========================================");
+
         if (company == null) {
             request.setAttribute("error", "Company profile not found.");
             request.getRequestDispatcher("/companyDashboard.jsp")

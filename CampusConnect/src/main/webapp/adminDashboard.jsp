@@ -132,6 +132,33 @@
 
 
     <style>
+    /* ================= LOGOUT BUTTON ================= */
+
+.logout-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 10px 15px;
+    margin-left: 22px;
+
+    color: #d6ad52;
+    border: 1px solid rgba(214,173,82,.3);
+    border-radius: 9px;
+    background: transparent;
+
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 700;
+
+    transition: .3s ease;
+}
+
+.logout-btn:hover {
+    color: #071426;
+    background: #d6ad52;
+    border-color: #d6ad52;
+    transform: translateY(-2px);
+}
     .action-buttons {
     display: flex;
     align-items: center;
@@ -1055,19 +1082,27 @@
 
         <div class="navbar-right">
 
-            <div class="admin-name">
+    <div class="admin-name">
 
-                <span class="admin-icon">
-                    <i class="bi bi-shield-check"></i>
-                </span>
+        <span class="admin-icon">
+            <i class="bi bi-shield-check"></i>
+        </span>
 
-                <span>
-                    <%= user.getName() %>
-                </span>
+        <span>
+            <%= user.getName() %>
+        </span>
 
-            </div>
+    </div>
 
-        </div>
+    <a href="<%= request.getContextPath() %>/logout"
+       class="logout-btn">
+
+        <i class="bi bi-box-arrow-right"></i>
+        Logout
+
+    </a>
+
+</div>
 
     </div>
 
